@@ -1,0 +1,147 @@
+## Cynthia Clement: Final Project 
+## EDAV 
+##############################################
+
+
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(tidyr)
+library(dplyr)
+library(viridis)
+library(oce)
+
+## Set file path
+path = "/Users/cynthiaclement/Desktop"
+
+## define year range to look at 
+year_min = 1937
+year_max = 1947 
+year_usdev_min = 1974 
+year_usdev_max = 2010 
+
+################################# Looking at US Alliances #################################
+
+member_alliances = read.csv(paste(path, "version4.1_csv/alliance_v4.1_by_member.csv", sep= "/"))
+dyad_alliance = read.csv(paste(path, "version4.1_csv/alliance_v4.1_by_dyad.csv", sep= "/"))
+directed_alliance = read.csv(paste(path, "version4.1_csv/alliance_v4.1_by_directed.csv", sep= "/"))
+
+
+dyad_after1900 = dyad_alliance[dyad_alliance$dyad_st_year > 1900,]
+us_alliances <- dyad_alliance[dyad_alliance$ccode1 == 2,] 
+
+ggplot(us_alliances, aes(x=dyad_st_year, y = state_name2)) + geom_point() 
+
+dyad_us_1920_1950 = us_alliances[us_alliances$dyad_st_year > 1920,]
+dyad_us_1920_1950 = dyad_us_1920_1950[dyad_us_1920_1950$dyad_st_year < 1950,]
+
+#ggplot(dyad_us_1920_1950, aes(x=dyad_st_year, y = state_name2)) + geom_point() + ggtitle("US Alliances 1920-1950")
+
+
+a = directed_alliance[directed_alliance$ccode1 == 2,] 
+b = directed_alliance[directed_alliance$ccode2 == 2,] 
+us_dir_alliances <- rbind(a,b)
+#ggplot(us_dir_alliances, aes(x=state_name2, y =dyad_st_year )) + geom_point() + ggtitle("US Alliances")+ theme(axis.text.x = element_text(angle = 60, hjust = 1))
+
+
+
+################################# Seperating Axis and Allies  #################################
+
+allies <- c("United States of America", "United Kingdom", "France", "Russia", "Australia", "Belgium", "Brazil", "Canada", "China", "Denmark", "Greece", "Netherlands", "New Zealand", "Norway", "Poland", "South Africa", "Yugoslavia")
+allies_ccode <- member_alliances$ccode[match(allies, member_alliances$state_name)]
+
+axis <- c("Germany", "Italy", "Japan", "Hungary", "Romania", "Bulgaria")
+axis_ccode <- member_alliances$ccode[match(axis, member_alliances$state_name)]
+
+
+################################# Looking at National Material Capabilities by Allies vs Axies #################################
+
+NMC = read.csv(paste(path, "NMC/NMC_v4_0.csv", sep= "/"))
+NMC_WWII <- NMC[NMC$year >= year_min , ]
+NMC_WWII <- NMC_range[NMC_range$year <= year_max , ]
+
+us_nmc = NMC[NMC$ccode == 2, ]
+
+a <- ggplot(us_nmc, aes(x = year, y = irst)) + geom_line()
+b <- ggplot(us_nmc, aes(x = year, y = milex)) + geom_line() ## look at the military expenditures
+c <- ggplot(us_nmc, aes(x = year, y = milper)) + geom_line() ## look at militart personel
+d <- ggplot(us_nmc, aes(x = year, y = pec)) + geom_line()
+grid.arrange(a,b,c,d, nrow = 2 )  
+
+############# Allies NMC
+
+NMC_range <- NMC[NMC$year >= year_min , ]
+NMC_range <- NMC_range[NMC_range$year <= year_max , ]
+
+
+allies_nmc <- c("")
+for(code in allies_ccode){
+  #print(nrow(NMC_range[NMC_range$ccode == as.numeric(code)]))
+  allies_nmc <- rbind(allies_nmc, NMC_range[NMC_range$ccode == as.numeric(code),])
+}
+allies_nmc <- allies_nmc[c(2:nrow(allies_nmc)),]
+allies_nmc$irst <- as.numeric(allies_nmc$irst)
+allies_nmc$milex <- as.numeric(allies_nmc$milex)
+allies_nmc$milper <- as.numeric(allies_nmc$milper)
+
+########## Axis NMC_range
+axis_nmc <- c("")
+for(code in axis_ccode){
+  #print(nrow(NMC_range[NMC_range$ccode == as.numeric(code)]))
+  axis_nmc <- rbind(axis_nmc, NMC_range[NMC_range$ccode == as.numeric(code),])
+}
+axis_nmc <- axis_nmc[c(2:nrow(axis_nmc)),]
+axis_nmc$irst <- as.numeric(axis_nmc$irst)
+axis_nmc$milex <- as.numeric(axis_nmc$milex)
+axis_nmc$milper <- as.numeric(axis_nmc$milper)
+
+a<- ggplot(allies_nmc, aes(year, irst, group = stateabb , color = stateabb)) + geom_line() + theme(axis.text.x = element_text(angle = 60, hjust = 1), plot.title = element_text(hjust = 0.5)) 
+b<- ggplot(allies_nmc, aes(year, milex, group = stateabb , color = stateabb)) + geom_line() + theme(axis.text.x = element_text(angle = 60, hjust = 1), plot.title = element_text(hjust = 0.5)) 
+c<- ggplot(allies_nmc, aes(year, milper, group = stateabb , color = stateabb)) + geom_line() + theme(axis.text.x = element_text(angle = 60, hjust = 1), plot.title = element_text(hjust = 0.5)) 
+grid.arrange(a,b,c, nrow = 1)
+
+
+a<- ggplot(axis_nmc, aes(year, irst, group = stateabb , color = stateabb)) + geom_line() + theme(axis.text.x = element_text(angle = 60, hjust = 1), plot.title = element_text(hjust = 0.5)) 
+b<- ggplot(axis_nmc, aes(year, milex, group = stateabb , color = stateabb)) + geom_line() + theme(axis.text.x = element_text(angle = 60, hjust = 1), plot.title = element_text(hjust = 0.5)) 
+c<- ggplot(axis_nmc, aes(year, milper, group = stateabb , color = stateabb)) + geom_line() + theme(axis.text.x = element_text(angle = 60, hjust = 1), plot.title = element_text(hjust = 0.5)) 
+grid.arrange(a,b,c, nrow = 1)
+ ################################# Looking at Trade #################################
+##
+## world war II dates: 1939 - 1945
+
+dyad_trade = read.csv(paste(path, "COW_Trade_4.0/Dyadic_COW_4.0.csv", sep= "/"))
+nat_trade = read.csv(paste(path, "COW_Trade_4.0/National_COW_4.0.csv", sep= "/"))
+
+dyad_trade = dyad_trade[dyad_trade$year > 1937,]
+nat_trade = nat_trade[nat_trade$year > 1937,]                                                                                                                                                                                                                    
+dyad_trade = dyad_trade[dyad_trade$year < 1947,]
+nat_trade = nat_trade[nat_trade$year < 1947,] 
+
+#ggplot(nat_trade, aes(x = year, y = exports)) + geom_line() 
+
+nat_trade_allies <- c('')
+for(code in allies_ccode){
+  nat_trade_allies <- rbind(nat_trade_allies,nat_trade[nat_trade$ccode == as.numeric(code),])
+}
+nat_trade_allies <- nat_trade_allies[c(2:nrow(nat_trade_allies)),]
+nat_trade_axis <- c('')
+for(code in axis_ccode){
+  nat_trade_axis <- rbind(nat_trade_axis,nat_trade[nat_trade$ccode == as.numeric(code),])
+}
+nat_trade_axis <- nat_trade_axis[c(2:nrow(nat_trade_axis)),]
+
+
+nat_trade_allies$exports <- as.numeric(nat_trade_allies$exports)
+nat_trade_allies$imports <- as.numeric(nat_trade_allies$imports)
+nat_trade_axis$exports <- as.numeric(nat_trade_axis$exports)
+nat_trade_axis$imports <- as.numeric(nat_trade_axis$imports)
+
+
+ggplot(nat_trade_allies, aes(x = year, y = exports, group = statename, color = statename)) + geom_line()+ ggtitle("Allies exports")
+b<-ggplot(nat_trade_allies, aes(x = year, y = imports, group = statename, color = statename)) + geom_line()+ ggtitle("Allies imports")
+c<-ggplot(nat_trade_axis, aes(x = year, y = exports, group = statename, color = statename)) + geom_line()+ ggtitle("Axis exports")
+d<-ggplot(nat_trade_axis, aes(x = year, y = imports, group = statename, color = statename)) + geom_line()+ ggtitle("Axis imports")
+grid.arrange(a,b,c,d, nrow = 2 )
+
+
+################## Look at materials being traded
