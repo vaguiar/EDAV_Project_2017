@@ -1,0 +1,19 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+
+#Common values to be used as a dictionary
+
+WW1_start <- 1914
+WW2_end <- 1918
+
+WW2_start <- 1939
+WW2_end <- 1945
+
+
+```
+
