@@ -1,0 +1,83 @@
+---
+title: "World Trade"
+author: "Vineet Aguiar"
+output: html_notebook
+---
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(RColorBrewer)
+
+# Reading both raw DataSets - 
+nat_trade <-read.csv(file="./data/COW_Trade_4.0/National_COW_4.0.csv", head=TRUE, sep=",")
+#dyad_trade <-read.csv(file="./data/COW_Trade_4.0/Dyadic_COW_4.0.csv", head=TRUE, sep=",")
+
+#Using Dict values
+WW2_start <- 1939
+WW2_end <- 1945
+
+# Filtering data for the years for WW2 and 2 years before & after.
+nat_trade <- nat_trade[nat_trade$year >= (WW2_start-2), ]    
+nat_trade <- nat_trade[nat_trade$year <= (WW2_end+2), ] 
+
+#dyad_trade <- dyad_trade[dyad_trade$year > (WW2_start-2) ,]
+#dyad_trade = dyad_trade[dyad_trade$year < (WW2_end+2), ]
+
+# Top 10 exporters in the war years
+nat_top10_exp <- data.frame(colnames(nat_trade))
+#print(nat_top10_exp)
+
+for(yr in (WW2_start-2):(WW2_end+2))
+{
+  nat_top10_yr <- head(arrange(filter(nat_trade, year == yr), desc(exports)), 10)
+  
+  if(yr == (WW2_start-2))
+    nat_top10_exp <- nat_top10_yr
+  else
+    nat_top10_exp <- rbind(nat_top10_exp, nat_top10_yr)
+}
+
+#print(nat_top10_exp)
+
+#Using distinct color palette
+cols <- colorRampPalette(brewer.pal(12, "Paired"))
+myPal <- cols(length(unique(nat_top10_exp$statename)))
+
+ggplot(nat_top10_exp, aes(x = year, y = exports, fill = statename)) + 
+  geom_bar(stat="identity") +
+  scale_fill_manual(values = myPal) +
+  ggtitle("Top Exporters during WW2")
+  
+
+```
+
+```{r}
+
+
+# Top 10 importers in the war years
+nat_top10_imp <- data.frame(colnames(nat_trade))
+
+for(yr in (WW2_start-2):(WW2_end+2))
+{
+  nat_top10_yr <- head(arrange(filter(nat_trade, year == yr), desc(imports)), 10)
+  
+  if(yr == (WW2_start-2))
+    nat_top10_imp <- nat_top10_yr
+  else
+    nat_top10_imp <- rbind(nat_top10_imp, nat_top10_yr)
+}
+
+#print(nat_top10_imp)
+
+#Using distinct color palette
+cols <- colorRampPalette(brewer.pal(12, "Paired"))
+myPal <- cols(length(unique(nat_top10_imp$statename)))
+
+ggplot(nat_top10_imp, aes(x = year, y = imports, fill = statename)) + 
+  geom_bar(stat="identity") +
+  scale_fill_manual(values = myPal) +
+  ggtitle("Top Importers during WW2")
+```
+
+
