@@ -1,0 +1,16 @@
+a3a1b3f2e8d58fa220ac60056ee0217e *DESCRIPTION
+8b54e5a89fbda3af5e077053d40bec76 *NAMESPACE
+316de8433c5c0cc271b41bfdb39dbcb0 *data/Decathlon.rda
+39297be89e2c839396b5942e6bf24357 *data/EastIndiesTrade.rda
+fb94a796e5d6e3127444835cca812b77 *data/HRstars.rda
+ed6f8ee74100c1b3572a5e57dd34523d *data/MexLJ.rda
+2b654b2d4994222978a74f7d9a18a33f *data/SpeedSki.rda
+b62d944c289189e141e1f420d549adb6 *data/foodnames.rda
+e53be4c32af9fd6bf032c33df328e6d4 *data/uniranks.rda
+f72bb8c4ae64eb65be5687ae0bab5bb2 *man/Decathlon.Rd
+41d1203447d41960de907a62c3997825 *man/EastIndiesTrade.Rd
+93810c20ab81ae34b7a98ca9463799d9 *man/HRstars.Rd
+472087b5bce187a3413bbb6c2e50421a *man/MexLJ.Rd
+a29a16c5c4d4a03b28608f93b33e8110 *man/SpeedSki.Rd
+0ab98cea700e7d294a9a139cf3b3c360 *man/foodnames.Rd
+ade634bb50a416dc944e6069c4b84408 *man/uniranks.Rd

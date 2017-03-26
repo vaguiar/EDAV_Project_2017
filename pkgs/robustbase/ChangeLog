@@ -1,0 +1,1443 @@
+NOTE: All newer changes are in  ./inst/NEWS.Rd  --> `news(package = "robustbase")`
+----                            ---------------
+
+2014-12-12  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/mc.R (mc): fix for limit case where x[] contains +/-Inf: pass +/- Inf to C
+	* src/mc.c (mc_C_d): and replace them by 'Large' = +/- DBL_MAX/4
+
+2014-12-11  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* man/adjOutlyingness.Rd: fix another old FIXME:
+	* R/adjoutlyingness.R (adjOutlyingness): cupper=0, clower=0 now
+	computes the classical ("symmetric") outlyingness W/O mc() call.
+
+2014-12-03  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.92-3
+
+	* R/comedian.R (covComed): new from Maria Anna, tweaked by Valentin
+	and modified considerably by MM.
+
+2014-11-22  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.92-2, released to CRAN on 2014-11-22
+
+2014-11-18  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.92-1, released to CRAN on 2014-11-18
+
+2014-10-24  Martin Maechler  <maechler@stat.math.ethz.ch>
+	and
+2014-10-19  Valentin Todorov  <valentin.todorov@chello.at>
+
+	* DESCRIPTION (Version): 0.92-1
+
+	* R/covMcd.R, detmcd.R: added Deterministic MCD as an option to covMcd
+	    		(nsamp="deterministic"), function .detMcd()
+
+	* tests/tmcdd.R: new tests, for covMcd() with nsamp="deterministic"
+
+	* tests/tmcdd.Rout.save: new tests, for covMcd() with nsamp="deterministic"
+
+	* inst/xtraR/test_MCD.R: modified to test covMcd() with nsamp="deterministic"
+
+	* NAMESPACE: export the functions r6pack() and doScale() to
+	  be used in rrcov for the deterministic S- and MM-estimates
+
+    * src/rffastmcd and init.c, R/covMcd: fix a bug in nsamp="exact"
+
+2014-10-17  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/adjoutlyingness.R (adjOutlyingness): reverse the defaults of
+	'clower' and 'cupper' and fix +/- swap; see new note in man/adjOutlyingness.Rd
+	* man/adjOutlyingness.Rd: the wrong defaults came from *.ssc file from Antwerpen
+
+2014-06-30  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* src/rllarsbi.f (rlLARSbi): got rid of warnings -- and many GOTOs
+
+2014-06-11  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.92-0
+	* R/nlrob.R (.nls.get.start, nlrob): now works with indexed vector parameters
+	  -- FIXME: at ETH have testing code + example data -- unfinished!-- -- on nb-mm3 not
+
+2014-04-30  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.91-1, released to CRAN on 2014-05-01
+
+2014-04-24  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version, Date): 0.91-0, released to CRAN 2014-04-24
+
+2014-01-30  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.90-1, released to CRAN on 2014-01-30
+
+2013-05-22  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/lmrob.MM.R (Mpsi, Mchi, Mwgt): now all work via .Call():
+	is  9 x  faster for n ~ 4000, and a few NAs.
+
+2013-05-18  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/lmrob.MM.R (MrhoInf): new, providing rho(Inf), i.e.,
+	the scaling constant (rho |--> rho~ = chi)
+	* R/lmrob.MM.R (Mpsi, Mchi, Mwgt): renamed, exported and documented,
+	from former hidden lmrob.psifun(), lmrob.chifun(), lmrob.wgtfun().
+	* TODO: now has an extensive section on psi/rho/chi etc
+
+2013-03-27  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.9-8, released to CRAN on 2013-06-14
+
+2013-03-06  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.9-7, released to CRAN on 2013-03-06
+
+2013-03-01  Manuel Koller   <mkoller@ispm.unibe.ch>
+
+	* R/lmrob.R (lmrob): Adding weights and offset arguments.
+
+2013-02-26  Manuel Koller   <mkoller@ispm.unibe.ch>
+
+	* R/lmrob.R (class lmrob): Objects of class lmrob now store
+	the robustness weights in $rweights (used to be in $weights).
+
+	* R/lmrob.R (weights.lmrob): specialized weights() function for
+	lmrob objects. Returns prior weights by default. Robustness weights
+	are available via the "type" argument.
+
+2013-02-14  Manuel Koller   <mkoller@ispm.unibe.ch>
+
+	* R/lmrob.R (lmrob): setting class "lmrob" also for unconverged
+	initial estimates.
+
+	* R/lmrob.R (print.summary.lmrob, print.lmrob, print.lmrob.S): improved
+	handling of unconverged estimates and exact fits.
+
+2013-02-07  Manuel Koller   <mkoller@ispm.unibe.ch>
+
+	* R/lmrob.R (lmrob): compatibility to lm:
+	'assign': labels of terms used for fitting.
+
+	* R/lmrob.R (summary.lmrob): compatibility to summary.lm for:
+	'df': degrees of freedom, a 3-vector (p, n-p, p*), the last being
+	the number of non-aliased coefficients (used to be just (n-p)).
+	'aliased': named logical vector showing if the original
+	coefficients are aliased (was not returned before).
+
+2012-09-11  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.9-4, released to CRAN on 2012-09-11
+
+2012-05-14  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/lmrob.MM.R (.vcov.avar1): fix typo in "posdefify"
+
+2012-03-05  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/lmrob.MM.R (.vcov.avar1): "posdefify" FIXME (negative eigen values)
+
+2012-02-27  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.8-1-1, released to CRAN on 2012-03-02
+
+2012-02-24  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* R/lmrob.R (lmrob): added init argument: string, function or list.
+	* R/lmrob.MM.R (lmrob.fit): added init argument.
+
+	* man/lmrob.Rd: Added documentation about init argument.
+	* man/lmrob.fit.Rd: see above.
+
+2012-02-22  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/nlrob.R (print.summary.nlrob): use full call instead of just
+	formula. --> shows non-default psi()
+
+2012-02-19  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/nlrob.R (nlrob): now use nls(...., weights = *, ..), no longer
+	need hack "put everything to the RHS".
+
+2011-12-23  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/nlrob.R (nlrob): for zero weights 'w', the residuals
+	accidentally where NaN.
+
+2011-12-12  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.8-1
+	* src/mc.c (mc_C_d): fixed bug in iteration; see svn log -r 272 & 274
+
+2011-12-09  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/adjbox.R (adjboxStats): fix the sign-error thinko for the case mc < 0.
+	* man/adjboxStats.Rd: document; test the reflection invariance now.
+
+2011-12-08  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/adjbox.R (adjbox.default): new 'doReflect' argument; default
+	'TRUE' ensures that 'adjbox(x)' behaves symmetrically in 'x'.
+
+	* DESCRIPTION (Version): 0.8-0, released to CRAN on 2011-12-09
+
+2011-10-24  Martin Maechler  <maechler@stat.math.ethz.ch>  with	Andreas in train to Fribourg
+
+	* R/glmrob.R (residuals.glmrob): provide a version of
+	residuals.glm() which works
+	* NAMESPACE: residuals.glmrob
+
+2011-10-11  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.7-8, released to CRAN on 2011-10-26, r270
+
+	* man/lmrob.Rd: See also extended with lmrob..M..fit.
+
+	* man/lmrob..M..fit.Rd: Extended example with function lmrob.custom.
+
+	* R/lmrob.MM.R (lmrob.tau): moving calculation of h to the inside
+	of the function, so that obj$qr is not required.
+
+	* R/ltsPlot.R (ltsPlot, myqqplot): removed superfluous title().
+
+2011-10-11  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* src/rfltsreg.f: add 'implicit none' and declare everything;
+	new gfortran gave (correct) warnings.
+
+	* R/nlrob.R, man/nlrob.Rd: finally fix "fitted.values"
+	* tests/nlrob-tst.R (new): start more testing of nlrob()!
+
+2011-08-09  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* R/plot.lmrob.R (plot.lmrob): Fixing bug reported by Andreas
+	Papritz. is.null(x$x) is always FALSE since there is always
+	x$xlevels present.
+
+	* inst/doc/lmrob_simulation.Rnw (f.gen): load(file) was missing the
+	proper path.
+
+2011-05-24  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.7-6, released to CRAN today
+
+	* inst/doc/lmrob_simulation.Rnw: cleaned up chunk headers.
+
+	* inst/doc/Makefile: added Makefile that runs qpdf after texi2pdf.
+
+2011-05-23  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version, Date): 0.7-5
+
+	* man/lmrob..D..fit.Rd: updated reference to Koller and Stahel
+	2011 (now with volume, issue and page numbers).
+	* man/lmrob.control.Rd: updated reference.
+	* man/lmrob.Rd: update reference.
+	* inst/doc/lmrob_simulation.bib: updated reference.
+
+	* inst/doc/estimating.functions.R (robustness.weights.lmrob.S):
+	fixed typo.
+
+2011-03-17  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version, Date): 0.7-4
+
+	* inst/doc/lmrob_simulation.Rnw: Fixed problem with paths in
+	source(), save() and load().
+
+2011-03-08  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version, Suggests): 0.7-3 and added xtable and
+	ggplot2 to Suggests.
+
+	* inst/doc/lmrob_simulation.Rnw: re- or moved dependencies that are
+	not required or just needed for data generation.
+
+	* inst/doc/error.distributions.R: removed dependency on skewt.
+
+2011-02-10  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): Version: 0.7-2
+
+	* inst/doc/lmrob_simulation.Rnw: updated title.
+	* inst/doc/lmrob_simulation.bib: updated references.
+	* man/lmrob.control.Rd: as above.
+	* man/lmrob.Rd: as above.
+
+2011-01-28  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/glmrobMqle.R (Huberprop2, ...),
+	* R/psi-rho-funs.R (huberPsi): replace pmin2/pmax2 by
+	pmin.int()/pmax.int().
+
+2011-01-26  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* R/psi-rho-funs.R (psiFunc, chgDefaults): default arguments are
+	now also set for the E... slots
+	* tests/psi-rho-etc.R: updated comments
+	* tests/psi-rho-etc.Rout.save: updated accordingly
+
+2011-01-20  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	Updated reference to Koller and Stahel 2011 paper.
+
+	* man/lmrob.control.Rd: updated reference. KS2010 -> KS2011.
+	* man/lmrob.Rd: see above
+	* inst/doc/lmrob_simulation.bib: updated ks2011 reference.
+	* inst/doc/lmrob_simulation.Rnw: see above
+	* R/lmrob.MM.R (lmrob.control): setting argument: KS2011 instead of
+	KS2010
+
+2011-01-18  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* tests/psi-rho-etc.R: added tests to document bug in psi_func
+	class and pmin2/pmax2 functions.
+	* tests/psi-rho-etc.Rout.save: results as they should be
+
+	* inst/doc/lmrob_simulation.Rnw: added table with tuning constants
+	used in simulation.
+
+2010-12-04  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/qnsn.R (Qn): even better finite sample correction,
+	from an analysis of a Qn simulation.
+	(Qn.old): provide, if needed for back-compatibility.
+
+2010-12-02  Valentin Todorov  <valentin.todorov@chello.at>
+
+	* R/ltsReg.R, man/ltsReg.Rd, tests/LTS-specials.R: the raw weights
+	'raw.weights' added to the returned object
+
+	* R/ltsReg.R, src/rfltsreg.f, man/ltsReg.Rd: options nsamp="exact"
+	and nsamp="best" fixed; Added 'trace' parameter
+
+2010-12-02  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* tests/mc-strict.R (adjOutlyingness): adapt tests to the fixed
+	mc() code; using some tolerance... still need to be tested on Win/Mac/..
+
+	* R/nlrob.R (summary.nlrob): do not compute 'se' if not converged;
+	update help page;
+	(print.summary.nlrob): print  "non-convergence"
+
+	* man/summary.nlrob.Rd, man/predict.lmrob.Rd, ..: update and
+	trivial changes.
+
+	* R/qnsn.R (Qn): fixed the consistency constant (thanks to Peter
+	Ruckdeschel), slightly adapting the finite sample factors for n = 2:9.
+
+2010-12-02  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.6-9
+
+	* R/mc.c: fixed several bugs, consequent use of eps[0] and eps[1]
+	to avoid numerical problems, fixed memory corruption bug that
+	caused segfaults from time to time.
+
+	* tests/mc-etc.R: see below
+	* tests/mc-etc.Rout.save: see below
+	* tests/mc-strict: updated tests and results
+
+	* man/mc.Rd: see below
+	* R/mc.R (mc.default): updated eps1 and eps2 defaults.
+
+	* inst/doc/lmrob_simulation.Rnw: minor cosmetic changes
+	* inst/doc/graphics.functions.R: added some helper functions to
+	ease working with color palettes used by ggplot2.
+
+2006-10-27  Andreas Ruckstuhl  <rks@zhwin.ch>
+	and
+2010-10-28  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.6-8
+
+	* R/lmrobPredict.R, R/glmrobPredict.R: new more careful prediction
+	methods, now documented in
+	* man/predict.lmrob.Rd,	man/predict.glmrob.Rd:
+	and no longer in
+	* man/summary.lmrob.Rd:
+
+2010-10-13  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.6-7
+
+	* R/lmrob.MM.R (lmrob.psifun, lmrob.rhofun, lmrob.wgtfun):
+	as.double caused input to loose dimension attribute, fixed.
+
+	* inst/doc/lmrob_simulation.Rnw: Updated vignette title. Enhanced
+	aggregation procedure.
+	* inst/doc/lmrob_simulation.Bib: Fixed entry KS2010, no more
+	trouble with bibtex.
+	* inst/doc/aggr_results.Rdata: updated simulation results. n = 400
+	missing for now.
+	* inst/doc/error.distributions.R: added cskt distribution: centered
+	skewed t-distribution.
+	* inst/doc/simulation.results.R: small changes in proclist generation.
+
+2010-10-11  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.6-6
+	(Depends): Depends on R 2.9.0 (use of grepl)
+
+	* man/lmrob.Rd: Design Adapted Scale estimate renamed to Design
+	Adaptive Scale estimate
+	* man/lmrob.fit.Rd: ditto
+	* man/lmrob..D..fit.Rd: ditto
+
+2010-10-08  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.6-5
+
+	* inst/doc: added directory.
+	* inst/doc/lmrob_simulation.Rnw: vignette containing simulation
+	study of Koller and Stahel (2010).
+	* inst/doc/lmrob_simulation.bib: bibtex file for vignette
+	* inst/doc/graphics.functions.R: R code used in vignette, graphics
+	helper functions.
+	* inst/doc/error.distributions.R: R code used in vignette, custom
+	distribution functions.
+	* inst/doc/simulation.functions.R: R code used in vignette,
+	functions used in simulations.
+	* inst/doc/estimating.functions.R: R code used in vignette, extra
+	estimating functions.
+	* inst/doc/asymptotic.max.bias.Rdata: Cache of calculations, to
+	speed up vignette making.
+	* inst/doc/aggr_results.Rdata: Cache of calculations, to
+	speed up vignette making.
+	* .Rbuildignore: Omitting temporary Sweave output files from the
+	build.
+
+	* src/init.c: added function to process simulation output (used in
+	vignette).
+	* src/lmrob.c (R_calc_fitted): ditto
+	* src/robustbase.h: ditto
+
+2010-10-08  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.6-4
+
+	* inst/CITATION: Added my name.
+
+	* man/lmrob.control.Rd: Added more information to
+	"setting"-Argument.
+	* man/lmrob.Rd: ditto. Added example for "setting" argument.
+
+	* R/lmrob.R (lmrob): Moved call of lmrob.control to function code.
+
+	* R/lmrob.MM.R (lmrob.control): Changed setting KS2010: uses lqq
+	instead of ggw. Fixed bug when using unknown setting.
+
+	* R/lmrob.MM.R (lmrob.fit): Check for initial estimator. Issues
+	warning if neq S.
+
+2010-08-13  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.6-3
+
+	* R/lmrob.MM.R (lmrob.psifun, ..., ghq): cosmetic changes; cleaner
+	* src/lmrob.c (rho, psi, psip, ...): cleaner; partly faster; also
+	ok for x = +-Inf....
+
+	* tests/lmrob-psifns.R: test psi(), rho(), etc -- also nice plots:
+	tests/rob-psifns.pdf after .. check.
+
+2010-08-13  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* R/lmrob.MM.R: changed the naming of lgw to the more accurate lqq
+	"linear, quadratic, quadratic" (by construction of psi prime).
+
+	* tests/lmrob-psifuns.R: changed the naming of lgw to the more
+	accurate lqq
+	* man/lmrob.control.Rd: ditto
+
+	* man/summary.lmrob.Rd: updated documentation to account for "cov"
+	argument of vcov.
+
+	* R/lmrob.R (lmrob): warning and check for method argument improved.
+
+2010-08-05  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.6-2
+
+	* R/lmrob.MM.R (lmrob.const): replaced lmrob.ggw.const by
+	lmrob.const, which now supports ggw and lgw.
+	(lmrob.control, lmrob.lgw.findc, lmrob.conv.cc, lmrob.psi2ipsi):
+	support for lgw psi function.
+	(lmrob.efficiency, lmrob.bp): functions to calculate the efficiency
+	and breakdown point of an M-estimator.
+	(lmrob.tau, lmrob.tau.fast.coefs): Updated constants in all.equal
+	check for Hampel psi function. Updated constants for all the
+	supported psi functions.
+	(lmrob..D..fit): switched order of updating covariance matrix and
+	updating control$method. This caused the correction factors to be
+	set incorrectly in some cases.
+
+	* src/lmrob.c (normcnst, rho_lin, psi_lin, psip_lin, wgt_lin)
+	(rho, psi, psip): Added support lgw psi function.
+	* man/lmrob.control.Rd: updated to account for lgw.
+
+	* tests/lmrob-psifns.R: added tests lgw psi function
+	* tests/lmrob-psifns.Rout.save: updated accordingly
+
+	* tests/lmrob-methods.Rout.save: updated, since constants for
+	calculation of taus changed slightly
+
+	* R/lmrob.R (vcov.lmrob): added possibility to calculate covariance
+	matrix with another estimation method.
+
+
+2010-07-12  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.6-1
+
+	* src/lmrob.c (normcnst, rho_ggw, psi_ggw_vec, psi_ggw, psip_ggw)
+	(wgt_ggw): Added support for custom constants for psi ggw.
+
+	* R/lmrob.MM.R (.vcov.w): Modified constants for ggw psi function.
+	(lmrob.control): Added method to calculate constants for ggw psi
+	function.
+	(lmrob.conv.cc, lmrob.ggw.mx, lmrob.ggw.ms, lmrob.ggw.ac)
+	(lmrob.ggw.bp, lmrob.ggw.finda, lmrob.ggw.findc, lmrob.ggw.const):
+	Methods to calculate constants for ggw psi.
+	(lwgt): control argument optional.
+
+	* tests/lmrob-psifns.R: added tests for custom tuning constants
+	* tests/lmrob-psifns.Rout.save: added tests for custom tuning
+	constants
+
+	* experi-psi-rho-funs.R: added ggwPsi function, standardized
+	s.t. Dpsi(0) = 1. Putting this into R/psi-rho-funs.R results in an
+	error while "preparing for lazy-loading".
+
+2010-06-25  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.6-0
+
+	* NAMESPACE: dropped lmrob.control.sfs
+
+	* R/lmrob.R (lmrob): "method" argument
+	* man/lmrob.Rd: "method" argument
+
+	* R/lmrob.MM.R (lmrob.control, lmrob.control.sfs): argument
+	setting="KS2010" replaces lmrob.control.sfs. Setting a method
+	involving a D step, sets default psi to ggw.
+
+	* man/lmrob.control.Rd: "setting" argument
+
+	* tests/lmrob-methods.R: "methods" and "psi" argument
+	* tests/lmrob-methods.Rout.save: call output in summary changed
+	* tests/lmrob-psifns.Rout.save: call output in summary changed
+
+	* man/lmrob.control.Rd: Documentation details for tuning constants
+	and alternative constants for .85 efficiency at the normal.
+
+2010-06-24  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.5-1.1
+
+	* tests/lmrob-psifns.R: added Hampel psi function example and
+	updated coefficients of ggw.
+
+	* src/lmrob.c: replaced "gws" with "ggw" in function names, "gwgt"
+	with "welsh", replaced pow() with R_pow(), implemented support for
+	coefficient vectors. Fixed problem with "ggw" on 32-bit machines.
+
+	* R/lmrob.MM.R: changed the way coefficients for psi functions are
+	handled: coefficient vectors are now supported.
+
+	* R/lmrob.MM.R (lmrob..M..fit): class attribute for init entry in
+	lmrob..M..fit was missing.
+
+2010-06-23  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* tests/lmrob-methods.R: tests for compatibility between manual
+	construction of different methods with specifying method argument
+	in lmrob.
+	* tests/lmrob-methods.Rout.save: expected results
+	* tests/lmrob-psifns.R: tests for the support of different psi
+	functions.
+	* tests/lmrob-psifns.Rout.save: expected results
+	* tests/lmrob-data.Rout.save: updated results to reflect slightly
+	modified summary output (more options)
+
+	* man/lmrob.Rd: updated to reflect changes in options
+	* man/lmrob..D..fit.Rd: added documentation
+	* man/lmrob..M..fit.Rd: updated example
+	* man/lmrob.control.Rd: updated to reflect changes in options
+	* man/lmrob.fit.Rd: updated from lmrob.fit.MM to reflect changes in
+	options
+	* man/lmrob.fit.MM.Rd: moved to lmrob.fit.Rd
+	* man/lmrob.S.Rd: coef -> coefficients in example
+
+	* R/anova.lmrob.R (length.tl, anovaLmrobPair, anovaLmrobList):
+	Added checks to ensure soundness of result for methods other than
+	"MM".
+
+
+2010-06-21  Manuel Koller  <koller@stat.math.ethz.ch>
+
+	* R/lmrob.MM.R (lmrob.control, lmrob.control.sfs, lmrob.fit.MM)
+	(.vcov.w, .vcov.avar1, lmrob..M..fit, lmrob.S, lmrob..D..fit)
+	(lmrob.kappa, lmrob.tau, lmrob.hatmatrix, lmrob.leverages)
+	(lmrob.psi2ipsi, lmrob.psifun, lmrob.chifun, lmrob.wgtfun)
+	(residuals.lmrob.S, lmrob.E, ghq): Support for psi functions
+	other than bisquare as well as SMDM estimates.
+
+	* R/lmrob.R (lmrob): Support for psi functions other than bisquare
+	as well as SMDM estimates. Replaced lmrob.fit.MM by lmrob.fit.
+
+	* src/robustbase.h: declarations of new functions in lmrob.c
+	* src/init.c: definitions of new functions in lmrob.c
+	* src/lmrob.c: added support for psi functions other than
+	bisquare, including vectorized accessor functions ("R_psifun",
+	"R_chifun" and "R_wgtfun"). "wgt" is now always used to calculate
+	robustness weights. Function to calculate scale estimate
+	iteratively ("R_find_D_scale").
+
+	* NAMESPACE: added lmrob.fit, lmrob..D..fit and lmrob.control.sfs
+	to export.
+
+	* DESCRIPTION: added my name to the list.
+
+2010-04-01  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.5-1
+
+2009-11-19  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/covMcd.R (.fastmcd): nLarge = 100'000 (instead of previous 5000),
+	for now.  nsamp <= integer.max  is asserted now.
+
+	* R/covMcd.R (covMcd): nmini = 300 is now an optional argument.
+	* R/rrcov.control.R (rrcov.control): 'nmini = 300' ...
+	* R/ltsReg.R (ltsReg.default): .fastmcd(..., nmini = 300)
+
+	* src/rffastmcd.f (rffastmcd):  new argument  nmini
+
+2009-11-18  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.5-0-1, released to CRAN
+
+	* tests/mc-strict.R: don't use the longmemo example for now.
+		(platform dependence !)
+
+2009-11-11  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* tests/glmrob-1.R: add moe explicit glmrob() tests;
+	including the simple puzzling 1-outlier problem.
+
+	* R/glmrobMqle.R: do use getRversion() !
+
+2009-06-27  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* data/wagnerGrowth.rda: add the "wagner data" (continuous + categorical)
+	* man/wagnerGrowth.Rd: ditto
+
+2009-06-05  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/glmrob.R (glmrob): add the option  start = "lmrobMM", using
+	a *robust* start for {essentially} glm().
+	* man/glmrob.Rd: add an example for that   <<<<<______________ FIXME
+
+2009-06-04  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.5-0; *not* released
+
+	* tests/glmrob-1.R: more glmrob() examples
+
+2009-06-03  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/glmrobMqle.R (mFormat): make 'trace=TRUE' also depend on
+	getOption("digits").
+
+	* R/glmrobMqle.R, R/glmrob.R: changes from Andreas Ruckstuhl,
+	to support family = "Gamma".
+	Unfortunately, these at first also very slightly change binomial,
+	poisson. ==> few small changes by MM.
+
+	* R/glmrob.R (glmrob): allow y (in "y ~ ...") to be *factor*
+
+2009-01-17  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.4-5 : bug-fixing release
+
+	* tests/tmcd.R: add a regression test for the bug
+
+	* src/rffastmcd.f: rfrdraw() w/o 'seed'
+	* src/rfltsreg.f: ditto
+
+2009-01-10  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* src/rf-common.f (rfrangen): drop unused 'seed' argument
+	(rfrdraw): ditto
+
+	* src/rffastmcd.f: get rid of TABs (gfortran -Wall  complains)
+
+	* man/exAM.Rd, man/possumDiv.Rd, ...: Rd_parse fixes
+
+2008-11-28  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/OGK.R (covOGK): also return n.iter and weight.fn.
+	* man/covOGK.Rd: note about the "silly" weight.fn
+
+2008-10-15  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/lmrob.MM.R (lmrob.S): fix error message s/larger/smaller/
+	thanks to Keith Ponting.
+
+2008-10-01  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* src/wgt_himed_templ.h: fix leading comment
+
+2008-08-29  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.4-3  for CRAN release
+
+	* tests/mc-strict.R: define 'isMac' and tweak the tests;
+	thanks to reports from Rory Winston.
+
+2008-08-09  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* NAMESPACE: import stats::cov {since others hide it!}
+
+2008-08-05  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/huber.R (huberM): replace `s' by 's' in errors and warnings.
+	* R/qnsn.R, R/plot.lmrob.R, R/ltsReg.R, R/ltsPlot.R: ditto
+
+2008-08-04  Martin Maechler  <maechler@stat.math.ethz.ch>, really from
+
+	    Valentin Todorov  <valentin.todorov@chello.at>
+
+	* R/ltsReg.R (ltReg.default): if(mcd) call covMcd() with correct alpha
+
+	* R/covMcd.R (covMcd): drop (n-1)/n correction, as cov.wt()
+	contains that per default (in R, not in S-plus!).
+
+	* R/tolEllipse.R (tolEllipsePlot): no text() for id.n == 0
+
+	* DESCRIPTION (Version): 0.4-2 released to CRAN.
+
+2008-08-04  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* src/wgt_himed.c: renamed  wgt_himed.c_templ  to
+	* wgt_himed_templ.h:
+
+2008-08-02  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.4-1 ready for release to CRAN.
+
+	* R/ltsReg.R (ltsReg.default): don't add artificial "Y" y-name
+
+	* src/lmrob.c (rwls): first call to sum_rho() is only needed for
+	tracing (was used for lambda iterations).
+
+	* R/glmrob.R (glmrob),
+	* R/glmrobMqle.R (glmrobMqle): introduce 'trace' option to trace
+	the robustness iterations {*not* part of control: does *not*
+	influence result}
+
+	* man/CrohnD.Rd: new data example robust poisson regression
+	* data/CrohnD.rda:
+
+2008-01-25  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/covMcd.R (.fastmcd): fix nsamp="exact" to use "all"
+	* src/rffastmcd.f: krep=0 <==> nsamp="exact" : all := TRUE;
+		new argument i_trace; and use intpr() and dblepr()
+	* man/covMcd.Rd: pass 'trace' to .fastmcd() and Fortran
+	* src/rf-common.f (rfncomb): give "error" message for very
+		large 'comb'
+
+	* tests/tmcd.R: add test for nsmap = "exact"
+
+
+2008-01-05  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* man/ambientNOxCH.Rd: new data set from René Locher,
+	* data/ambientNOxCH.rda: showing some lmrob-nonconvergence
+
+2007-12-22  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* src/lmrob.c (rwls): if (trace_lev >= 3)  show beta vector.
+
+2007-12-13  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* man/summarizeRobWeights.Rd: add toy example
+
+	* R/lmrob.R (summarizeRobWeights): cosmetic change; notably
+	finishing line when weights were practically 0/1.
+
+	* tests/MCD-specials.Rout.save {adapt from change of 11-07}
+
+2007-11-07  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/covMcd.R (covMcd): if we have singularity, also say so, even
+	if trace is FALSE.
+
+	* R/covMcd.R (singularityMsg): for "on.hyperplane", concatenate
+	long coefficient vector.
+
+2007-10-25  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* man/pulpfiber.Rd:   New data set (p=8 = 4 + 4)
+	* data/pulpfiber.tab: from "Robust Multivariate Regression (2004)".
+
+	* tests/lmrob-ex12.R: use versions of predict[.lmrob]()
+
+2007-10-24  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* man/condroz.Rd: set latin1 encoding (and fix typo)
+
+	* R/lmrob.R (predict.lmrob): define predict() and model.matrix()
+	methods, working via "lm" methods.
+
+	* NAMESPACE: export vcov(<lmrob>)
+
+	* man/summary.lmrob.Rd: some docu of new methods
+
+
+2007-08-02  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/adjoutlyingness.R (adjOutlyingness): small improvements,
+	  getting rid of loops; fix an obvious typo (in original code).
+	  Leave away the Inf and NaN that from  abs(Y[] - m) / ( tup | tlo)
+
+2007-07-21  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Author): add Tobias
+
+	* src/rmc.c (h_kern): revert to absolute test; many more experiments
+	* tests/mc-etc.R (x3): a smallish "extreme" case of "non-convergence"
+
+2007-07-20  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* tests/mc-etc.R: new testing of mc() and related
+
+	* src/rmc.c (mc_C_d): changed work[] and weight[] to 0-indexing;
+		this is hopefully the last bug ...
+
+	* R/adjbox.R (adjbox.formula): use adjbox(), not boxplot()!
+	* man/adjboxStats.Rd: added
+
+2007-07-20  Tobias Verbeke  <tobias.verbeke@businessdecision.com>
+
+	* R/adjbox.R: Skewness-adjusted boxplot ported from Matlab LibRA
+	* man/adjbox.Rd:
+
+	* data/los.rda, man/los.Rd:
+	* data/condroz.rda, man/condroz.Rd: two dataset related to medcouple
+
+2007-07-19  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/adjoutlyingness.R: new (also from the Antwerpen MC collection)
+
+	* DESCRIPTION (Depends): R >= 2.3.1, so we can use
+	* NAMESPACE (useDynLib): .registration = TRUE
+	* R/*.R (.C, .Fortran): now can use name variable instead of string
+	and drop 'PACKAGE = ".."'
+
+
+2007-07-18  Tobias Verbeke and Martin Maechler <maechler@R-project.org>
+
+	* src/rmc.c, src/robustbase.h (rmc): code for medcouple (MC);
+		needs debugging: infinite loops and segmentation faults
+	* R/mc.R (mc): new mc() for MedCouple
+
+2007-07-16  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.4-0 - definitely made progress
+
+	* R/plot.lmrob.R (plot.lmrob): recompute robust Mahalanobis
+	distances and cache them with the object.
+
+2007-07-10  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* R/lmrob.R (summarizeRobWeights): new defaults; work but warn
+	when 'eps' and 'eps1' lead to weights both close to 0 and 1.
+
+	* R/covPlot.R: don't warn for which = "all"
+	* man/covPlot.Rd: example
+
+2007-06-28  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* data/kootenay.tab: add "famous" data set
+	* man/kootenay.Rd:
+
+	* data/cushny.R: add the other "famous" simple data set
+	* man/cushny.Rd:
+
+2007-06-20  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+	* DESCRIPTION (Version): 0.2-8  ready to be released
+
+	* src/lmrob.c (rwls): patch from Matias Salibian: Don't do any
+	"lambda iterations" anymore, they are remnants from old "experiments".
+
+2007-06-19  Valentin Todorov  <valentin.todorov@chello.at>
+
+    * R/covMcd.R: usage of simulated finite sample correction factors fixed:
+    * - case p=1 fixed
+    * - simulated corrections used only when the Pison et.al.
+    *   formula is definitely wrong (negative or very large)
+
+2007-06-09  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * tests/lmrob-data.R, *.Rout.save: new consistency tests for lmrob()
+
+    * R/biweight-funs.R (tukeyPsi1, tukeyChi): renamed from
+    lmrob.Psi() and lmrob.Chi();  also renamed
+    * man/tukeyPsi1.Rd, man/tukeyChi.Rd: updated, also mentioning "psiFunc"
+
+    * src/lmrob.c (rwls): now controlling *relative* error in MM
+    iterations, i.e., convergence happens when  ||b1 - b2|| < eps * ||b1||.
+    The above 'eps' is now part of lmrob.control() instead of
+    hard-wired in C code.
+
+    * R/lmrob.MM.R (lmrob.MM): new argument 'trace.lev'
+    * src/robustbase.h (R_lmrob_MM): add trace_lev argument
+
+2007-06-08  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * src/lmrob.c (refine_fast_s): slight change in warning()
+    [make message nicer for future R >= 2.5.1]
+
+2007-04-21  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/ltsReg.R: replace 'quan' by 'h' internally
+    * R/covMcd.R: ditto
+
+    * R/covMcd.R (h.alpha.n): renamed from "quan.f"() and now exported:
+    * NAMESPACE: and hence
+    * man/h.alpha.n.Rd: documented, and linked to from here
+    * man/ltsReg.Rd, man/covMcd.Rd:
+
+2007-04-18  Valentin Todorov  <valentin.todorov@chello.at>
+
+    * R/covMcd.R: use simulated finite sample correction factors {FIXME!}
+
+2007-04-11  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/ltsReg.R (ltsReg.default): 'ans$X' now has "intercept first"
+    to match coefficient vector.
+    * R/ltsReg.R (summary.lts): no need to reorder 'R' (cholesky) anymore
+
+2007-04-02  Valentin Todorov  <valentin.todorov@chello.at>
+
+    * R/covMcd.R: the (repeated) calculation of the consistency
+    *   correction factor for the raw and reweighted MCD covariance
+    *   replaced by a call to a function MCDcons()
+
+2007-03-30  Valentin Todorov  <valentin.todorov@chello.at>
+
+    * R/covMcd (print.mcd): solve a conflict with fastmcd() in
+    package robust: both return an object of class "mcd"
+
+2007-03-28  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/covMcd.R (.fastmcd): subsample size  myk <- p+1  (was 'p')
+
+2007-03-27  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/covMcd.R: cosmetic changes; comments
+    * src/rffastmcd.f: ditto
+
+    * tests/tmcd.R: added very small sample (n < 2p) examples.
+
+2007-03-26  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/ltsReg.R (print.summary.lts): signif.stars: instead of FALSE,
+    use same default as for lm(.).
+    * man/summary.lts.Rd
+
+2007-03-26  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/covMcd.R (covMcd): be more tolerant about small n,
+        notably n < 2p, now only requiring  n >= p + 2
+
+    * src/rf-common.f (rfnbreak): really unused
+    * src/rfltsreg.f, src/rffastmcd.f: comment use of rfnbreak()
+
+2007-03-24  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/covMcd.R (covMcd): ans$raw.cov should be matrix even for p==1
+
+2007-03-21  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/ltsReg.R (ltsReg.default): fix long-standing ("rrcov") bug of
+    wrong coefficient order in ltsReg(x,y, intercept=FALSE).
+
+    * tests/LTS-specials.R: add regression-test
+
+2007-02-08  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/covMcd.R (singularityMsg): moved the remaining cases out of
+    covMcd().
+
+2007-01-24  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/covMcd.R (covMcd): save 'singularity' info as list, and don't
+        append it as string to 'method'.
+    (singularityMsg): new utility used for printing singularity of MCD
+
+    (print.mcd): using strwrap() instead of "\n" such that print()
+    obeys options("width").
+
+
+2006-12-28  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * DESCRIPTION (Version): 0.2-7 released to CRAN
+
+    * src/rfltsreg.f: get rid of warnings, notably some extraneous args.
+    * src/rffastmcd.f: ditto
+
+    * inst/test_MCD.R (mortality, mort3): add example {near singular}
+    * tests/tmcd.R: test "near singular" example, using new tolSolve:
+
+    * R/rrcov.control.R (rrcov.control): new tolSolve = 1e-14
+
+    * R/covMcd.R (covMcd): use 'tolSolve' instead of 1e-10 for
+      mahalanobis' solve(*, tol).
+
+2006-12-21  Valentin Todorov  <valentin.todorov@chello.at>
+
+    * R/ltsPlot.R (ltsPlot): for "rqq", use *standardized* residuals
+
+
+2006-10-20  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * src/rfltsreg.f (rfltsreg): more comments; and minor cleanups
+
+    * R/ltsReg.R (.fastlts): slightly simplified 'nsamp' checking and
+    setting
+
+    * DESCRIPTION (LazyData): yes
+
+    * man/heart.Rd: mention survivals' "heart" data
+
+2006-10-18  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * src/rfltsreg.f: less  "if(<expr>) l1,l2,l3" ; better indenting; etc
+        worked pretty hard on C translation but that still seg.faults (!)
+
+2006-10-04  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * INDEX: added a "manual"  INDEX which has all the data sets at
+    the end.
+
+    * R/OGK.R (covOGK): more default arguments: n.iter = 2, and
+        weight.fn = hard.rejection
+
+    * R/OGK.R (s_mad, s_IQR): more "scale functions" for (O)GK
+
+    * tests/OGK-ex.R: added examples for new s_*() scales;
+    * tests/OGK-ex.Rout.save: new
+
+2006-10-03  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/qnsn.R (s_Qn, sSn): new (trivial) wrapper functions for easier
+    use in covOGK().
+    * man/Sn.Rd, man/Qn.Rd: ditto
+    * man/covOGK.Rd: example with the above
+
+2006-09-30  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * DESCRIPTION (Version): 0.2-6
+
+    * R/covPlot.R (covPlot): added 'labels.id', 'cex.id' and
+    'label.pos' arguments, "parallel" to plot.lm() and improved the
+    labeling accordingly.
+
+    * man/covPlot.Rd: 'ask=TRUE' gives problems in R <= 2.3.1
+
+2006-09-29  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * DESCRIPTION (Version): 0.2-5
+
+    * data/radarImage.rda: add 'radarImage' data set from MMY-book
+    * man/radarImage.Rd: ditto
+
+    * data/toxicity.rda: added 'toxicity' data set (from MMY)
+    * man/toxicity.Rd:   ditto
+
+    * src/rf-common.f (rfishsort): swap integer declaration order
+
+2006-09-23  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * man/covPlot.Rd: document covPlot() as well, since that is more
+    generally usable.
+
+    * src/rf-common.f (rfrangen): declare unifrnd() as double prec.;
+    also in other places;  now using 'implicit none' to catch such
+    things more easily.
+
+    * R/tolEllipse.R (tolEllipsePlot): classic=TRUE: do not prepare
+    a side-by-side plot, since we *over*plot.
+    Rename 2nd argument from 'mcd' to 'm.cov', since it really only
+    needs to have a mean ('center') and covariance component.
+
+2006-09-05  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * DESCRIPTION (Version): 0.2-3 uploaded to CRAN
+
+    * tests/tlts.R: rename test functions and move to new file
+    * inst/test_LTS.R:
+    * tests/tmcd.R: rename test functions and move to new file;
+       do not 'time' them, since we want to use *.Rout.save files.
+    * inst/test_MCD.R:
+
+    * src/Makevars: add long overdue $(FLIBS)
+
+2006-09-04  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/ltsReg.R (ltsReg.default): add argument name: sort(*, partial = )
+    * R/covMcd.R (covMcd): ditto
+
+2006-06-27  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * DESCRIPTION (Depends): no longer depend on "MASS" which is suggested.
+
+    * NAMESPACE, man/summarizeRobWeights.Rd: export and document
+        summarizeRobWeights().
+
+    * R/lmrob.R (summarizeRobWeights): improvement (singular/plural etc)
+
+    * R/ltsReg.R (ltsReg.formula): add 'subset' etc; and follow
+        guidelines in developer.r-project.org/model-fitting-functions.txt.
+
+    * tests/tmcd.R: typo; add timing comparison
+
+    * R/glmrob.R (glmrob): family = "gaussian" now dispatches to lmrob()
+
+2006-06-24  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/glmrob.R (print.summary.glmrob): as for lmrob(), now use
+        summarizeRobWeights() and printControl().
+
+    * R/lmrob.R (printControl): more flexible
+
+    * man/glmrob.Rd: update examples with 'weights.on.x'
+
+2006-06-23  Andreas Ruckstuhl  <rks@zhwin.ch>
+
+    * R/glmrobMqle.R (wts_HiiDist): *row*Sums()!
+
+2006-06-13  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * DESCRIPTION (Version): 0.2-2
+
+    * src/Makevars (PKG_LIBS): need this (in particular for Windows)
+
+2006-06-08  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * src/lmrob.c (refine_fast_s): made sure 'conv *is* called as *Rboolean
+
+2006-06-07  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * src/lmrob.c (refine_fast_s): print warning in case of non-convergence
+
+    * DESCRIPTION (Version): 0.2-1 - pre-release
+
+    * R/lmrob.MM.R (lmrob.control): decrease refine.tol "back" to 1e-7
+    * man/lmrob.control.Rd:  ditto
+    * src/lmrob.c (rho_biwgt): fix embarassing sign typo/thinko
+
+2006-06-06  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * DESCRIPTION (Version): 0.2-0 "pre-released" to Andreas & Matias
+    * src/lmrob.c (rwls): return *max_it = #{iterations used}
+    * R/lmrob.MM.R (lmrob.MM): return #{iterations} back to R level
+    * R/lmrob.R (summary.lmrob): and make sure they are printed.
+
+2006-06-05  Andreas Ruckstuhl  <rks@zhwin.ch>
+
+    * R/anova.lmrob.R (anova.lmrob): new, for model comparison
+      both "Wald" and "Deviance" tests.
+    * man/anova.lmrob.Rd: docu + example
+
+2006-05-31  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/covMcd.R (covMcd): use R' RNG
+    * R/covMcd.R (print.summary.mcd): is new; also print.mvd and
+        summary.* are now here, and improved.
+
+    * src/rfltsreg.f (rfltsreg): use R's RNG
+    * src/rffastmcd.f (rffastmcd): ditto
+
+    * src/rf-common.f (rfrangen): use unifrnd(), and comment out
+        the previous uniran()
+
+    * src/R-rng4ftn.c: use R's RNGs also for Fortran, in
+
+2006-05-29  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * src/lmrob.c: use R's unif_rand() instead of C's rand()
+    * R/lmrob.MM.R: set/save R's .Random.seed, possible from 'seed'
+
+2006-05-29  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * DESCRIPTION: version 0.1-7; the last one with C's rand()
+    * R/lmrob.MM.R: it's "$seed" from init.S , not M(M)-estimate
+
+2006-04-25  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/biweight-funs.R (lmrob.Psi): unification, rescaling, such
+    that Psi'(0) = 1
+
+2006-04-22  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/lmrob.MM.R (lmrob.S): new (control) option 'best.r.s = 2';
+        was hardcoded in C
+    * src/lmrob.c (R_lmrob_S): 'best_r' is now argument; further,
+        seed_rand is passed to the fast_s*() sub functions, so we
+        can call them from R {and decide ourselves "if fast".
+
+    * src/rf-common.f: new file for functions identical
+    in rffastcmd.f and rfltsreg.f.
+
+2006-04-21  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * data/NOxEmissions.Rd: add the large dataset from René Locher
+    * man/NOxEmissions.Rd:
+
+2006-04-21  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/lmrob.MM.R (lmrob.MM): return robustness weights as 'wt'
+
+2006-04-18  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/lmrob.MM.R (lmrob.control): change default for 'compute.rd'
+    to FALSE ==> robust (Mahalanobis) distances are *not* computed by
+    default.  This prevents singularity errors which happen frequently
+    as soon as X contains (large) factors (with few levels).
+
+2006-04-15  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * man/pension.Rd: add plots and simple 1st aid trafo (!)
+
+    * R/glmrobMqle.R (glmrobMqle): weights.on.x = "hat" couldn't have
+    worked(!) - still needs work __TODO__
+
+    * R/lmrob.MM.R (lmrob.S, lmrob.MM): simplified computations
+    achieving ~ 10% faster execution for a (n,p) = (500,20) example.
+
+2006-04-01  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * src/lmrob.c:   new lmrob() code from Matias' roblm package
+    * R/lmrob.*.R:   renamed s/roblm/lmrob/  but also refactored
+    * man/lmrob.*.Rd: and added a bit
+    * TODO:  section on lmrob()
+
+2006-03-20  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * DESCRIPTION (Version): 0.1-4
+
+    * data/vaso.rda:  one value, vaso[32,2],  had a typo; it was '0.3'
+    but should have been '0.03'
+
+2006-03-16  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/OGK.R (scaleTau2): add consistency correction (for OGK).
+    * man/scaleTau2.Rd: added
+
+    * R/glmrobMqle.R: ni=0 special casing (not finished yet).
+    * tests/binom-ni-small.R: more testing of ni=0
+
+2006-03-14  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * TODO, Done, DESCRIPTION: updated, ready for release
+
+2006-03-14  Andreas Ruckstuhl  <rks@zhwin.ch>
+
+    * R/anova-glmrob.R (anova.glmrob): new function
+    * man/anova.glmrob.Rd: and documentation, replacing previous modsel.*()
+
+2006-02-24  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/print.lts.R: moved to this file (and simplified slightly) to
+    * R/ltsReg.R (ltsReg): more cleanup; fix (y ~ 1) and (y ~ 0) properly
+
+2006-02-23  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * tests/LTS-specials.R: new file
+
+2006-02-22  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * tests/MCD-specials.R: new tests
+
+    * tests/huber-etc.R: tests for huberM() moved from pkg 'sfsmisc'
+
+2006-02-21  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/glmrob.R (summary.glmrob): "Std. Error" (with blank!)
+
+2006-02-18  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/glmrobMqle.R (glmrobMqle): make it work for ncoef == 0
+
+    * tests/glmrob-specials.R: new tests
+
+    * R/glmrob.R (print.summary.glmrob): the same as print.glmrob + more
+
+2006-02-17  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/glmrob.R (vcov.glmrob): added
+    (print.glmrob): fix typo
+
+    * tests/binom-ni-small.R: add from Martin's old "robGLM1" package
+
+    * R/glmrob.R (glmrob): '...' passed to glmrob<METH>.control(...)
+
+2006-02-17  Valentin Todorov  <valentin.todorov@chello.at>
+
+    * FIXED - .fastmcd and .fastlts no more return everything
+
+    * fixed problems in ltsReg in case of location model Y~1 (i.e. x
+        is missing in ltsReg.default())
+    * ltsReg & covMcd - added options 'best' and 'exact' for nsamp
+
+    * ltsReg & covMcd - added parameter for controlling the small
+        sample correction factors - use.correction
+
+    * rrcov.control - added parameter for controlling the small sample
+        correction factors - use.correction
+
+    * ltsReg & covMcd - output of the consistency and the small sample
+        correction factors
+
+
+2006-02-09  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * DESCRIPTION (Version): 0.1-2 ready for CRAN "baby release"
+
+    * man/vaso.Rd: fix longstanding typo:  con*s*triction
+
+    * R/glmrob.R (glmrob): Oops! the *.control() function must only
+    have one "." and must be *called*
+
+2006-02-08  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/glmrob.R,......: added 'glmrob' and 'nlrob' from Andreas Ruckstuhl
+
+2006-02-02  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * R/covMcd.R: all moved from 'rrcov' after Valentin's
+    * R/ltsReg.R: "green light"
+    ..........
+
+2006-01-25  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * DESCRIPTION (Version): 0.0-1  "prerelease" ready
+
+    * man/psi_func-class.Rd: version "checked in" and ready for pre-release
+    * man/chgDefaults-methods.Rd: ditto
+
+2006-01-17  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * NAMESPACE: added name space
+
+    * R/OGK.R (covOGK): added this; even though, the default scale
+        estimate is *not* consistent
+    * tests/tests-OGK.R: minimal 'test'
+
+2006-01-16  Martin Maechler  <maechler@stat.math.ethz.ch>
+
+    * man/starsCYG.Rd: clean up of documentation for the Rousseeuw data
+    * man/aircraft.Rd: from Valentin
+    * ....
+
+--------------- all these are for those things from 'rrcov' -------------------
+
+2005-12-28  Valentin Todorov  <valentin.todorov@chello.at>
+    * 0.2-11
+    * added more data sets from Rousseeuw & Leroy: telef, lactic,
+    pension, pilot, cloud, education, airmay
+    * fixed codoc discrepancies in the data sets stars and wood
+    * ltsReg & covMcd - added control parameter for the small sample correction factors
+    * ltsReg & covMcd - output of the consistency and the small sample correction factors
+
+2005-10-24  Valentin Todorov  <valentin.todorov@chello.at>
+    * 0.2-10
+    * minor corrections in the help of covPlot
+    * fixed bug in covPlot in case of class=TRUE
+    * tolellipse - both robust and classical ellipse are superimposed
+    * added directory inst/bm containing benchmarks comparing covMcd and ltsReg
+    to the corresponding functions in MASS, S-PLUS and Matlab
+2005-10-17  Valentin Todorov  <valentin.todorov@chello.at>
+    * 0.2-9
+    * minor corrections in the help of covMcd
+    * minor correction in ltsReg (false corrected to FALSE)
+    * covMcd - fixed the limitation on the number of variables <= 50
+    * ltsReg - fixed the limitation on the number of variables <= 50
+    * added function summary.mcd which prints (additionally to the output
+    of print.mcd) the correlation matrix (if requested), the eigenvalues
+    of the covariance or correlation matrix and the robust distances.
+    * added control object for the estimation options rrcov.control and
+    used in covMcd and ltsReg
+
+2005-09-20  Valentin Todorov  <valentin.todorov@chello.at>
+    * 0.2-8
+    * ltsReg: added formula interface
+    * ltsReg: adde generic functions summary.lts and print.summary.lts
+    * ltsReg: fixed a problem with reordering of the coeficients even in case
+    without intercept
+
+2005-04-16  Valentin Todorov  <valentin.todorov@chello.at>
+    * 0.2-7
+    * ltsReg: fixed a bug related to nsamp -> it was hard-coded = 500
+    in Fortran
+    * ltsPlot: default for id.n changed - instead of 3, now it is the
+    number of identified outliers
+    * ltsPlot: help enhanced
+    * covMcd, covPlot, tolellipse: tol.inv parameter changed to tol,
+    according the change in mahalanobis() in 2.1.0
+
+2004-12-26  Valentin Todorov  <valentin.todorov@chello.at>
+    * 0.2-6
+    * a bug in ltsReg (rsquared) fixed
+    * fixed CRLF line endings in FORTRAN sources
+    * fixed a problem in covMcd: in case of p=1 and cov=[0], the cov matrix was
+    a double instead of a matrix, which resulted in errors in subsequent
+    calls (e.g. determinant(mcd$cov) expects a matrix)
+    * fixed a problem in ltsReg when p==1 and Intercept==FALSE - the vectors of
+    coefficients ans$coefficients and ans$raw.coefficients were of size 2
+    * error handling added in ltsReg in case of scale=0
+
+2004-09-16  Valentin Todorov  <valentin.todorov@chello.at>
+    * 0.2-5
+    * several errors in doc fixed (ltsPlot.Rd, covPlot.Rd, aircraft.Rd)
+
+2004-09-16 Valentin Todorov  <valentin.todorov@chello.at>
+    * 0.2-4
+    * added Regression Diagnostic Plots - function ltsPlot()
+    * ...added Normal QQ Plot of the residuals
+    * ...added Standardized Residuals versus index plot
+    * ...added Standardized Residuals versus fitted values plot
+    * ...added Regression diagnostic plot
+    * ltsReg: the responce variable Y added to the result object
+    * covMcd: fixed a bug related to nsamp -> it was hard-coded = 500 in Fortran
+    * covMcd: fixed a bug - in case of alpha=1
+    * added S3 methods plot.mcd and plot.lts
+    * the S3 methods print.mcd and print.lts moved to separate R files
+    * added the stars data set (Hertzsprung-Russell diagram)
+
+2004-07-13  Valentin Todorov  <valentin.todorov@chello.at>
+    * 0.2-3
+    * improved documentation of the datasets
+    * added datasets aircraft and delivery
+    * added Covariance Plots - function covPlot()
+    * ...added Distance Plot - function distplot()
+    * ...added Distance-Distance Plot - function ddplot()
+    * ...added Chisquare QQ-Plot - function chi2qqplot()
+    * ...added Tolerance Ellipse Plot - function tolellipse()
+    * added function print.lts (for ltsReg result); included in the test tlts.R
+    * added function print.mcd (for covMcd result); included in the test tmcd.R
+
+2004-06-26  Valentin Todorov  <valentin.todorov@chello.at>
+    * 0.2-2
+    * fixed bug in Fortran: rfltsreg.f, xrfnbreak()
+    * Depends >= 1.8 (it was >= 1.9, because of the bug above)
+    * Parameter, controlling whether to perform intercept adjustment at each step added to ltsReg and its default value set to FALSE
