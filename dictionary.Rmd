@@ -6,13 +6,29 @@ output: html_notebook
 
 ```{r}
 
-#Common values to be used as a dictionary
+# List of US fought War List
+US_War <- c('WW1', 'WW2', 'KoreanWar', 'VietnamWar', 'ColdWar', 'AfghanWar')
 
+# US War Start/End dates
 WW1_start <- 1914
-WW2_end <- 1918
+WW1_end <- 1918
 
 WW2_start <- 1939
 WW2_end <- 1945
+
+KoreanWar_start <- 1950
+KoreanWar_end <- 1953
+
+VietnamWar_start <- 1955
+VietnamWar_end <- 1975
+
+ColdWar_start <- 1947
+ColdWar_end <- 1991
+
+AfghanWar_start <- 2001
+AfghanWar_end <- 2010
+
+
 
 
 ```
