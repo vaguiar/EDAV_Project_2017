@@ -5,6 +5,14 @@ output: html_notebook
 ---
 
 ```{r}
+path = "/home/vaguiar/col_hw/vis_hw/final/data/"
+member_alliances = read.csv(file="./data/version4.1_csv/alliance_v4.1_by_member.csv", sep= ",")
+nat_trade <-read.csv(file="./data/COW_Trade_4.0/National_COW_4.0.csv", head=TRUE, sep=",")
+
+```
+
+
+```{r}
 library(ggplot2)
 library(dplyr)
 library(RColorBrewer)
@@ -79,5 +87,51 @@ ggplot(nat_top10_imp, aes(x = year, y = imports, fill = statename)) +
   scale_fill_manual(values = myPal) +
   ggtitle("Top Importers during WW2")
 ```
+
+
+
+
+
+#### Trade for the top 
+```{r}
+library(ggplot2)
+library(dplyr)
+
+G4 <- c("United States of America", "United Kingdom", "Russia", "China", "France", "Canada", "Italy", "Germany")
+G4_ccode <- member_alliances$ccode[match(G4, member_alliances$state_name)]
+
+G4_trade <- filter(nat_trade, nat_trade$statename %in% G4, year>=1900)
+
+
+# Overlay w/ rectangle theme
+y2_high = 3000000
+d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+
+ggplot() + 
+  scale_x_continuous(name="x") + 
+  scale_y_continuous(name="y") +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  geom_line(data=G4_trade, aes(year, exports, color = stateabb, group = stateabb)) +
+  ggtitle("Exports of World Powers") 
+  #theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5)) 
+
+
+```
+Track the Export strength of major countries of the world.
+
+
+```{r}
+US_trade <- filter(nat_trade, ccode == 2, year>=1900)
+
+ggplot() + 
+  scale_x_continuous(name="x") + 
+  scale_y_continuous(name="y") +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  geom_line(data=US_trade, aes(year, exports)) +
+  geom_line(data=US_trade, aes(year, imports)) +
+  ggtitle("Export Import Trade Trends in the US") 
+  #theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5)) 
+```
+
 
 
