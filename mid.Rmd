@@ -1,0 +1,18 @@
+---
+title: "World Trade"
+author: "Vineet Aguiar"
+output:
+  html_notebook: default
+  html_document: default
+---
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(RColorBrewer)
+
+path = "/home/vaguiar/col_hw/vis_hw/final/data/"
+member_alliances = read.csv(file="./data/version4.1_csv/alliance_v4.1_by_member.csv", sep= ",")
+
+```
+
