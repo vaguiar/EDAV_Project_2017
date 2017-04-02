@@ -1,0 +1,337 @@
+---
+title: "Alliances Analysis"
+output: html_notebook
+---
+
+
+```{r}
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(tidyr)
+library(dplyr)
+library(viridis)
+library(oce)
+library(vcd)
+library(vcdExtra)
+library(extracat)
+
+## Set file path
+path = "/Users/cynthiaclement/Desktop"
+
+
+
+################################# Looking at US Alliances #################################
+dyad_al= read.csv(paste(path, "version4.1_csv/alliance_v4.1_by_dyad.csv", sep= "/"))
+dyad_al_year = read.csv(paste(path, "version4.1_csv/alliance_v4.1_by_dyad_yearly.csv", sep= "/"))
+
+member_alliances = read.csv(paste(path, "version4.1_csv/alliance_v4.1_by_member.csv", sep= "/"))
+member_al_year = read.csv(paste(path, "version4.1_csv/alliance_v4.1_by_member_yearly.csv", sep= "/"))
+
+dir_al_year= read.csv(paste(path, "version4.1_csv/alliance_v4.1_by_directed_yearly.csv", sep= "/"))
+dir_al = read.csv(paste(path, "version4.1_csv/alliance_v4.1_by_directed.csv", sep= "/"))
+
+
+us_alliances <- dyad_al[dyad_al$ccode1 == 2,] 
+alliances <- us_alliances[,c(2:5, 8, 11)]
+alliances<- gather(alliances, st_end, year, 	dyad_st_year:dyad_end_year)
+ggplot(alliances, aes(x=year, y = state_name2, color = st_end)) + geom_point() 
+
+
+
+
+```
+
+
+
+alliance v4 by member.* : this file contains one observation for every state in an alliance at the time of their alliance initiation  
+alliance v4 by member yearly.* : this file expands the alliance initiation format to include one observation for each state-year of the alliance  
+alliance v4 by dyad.* : the file contains one observation for every dyad in an alliance at the time of their alliance initiation  
+alliance v4 by dyad yearly.* : this file expands the dyadic alliance data to include one observation for each allied dyad-year  
+alliance v4 by directed.* : this file contains one observation for each directed dyad in an alliance at the time of their alliance initiation    
+alliance v4 by directed yearly.* : this file expands the directed-dyad alliance data to include one observation for each allied directed dyad-year  
+
+alliance_v4.1_by_directed_yearly.csv
+alliance_v4.1_by_directed.csv
+alliance_v4.1_by_dyad_yearly.csv
+alliance_v4.1_by_dyad.csv
+alliance_v4.1_by_member_yearly.csv
+alliance_v4.1_by_member.csv
+
+
+
+
+#WWI
+
+```{r}
+allied <- c("United States of America", "United Kingdom", "Russia", "Japan", "Italy")
+allied_ccode <- member_alliances$ccode[match(allied, member_alliances$state_name)]
+
+central <- c("Germany", "Turkey", "Austria-Hungary", "Romania", "Bulgaria")
+central_ccode <- member_alliances$ccode[match(central, member_alliances$state_name)]
+```
+
+
+#WWII
+
+```{r}
+allies <- c("United States of America", "United Kingdom", "France", "Russia", "Australia", "Belgium", "Brazil", "Canada", "China", "Denmark", "Greece", "Netherlands", "New Zealand", "Norway", "Poland", "South Africa", "Yugoslavia")
+allies_ccode <- member_alliances$ccode[match(allies, member_alliances$state_name)]
+
+axis <- c("Germany", "Italy", "Japan", "Hungary", "Romania", "Bulgaria")
+axis_ccode <- member_alliances$ccode[match(axis, member_alliances$state_name)]
+```
+
+#Cold war
+```{r}
+NATO <- c("United States of America", "United Kingdom", "Belgium", "Netherlands", "France","Canada", "Portugal", "Italy", "Norway", "Denmark", "Icealnd", "Turkey", "Greece")
+nato_ccode  <- member_alliances$ccode[match(NATO, member_alliances$state_name)]
+
+warsaw <- c("Russia", "Czechoslovakia", "Romania", "Bulgaria", "Poland", "Hungary")
+warsaw_ccode  <- member_alliances$ccode[match(warsaw, member_alliances$state_name)]
+```
+
+
+#Korean War
+```{r}
+sk <- c("United States of America", "United Kingdom", "South Korea")
+sk_ccode  <- member_alliances$ccode[match(sk, member_alliances$state_name)]
+
+
+nk <- c("Russia", "North Korea", "China")
+nk_ccode  <- member_alliances$ccode[match(nk, member_alliances$state_name)]
+
+```
+
+#Vietnam War
+
+```{r}
+us <- c("United States of America", "South Korea", "China", "New Zealand", "Australia")
+us_ccode  <- member_alliances$ccode[match(us, member_alliances$state_name)]
+
+
+viet <- c("Russia", "North Korea", "Vietnam", "Cuba")
+viet_ccode  <- member_alliances$ccode[match(viet, member_alliances$state_name)]
+```
+
+#Afghanistan war
+
+```{r}
+us <- c("United States of America", "United Kingdom", "Canada", "Germany", "Australia")
+us_ccode  <- member_alliances$ccode[match(us, member_alliances$state_name)]
+
+
+afg <- c("Afghanistan")
+afg_ccode  <- member_alliances$ccode[match(afg, member_alliances$state_name)]
+```
+
+
+```{r}
+
+countries<- c("United States of America", "United Kingdom", "Russia", "Japan", "Italy","Germany", "Turkey", "Austria-Hungary", "Romania", "Bulgaria", "Canada", "Australia", "China", "Vietnam", "South Korea", "North Korea", "Poland", "Austria", "Hungary", "Greece")
+ct_ccode  <- member_alliances$ccode[match(countries, member_alliances$state_name)]
+
+
+
+```
+
+```{r fig.width=6, fig.height=8}
+reverse <- filter(dyad_al_year, ccode2 %in% ct_ccode)
+reverse <- reverse[reverse$dyad_st_year >= 1900,]
+forward <- filter(dyad_al, ccode1 %in% ct_ccode)
+
+d=data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(.4,.4,.4,.4,.4,.4), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+
+ggplot() + 
+  geom_point(data =reverse, aes(x=year, y = state_name2, color = state_name1)) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Australia", ymax="Vietnam", fill=Conflict),alpha=0.15) + 
+  theme(legend.position="bottom")
+
+
+```
+
+"United States of America", "United Kingdom", "Russia", "Japan", "Italy","Germany", "Turkey", "Austria-Hungary", "Romania", "Bulgaria", "Canada", "Australia", "China", "Vietnam", "South Korea", "North Korea", "Poland", "Austria", "Hungary", "Greece"
+
+```{r fig.width=12, fig.height=12}
+
+dir_alliances <- gather(dir_al_year, treaty_type, idicator, defense:entente)
+
+dir_alliances <- dir_alliances[!dir_alliances$idicator %in%  0,]
+
+dir_alliances$dyad_end_year[dir_alliances$dyad_end_year %in% NA] = 2016
+dir_alliances <- dir_alliances[dir_alliances$year>1900,]
+
+ggplot() + 
+  geom_point(data =dir_alliances[dir_alliances$ccode1 == 2, ], aes(x=year, y = state_name2, color = treaty_type), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  theme(legend.position="bottom") + ggtitle("United States Alliances")
+
+```
+
+
+```{r fig.width=12, fig.height=12}
+ggplot() + 
+  geom_point(data =dir_alliances[dir_alliances$ccode1 == 200, ], aes(x=year, y = state_name2, color = treaty_type), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  theme(legend.position="bottom") + ggtitle("United Kingdom Alliances")
+
+```
+
+```{r fig.width=12, fig.height=12}
+ggplot() + 
+  geom_point(data =dir_alliances[dir_alliances$ccode1 == 255, ], aes(x=year, y = state_name2, color = treaty_type), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  theme(legend.position="bottom") + ggtitle("Germany")
+
+```
+
+
+```{r fig.width=12, fig.height=12}
+ggplot() + 
+  geom_point(data =dir_alliances[dir_alliances$ccode1 == 220, ], aes(x=year, y = state_name2, color = treaty_type), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  theme(legend.position="bottom") + ggtitle("France")
+
+```
+
+```{r fig.width=12, fig.height=12}
+ggplot() + 
+  geom_point(data =dir_alliances[dir_alliances$ccode1 == 365, ], aes(x=year, y = state_name2, color = treaty_type), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  theme(legend.position="bottom") + ggtitle("Russia")
+
+```
+
+
+```{r fig.width=12, fig.height=12}
+ggplot() + 
+  geom_point(data =dir_alliances[dir_alliances$ccode1 == 700, ], aes(x=year, y = state_name2, color = treaty_type), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  theme(legend.position="bottom") + ggtitle("Afghanistan")
+
+```
+
+
+```{r fig.width=12, fig.height=12}
+ggplot() + 
+  geom_point(data =dir_alliances[dir_alliances$ccode1 == 20, ], aes(x=year, y = state_name2, color = treaty_type), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  theme(legend.position="bottom") + ggtitle("Canada")
+
+```
+
+
+
+
+```{r fig.width=12, fig.height=12}
+ggplot() + 
+  geom_point(data =dir_alliances[dir_alliances$ccode1 == 40, ], aes(x=year, y = state_name2, color = treaty_type), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  theme(legend.position="bottom") + ggtitle("Cuba")
+
+```
+
+
+
+
+
+```{r fig.width=12, fig.height=12}
+ggplot() + 
+  geom_point(data =dir_alliances[dir_alliances$ccode1 == 750, ], aes(x=year, y = state_name2, color = treaty_type), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  theme(legend.position="bottom") + ggtitle("India")
+
+```
+
+
+
+
+
+
+```{r fig.width=12, fig.height=12}
+ggplot() + 
+  geom_point(data =dir_alliances[dir_alliances$ccode1 ==325, ], aes(x=year, y = state_name2, color = treaty_type), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  theme(legend.position="bottom") + ggtitle("Italy")
+
+```
+
+
+```{r fig.width=12, fig.height=12}
+ggplot() + 
+  geom_point(data =dir_alliances[dir_alliances$ccode1 ==740, ], aes(x=year, y = state_name2, color = treaty_type), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  theme(legend.position="bottom") + ggtitle("Japan")
+
+```
+
+
+
+```{r fig.width=12, fig.height=12}
+ggplot() + 
+  geom_point(data =dir_alliances[dir_alliances$ccode1 ==731, ], aes(x=year, y = state_name2, color = treaty_type), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  theme(legend.position="bottom") + ggtitle("North Korea")
+
+```
+
+
+
+```{r fig.width=12, fig.height=12}
+ggplot() + 
+  geom_point(data =dir_alliances[dir_alliances$ccode1 ==230, ], aes(x=year, y = state_name2, color = treaty_type), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  theme(legend.position="bottom") + ggtitle("Spain")
+
+```
+
+
+
+
+```{r fig.width=12, fig.height=12}
+ggplot() + 
+  geom_point(data =dir_alliances[dir_alliances$ccode1 ==300, ], aes(x=year, y = state_name2, color = treaty_type), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  theme(legend.position="bottom") + ggtitle("Austri-Hungary")
+
+```
+
+
+
+```{r fig.width=12, fig.height=12}
+ggplot() + 
+  geom_point(data =dir_alliances[dir_alliances$ccode1 ==816, ], aes(x=year, y = state_name2, color = treaty_type), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  theme(legend.position="bottom") + ggtitle("Vietnam")
+
+```
+
+
+```{r}
+
+#number of alliances 
+
+alliance_count <- dir_alliances[, c(2,3,14)]
+alliance_count$count <- 1 
+
+gp_ct <- aggregate(cbind(count) ~ ccode1+state_name1+year, data = alliance_count, FUN = sum )
+
+#countries <- c("Afghanistan", "Austria-Hungary", "Canada", "Cuba", "France", "Germany", "India", "Italy", "Japan", "North Korea", "Russia", "Spain", "United Kingdom", "United States of America", "Vietnam")
+countries <- c("China", "France", "Germany", "Japan",  "Russia", "United Kingdom", "United States of America")
+countires_code <-  member_alliances$ccode[match(countries, member_alliances$state_name)]
+
+gp_ct <- filter(gp_ct, ccode1 %in% countires_code)
+
+
+```
+
+
+
+```{r fig.width=14, fig.height=8}
+
+ggplot() + 
+  geom_line(data =gp_ct, aes(x=year, y = count, color = state_name1), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=max(gp_ct$count), fill=Conflict),alpha=0.15) + 
+  theme(legend.position="bottom") + ggtitle("Number of Alliances by Year")
+```
+
