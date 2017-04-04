@@ -1,0 +1,268 @@
+---
+title: "MID"
+output: html_notebook
+---
+
+```{r fig.width=10, fig.height=6}
+library(ggplot2)
+library(gridExtra)
+library(dplyr)
+library(RColorBrewer)
+
+midA = read.csv(file="./data/MID/MIDA_4.01.csv", sep= ",")
+midB = read.csv(file="./data/MID/MIDB_4.01.csv", sep= ",")
+midI = read.csv(file="./data/MID/MIDI_4.01.csv", sep= ",")
+midIP = read.csv(file="./data/MID/MIDIP_4.01.csv", sep= ",")
+
+## Combine A&B 
+
+midAB = merge(x = midB, y = midA, by = "DispNum3", all.x = TRUE)
+
+midAB <- midAB[,c(1,3,	4,	7,	10,	11,	15,	16,	17,	18,	19,	21,	28,	29,	32,	33,	36,	37,	38,	39,	40,	41,	42)]
+midAB <- midAB[midAB$EndYear.x >= 1900,]
+midA <- midA[midA$EndYear>= 1900,]
+midB <- midB[midB$EndYear>= 1900,]
+
+midAB$Outcome <- as.factor(midAB$Outcome)
+midAB$HiAct.x <- as.factor(midAB$HiAct.x)
+
+d=data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+
+ggplot() + 
+geom_rect(data=d, mapping=aes(xmin = x1, xmax=x2, ymin=0, ymax=250, fill = Conflict ),alpha=0.5) +
+geom_histogram(data = midA, aes(midA$StYear), alpha = .4) 
+
+
+
+```
+
+## Facet by Outcome
+```{r fig.width=15, fig.height=10}
+ggplot() + 
+geom_rect(data=d, mapping=aes(xmin = x1, xmax=x2, ymin=0, ymax=175, fill = Conflict ),alpha=0.5) +
+geom_histogram(data = midA, aes(midA$StYear), alpha = .4) + facet_wrap(~Outcome)
+
+```
+
+
+## Facet by Highest Action in Dispute 
+
+```{r fig.width=15, fig.height=10}
+ggplot() + 
+geom_rect(data=d, mapping=aes(xmin = x1, xmax=x2, ymin=0, ymax=150, fill = Conflict ),alpha=0.5) +
+geom_histogram(data = midA, aes(midA$StYear), alpha = .4) + facet_wrap(~HiAct)
+
+```
+
+
+## Facet by Hostility Level of Dispute 
+```{r fig.width=15, fig.height=10}
+ggplot() + 
+geom_rect(data=d, mapping=aes(xmin = x1, xmax=x2, ymin=0, ymax=200, fill = Conflict ),alpha=0.5) +
+geom_histogram(data = midA, aes(midA$StYear), alpha = .4) + facet_wrap(~HostLev)
+
+```
+
+
+## Facet by Settlement of Dispute 
+```{r fig.width=15, fig.height=10}
+ggplot() + 
+geom_rect(data=d, mapping=aes(xmin = x1, xmax=x2, ymin=0, ymax=200, fill = Conflict ),alpha=0.5) +
+geom_histogram(data = midA, aes(midA$StYear), alpha = .4) + facet_wrap(~Settle)
+
+```
+
+
+
+# US Disputes 
+
+```{r fig.width=15, fig.height=10}
+us <- filter(midB, ccode%in%2)
+
+us = merge(x = us, y = midA, by = "DispNum3", all.x = TRUE)
+
+ggplot() + 
+geom_rect(data=d, mapping=aes(xmin = x1, xmax=x2, ymin=0, ymax=30, fill = Conflict ),alpha=0.3) +
+geom_histogram(data = us , aes(us$StYear.x), alpha = .4) + facet_wrap(~Outcome)
+
+```
+
+
+```{r fig.width=15, fig.height=10}
+ggplot() + 
+geom_rect(data=d, mapping=aes(xmin = x1, xmax=x2, ymin=0, ymax=30, fill = Conflict ),alpha=0.3) +
+geom_histogram(data = us , aes(us$StYear.x), alpha = .4) + facet_wrap(~Orig)
+
+```
+
+
+```{r fig.width=15, fig.height=10}
+ggplot() + 
+geom_rect(data=d, mapping=aes(xmin = x1, xmax=x2, ymin=0, ymax=30, fill = Conflict ),alpha=0.3) +
+geom_histogram(data = us , aes(us$StYear.x), alpha = .4) + facet_wrap(~HostLev.x)
+
+```
+
+
+
+
+
+
+
+
+
+## World War I 
+
+WWI    -------------------------- 1914-1918  
+WWII  ------------------------- 1939-1945  
+Cold War -------------------- 1947-1991  
+Korean War ---------------- 1950-1953  
+Vietnam War --------------- 1955-1975  
+War in Afghanistan ------- 2001-2010 
+
+
+
+```{r fig.width=10, fig.height=14}
+
+d=data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+
+WWI <- midAB
+WWI <- midAB[midAB$StYear.x >= 1909,]
+WWI <- midAB[midAB$StYear.x <= 1925,]
+
+
+a <- ggplot() + 
+geom_rect(data=d, mapping=aes(xmin=1914, xmax=1918, ymin="AAB", ymax="ZIM"),alpha=0.15, fill = "salmon" ) +
+geom_point(data = WWI, aes(x = StYear.x, y = StAbb, color = Outcome)) + facet_wrap(~SideA)
+
+b <- ggplot() + 
+geom_rect(data=d, mapping=aes(xmin=1914, xmax=1918, ymin="AAB", ymax="ZIM"),alpha=0.15, fill = "salmon" ) +
+geom_point(data = WWI, aes(x = StYear.x, y = StAbb, color = Outcome)) + facet_wrap(~Orig)
+
+grid.arrange(a,b, nrow =2)
+
+```
+
+## World War II
+```{r fig.width=10, fig.height=14}
+WWII <- midAB
+WWII <- WWII[WWII$StYear.x >= 1930,]
+WWII <- WWII[WWII$StYear.x <= 1950,]
+
+
+a <- ggplot() + 
+geom_rect(data=d, mapping=aes(xmin=1939, xmax=1945, ymin="AAB", ymax="ZIM"),alpha=0.15, fill = "salmon" ) +
+geom_point(data = WWII, aes(x = StYear.x, y = StAbb, color = Outcome)) + facet_wrap(~SideA)
+
+b <- ggplot() + 
+geom_rect(data=d, mapping=aes(xmin=1939, xmax=1945, ymin="AAB", ymax="ZIM"),alpha=0.15, fill = "salmon" ) +
+geom_point(data = WWII, aes(x = StYear.x, y = StAbb, color = Outcome)) + facet_wrap(~Orig)
+
+grid.arrange(a,b, nrow =2)
+```
+
+```{r fig.width=10, fig.height=14}
+ggplot() + 
+geom_rect(data=d, mapping=aes(xmin=1939, xmax=1945, ymin=0, ymax=150),alpha=0.15, fill = "gray" ) +
+geom_histogram(data = WWII, aes(WWII$StYear.x)) 
+
+
+```
+
+
+
+
+
+## Cold War 
+```{r fig.width=15, fig.height=20}
+coldwar <- midAB
+coldwar <- coldwar[midAB$StYear.x >= 1940,]
+coldwar <- coldwar[midAB$StYear.x <= 1999,]
+
+a <- ggplot() + 
+geom_rect(data=d, mapping=aes(xmin=1947, xmax=1991, ymin="AAB", ymax="ZIM"),alpha=0.15, fill = "salmon" ) +
+geom_point(data = coldwar, aes(x = StYear.x, y = StAbb, color = Outcome)) + facet_wrap(~SideA)
+
+b <- ggplot() + 
+geom_rect(data=d, mapping=aes(xmin=1947, xmax=1991, ymin="AAB", ymax="ZIM"),alpha=0.15, fill = "salmon" ) +
+geom_point(data = coldwar, aes(x = StYear.x, y = StAbb, color = Outcome)) + facet_wrap(~Orig)
+
+grid.arrange(a,b, nrow =2)
+```
+
+
+
+```{r}
+ggplot() + 
+geom_rect(data=d, mapping=aes(xmin=1939, xmax=1945, ymin=0, ymax=150),alpha=0.15, fill = "gray" ) +
+geom_histogram(data = WWII, aes(WWII$StYear.x)) 
+
+```
+
+
+##Korean War 
+```{r fig.width=10, fig.height=14}
+kwar <- midAB
+kwar <- midAB[midAB$StYear.x >= 1947,]
+kwar <- midAB[midAB$StYear.x <= 1955,]
+
+vwar <- midAB
+vwar <- midAB[midAB$StYear.x >= 1950,]
+vwar <- midAB[midAB$StYear.x <= 1980,]
+
+awar <- midAB
+awar <- midAB[midAB$StYear.x >= 1996,]
+
+
+a <- ggplot() + 
+geom_rect(data=d, mapping=aes(xmin=1950, xmax=1953, ymin="AAB", ymax="ZIM"),alpha=0.15, fill = "salmon" ) +
+geom_point(data = kwar, aes(x = StYear.x, y = StAbb, color = Outcome)) + facet_wrap(~SideA)
+
+b <- ggplot() + 
+geom_rect(data=d, mapping=aes(xmin=1950, xmax=1953, ymin="AAB", ymax="ZIM"),alpha=0.15, fill = "salmon" ) +
+geom_point(data = kwar, aes(x = StYear.x, y = StAbb, color = Outcome)) + facet_wrap(~Orig)
+
+grid.arrange(a,b, nrow =2)
+```
+
+
+## Vietnam War
+```{r fig.width=10, fig.height=14}
+
+vwar <- midAB
+vwar <- midAB[midAB$StYear.x >= 1950,]
+vwar <- midAB[midAB$StYear.x <= 1980,]
+
+
+a <- ggplot() + 
+geom_rect(data=d, mapping=aes(xmin=1955, xmax=1975, ymin="AAB", ymax="ZIM"),alpha=0.15, fill = "salmon" ) +
+geom_point(data = vwar, aes(x = StYear.x, y = StAbb, color = Outcome)) + facet_wrap(~SideA)
+
+b <- ggplot() + 
+geom_rect(data=d, mapping=aes(xmin=1955, xmax=1975, ymin="AAB", ymax="ZIM"),alpha=0.15, fill = "salmon" ) +
+geom_point(data = vwar, aes(x = StYear.x, y = StAbb, color = Outcome)) + facet_wrap(~Orig)
+
+grid.arrange(a,b, nrow =2)
+```
+
+
+# Afghanistan War 
+```{r fig.width=10, fig.height=14}
+
+awar <- midAB
+awar <- midAB[midAB$StYear.x >= 1996,]
+
+
+a <- ggplot() + 
+geom_rect(data=d, mapping=aes(xmin=2001, xmax=2010, ymin="AAB", ymax="ZIM"),alpha=0.15, fill = "salmon" ) +
+geom_point(data = awar, aes(x = StYear.x, y = StAbb, color = Outcome)) + facet_wrap(~SideA)
+
+b <- ggplot() + 
+geom_rect(data=d, mapping=aes(xmin=2001, xmax=2010, ymin="AAB", ymax="ZIM"),alpha=0.15, fill = "salmon" ) +
+geom_point(data = awar, aes(x = StYear.x, y = StAbb, color = Outcome)) + facet_wrap(~Orig)
+
+grid.arrange(a,b, nrow =2)
+```
+
+
+
