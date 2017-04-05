@@ -93,8 +93,12 @@ nmc_yr<- nmc_c[nmc_c$year > 1900,]
 ggplot() + 
   scale_x_continuous(name="x") + 
   scale_y_continuous(name="y") +
-  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict),alpha=0.15) +
-  geom_line(data = nmc_yr, aes(x = year, y = cinc, color = stateabb, group = stateabb))
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=max(nmc_yr$pec), fill=Conflict),alpha=0.15) +
+  geom_rect(data = d, mapping = aes(xmin=1932, xmax=1939, ymin=0, ymax=max(nmc_yr$pec)), alpha = 1, color = "red")+
+  geom_rect(data = d, mapping = aes(xmin=1941, xmax=1941, ymin=0, ymax=max(nmc_yr$pec)), alpha =1, color = "blue") +
+  geom_line(data = nmc_yr, aes(x = year, y = pec, color = stateabb, group = stateabb))
+
+
 ```
 
 
@@ -241,6 +245,8 @@ allies_ccode <- member_alliances$ccode[match(allies, member_alliances$state_name
 
 axis <- c("Germany", "Italy", "Japan", "Hungary", "Romania", "Bulgaria")
 axis_ccode <- member_alliances$ccode[match(axis, member_alliances$state_name)]
+
+## US, GB,JAP, Germn, France, Italy, Russia
 
 WWII_year_st = 1939
 WWII_year_end = 1945
@@ -671,3 +677,30 @@ tpop<-ggplot() +
 
 grid.arrange(irst, ex, per, pec, tpop, upop , nrow = 3)
 ```
+
+
+
+```{r fig.width=6, fig.height=3}
+
+## looking at ratios 
+
+nmc_c2 <-nmc_c
+
+#nmc_c2$irst <- nmc_c2$irst/max(nmc_c2$irst)
+#nmc_c2$milex <- nmc_c2$milex/max(nmc_c2$milex)
+#nmc_c2$milper <- nmc_c2$milper/max(nmc_c2$milper)
+#nmc_c2$pec <- nmc_c2$pec/max(nmc_c2$pec)
+#nmc_c2$tpop <- nmc_c2$tpop/max(nmc_c2$tpop)
+#nmc_c2$upop <- nmc_c2$upop/max(nmc_c2$upop)
+
+nmc_c3<- gather(nmc_c2, metric, value, irst:upop)
+
+ggplot() + 
+geom_rect(data=d, mapping=aes(xmin = x1, xmax=x2, ymin=0, ymax=1, fill = Conflict ),alpha=0.25) +
+geom_line(data = nmc_c3, aes(x = year, y = value, color = stateabb), alpha = 1) + facet_wrap(~metric)
+
+```
+
+
+
+
