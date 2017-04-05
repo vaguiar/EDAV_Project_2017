@@ -703,4 +703,117 @@ geom_line(data = nmc_c3, aes(x = year, y = value, color = stateabb), alpha = 1) 
 
 
 
+## Calculate Ratios
+```{r}
+
+NMC = read.csv(paste(path, "NMC/NMC_v4_0.csv", sep= "/"))
+
+NMC$cinc[NMC$cinc == -9] <- 0
+NMC$irst[NMC$irst == -9] <- 0
+NMC$milex[NMC$milex == -9] <- 0
+NMC$milper[NMC$milper== -9] <- 0
+NMC$pec[NMC$pec == -9] <- 0
+NMC$tpop[NMC$tpop == -9] <- 0
+NMC$upop[NMC$upop == -9] <- 0
+
+
+
+ggplot(NMC[NMC$year > 1900,], aes(stateabb, year, fill = cinc)) + geom_tile()+
+  scale_fill_viridis() + ggtitle("Heatmap of cinc") + theme(axis.text.x = element_text(angle = 60, hjust = 1),plot.title = element_text(hjust = 0.5))
+
+
+
+
+
+```
+
+
+```{r}
+
+all_year <- c(1900:2007)
+
+NMC$cinc[NMC$cinc == -9| is.na(NMC$cinc)] <- 0
+NMC$irst[NMC$irst == -9| is.na(NMC$irst)] <- 0
+NMC$milex[NMC$milex == -9| is.na(NMC$milex)] <- 0
+NMC$milper[NMC$milper== -9| is.na(NMC$milper)] <- 0
+NMC$pec[NMC$pec == -9| is.na(NMC$pec)] <- 0
+NMC$tpop[NMC$tpop == -9| is.na(NMC$tpop)] <- 0
+NMC$upop[NMC$upop == -9| is.na(NMC$upop)] <- 0
+
+NMC$irst <- as.numeric(NMC$irst)
+NMC$milex <- as.numeric(NMC$milex)
+NMC$milper <- as.numeric(NMC$milper)
+NMC$pec <- as.numeric(NMC$pec)
+NMC$tpop <- as.numeric(NMC$tpop)
+NMC$upop <- as.numeric(NMC$upop)
+NMC$cinc <- as.numeric(NMC$cinc)
+NMC$year <- as.numeric(NMC$year)
+
+
+yr2000 <- NMC[NMC$year == 1971, ] 
+apply(yr2000, 2, max)
+
+NMC2 <- c("")
+
+for (year_t in all_year){
+  yr <- NMC[NMC$year == year_t, ] 
+  
+  max <- apply(yr, 2, max)
+  max <- as.numeric(max[4:9])
+  
+  for (i in 4:9){
+    yr[,i] = yr[,i]/max[i-3]
+
+  }
+  NMC2 <- rbind(NMC2, yr)
+}
+
+NMC2 <- NMC2[c(2:nrow(NMC2)),]
+
+
+```
+
+```{r fig.width=15, fig.height=10}
+d=data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(.4,.4,.4,.4,.4,.4), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+NMC2_yr<- NMC2[NMC2$year > 1900,]
+
+countries <- c("United States of America", "United Kingdom", "France", "Russia","Germany", "Italy", "Japan", "China")
+country_code <- member_alliances$ccode[match(countries, member_alliances$state_name)]
+
+
+NMC2_yr <- filter(NMC2_yr, NMC2_yr$ccode %in% country_code )
+
+NMC2_yr$irst <- as.numeric(NMC2_yr$irst)
+NMC2_yr$milex <- as.numeric(NMC2_yr$milex)
+NMC2_yr$milper <- as.numeric(NMC2_yr$milper)
+NMC2_yr$pec <- as.numeric(NMC2_yr$pec)
+NMC2_yr$tpop <- as.numeric(NMC2_yr$tpop)
+NMC2_yr$upop <- as.numeric(NMC2_yr$upop)
+NMC2_yr$cinc <- as.numeric(NMC2_yr$cinc)
+NMC2_yr$year <- as.numeric(NMC2_yr$year)
+
+
+
+a<- ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=1, fill=Conflict),alpha=0.15) +
+  geom_line(data = NMC2_yr, aes(x = year, y = irst, color = stateabb, group = stateabb))
+
+b<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=1, fill=Conflict),alpha=0.15) +
+  geom_line(data = NMC2_yr, aes(x = year, y = milex, color = stateabb, group = stateabb))
+
+
+c<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=1, fill=Conflict),alpha=0.15) +
+  geom_line(data = NMC2_yr, aes(x = year, y = milper, color = stateabb, group = stateabb))
+
+
+d<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=1, fill=Conflict),alpha=0.15) +
+  geom_line(data = NMC2_yr, aes(x = year, y = tpop, color = stateabb, group = stateabb))
+
+grid.arrange(a,b,c,d, nrow = 4 )
+
+
+```
 
