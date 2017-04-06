@@ -1,0 +1,144 @@
+---
+title: "Tale of War"
+output: html_notebook
+author: "Cynthia Clement & Vineet Aguiar"
+---
+
+
+##Introduction
+
+**Overview**  
+Wars are complex events born of geopolitical, cultural or economic strife, oftentimes spanning many years but ultimately costing us lives, our livelihood and peace. During wars, countries quickly adopt ideologies, form allegiances, and discipline their economic and scientific priorities while maintaining their military focus with a blind adherence. Although the causes of this displacement of peace may vary, is there a precursory pattern to it? Does the landscape change after the end of a prolonged conflict? Do certain actors benefit more? Do some lose more than others? And most importantly, could there be important predictors of these epic events that change the course of history? 
+
+**Our Aim**  
+We are particularly interested in studying the changes that happen to a country before and after they enter a war. We want to see the change of alliances and strategies, it's impact on trade and commerce and the economics at play. We also want to compare and contrast the characteristics of countries who won wars with the ones that lost. Our eventual goal is to find certain factors that indicate which countries will enter into a war and how these factors/predictors change over time. 
+
+**Scope and Timeline**  
+To limit our scope we will explore the data with a particular emphasis on the United States of America and the wars it has fought since 1900. At various points, we may have to include comparisons between countries and the US and we will explore the data breadth-wise to draw meaningful insights.  
+
+For our timeline, we plan to look at events/activity leading to, during and following the major US wars, namely;  
+WWI    -------------------------- 1914-1918  
+WWII  ------------------------- 1939-1945  
+Cold War -------------------- 1947-1991  
+Korean War ---------------- 1950-1953  
+Vietnam War --------------- 1955-1975  
+War in Afghanistan ------- 2001-2010 
+
+
+## The Data, Team Members and The Roles
+
+The [Correlates of War Project](http://www.correlatesofwar.org) is a treasure trove of information. We have a special interest in the following datasets: Trade, National Materials Capabilities, Alliances and Militarized Interstate Disputes. 
+
+**Our Plan**  
+We've decided to divide and conquer the work by each taking a subset of the data and exploring it. After sometime, we will regroup to see what we've learnt so far and switch data sets amongst ourselves to see if there are more insights to be learnt or different approaches to visualize the existing data. Lastly, we want to drill down into particular variables and plot correlations or predictors for the final output.
+
+*Phase 1:*  
+* Cynthia to analyze National Materials Capabilities and Alliances  
+* Vineet to analyze Militarized Interstate Disputes and Trade  
+
+*Phase 2:*  
+* We are going to switch the data sets we are looking at to see if the other person can discern any new insights or creative ways of presenting the data.  
+  + Cynthia to analyze Militarized Interstate Disputes and Trade  
+  + Vineet to analyze National Materials Capabilities and Alliances   
+
+*Phase 3:*
+* Cynthia and Vineet to come together and look at the interaction of different variables. For example how did a change in trade impact the NMC. 
+
+
+## Analysis of Data Quality 
+
+**Provide a detailed, well-organized description of data quality, including textual description, graphs, and code. **
+
+The Correlates of War datasets are a product of the Correlate of War Project (COW) founded in 1963. COW's goal is to "facilitate the collection, dissemination, and use of accurate and reliable quantitative data in international relations." [add source] From the COW datasets we focused on 4 datasets: NMC, MID, Alliances and Trade. 
+
+**Overall**
+
+*in this section we can talk about Consistency, conformity and integrity*
+
+
+Overall the consistency of these data sets is quite good. We have not found any evidence of conflicting information.
+
+
+
+*for each individual data set address accuracy, completeness, and dulpication*
+
+**National Materials Capabilities**
+  
+Completeness:
+
+Conformity:
+
+Accuracy: 
+
+Duplication: 
+
+Integrity: 
+  
+**Alliances**
+  
+  
+**Trade** 
+   
+     
+**Militarized Interstate Disputes** 
+
+
+
+*Below for reference only - this is what we want to talk to in this section*
+
+
+
+Completeness: Is all the requisite information available? Are data values missing, or in an unusable state? In some cases, missing data is irrelevant, but when the information that is missing is critical to a specific business process, completeness becomes an issue. 
+
+Conformity: Are there expectations that data values conform to specified formats? If so, do all the values conform to those formats? Maintaining conformance to specific formats is important in data representation, presentation, aggregate reporting, search, and establishing key relationships.
+
+Consistency: Do distinct data instances provide conflicting information about the same underlying data object? Are values consistent across data sets? Do interdependent attributes always appropriately reflect their expected consistency? Inconsistency between data values plagues organizations attempting to reconcile between different systems and applications. 
+
+Accuracy: Do data objects accurately represent the “real-world” values they are expected to model? Incorrect spellings of product or person names, addresses, and even untimely or not current data can impact operational and analytical applications. 
+
+Duplication: Are there multiple, unnecessary representations of the same data objects within your data set? The inability to maintain a single representation for each entity across your systems poses numerous vulnerabilities and risks. 
+
+Integrity: What data is missing important relationship linkages? The inability to link related records together may actually introduce duplication across your systems. Not only that, as more value is derived from analyzing connectivity and relationships, the inability to link related data instance together impedes this valuable analysis. 
+
+Based on the data how strong are your observations   
+  
+## Executive Summary 
+  
+**Provide a short nontechnical summary of the most revealing findings of your analysis with no more than 3 static graphs or one interactive graph (or link), written for a nontechnical audience. The length should be approximately 2 pages (if we were using pages...) Do not show code, and take extra care to clean up your graphs, ensuring that best practices for presentation are followed.**  
+
+* in our case it makes sense to have 4 graphs - one for each factor*
+
+
+**National Materials Capabilities**
+  
+  
+**Alliances**
+  
+  
+**Trade** 
+   
+     
+**Militarized Interstate Disputes** 
+  
+  
+## Main Analysis 
+
+**Provide a detailed, well-organized description of your findings, including textual description, graphs, and code.  Your focus should be on both the results and the process. Include, as reasonable and relevant, approaches that didn't work, challenges, the data cleaning process, etc.**
+
+**National Materials Capabilities**
+  
+  
+**Alliances**
+  
+  
+**Trade** 
+   
+     
+**Militarized Interstate Disputes** 
+  
+  
+## Conclusion 
+**Discuss limitations and future directions, lessons learned**
+
+## Sources 
+
