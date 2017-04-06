@@ -48,15 +48,21 @@ for(yr in (WW2_start-2):(WW2_end+2))
     nat_top10_exp <- rbind(nat_top10_exp, nat_top10_yr)
 }
 
+# Overlay w/ rectangle theme
+y2_high = 40000
+d = data.frame(x1=1941, x2=1941, y1=0, y2=y2_high, Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+
+
 #print(nat_top10_exp)
 
 #Using distinct color palette
 cols <- colorRampPalette(brewer.pal(12, "Paired"))
 myPal <- cols(length(unique(nat_top10_exp$statename)))
 
-ggplot(nat_top10_exp, aes(x = year, y = exports, fill = statename)) + 
-  geom_bar(stat="identity") +
+ggplot() + 
+  geom_bar(data=nat_top10_exp, aes(x = year, y = exports, fill = statename), stat="identity") +
   scale_fill_manual(values = myPal) +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, color='black'), alpha=0.15) +
   ggtitle("Top Exporters during WW2")
   
 
@@ -84,8 +90,9 @@ for(yr in (WW2_start-2):(WW2_end+2))
 cols <- colorRampPalette(brewer.pal(12, "Paired"))
 myPal <- cols(length(unique(nat_top10_imp$statename)))
 
-ggplot(nat_top10_imp, aes(x = year, y = imports, fill = statename)) + 
-  geom_bar(stat="identity") +
+ggplot() + 
+  geom_bar(data=nat_top10_imp, aes(x = year, y = imports, fill = statename), stat="identity") +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=5000, color='black'), alpha=0.15) +
   scale_fill_manual(values = myPal) +
   ggtitle("Top Importers during WW2")
 ```
