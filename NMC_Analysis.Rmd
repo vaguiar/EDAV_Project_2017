@@ -35,7 +35,7 @@ NMC$tpop[NMC$tpop == -9] <- 0
 NMC$upop[NMC$upop == -9] <- 0
 
 
-d=data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(.4,.4,.4,.4,.4,.4), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+d=data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
 ```
 
 
@@ -722,8 +722,8 @@ ggplot(NMC[NMC$year > 1900,], aes(stateabb, year, fill = cinc)) + geom_tile()+
   scale_fill_viridis() + ggtitle("Heatmap of cinc") + theme(axis.text.x = element_text(angle = 60, hjust = 1),plot.title = element_text(hjust = 0.5))
 
 
-
-
+#complete cases
+complete.cases(NMC_orig)
 
 ```
 
@@ -773,7 +773,7 @@ NMC2 <- NMC2[c(2:nrow(NMC2)),]
 
 ```
 
-```{r fig.width=15, fig.height=10}
+```{r fig.width=20, fig.height=15}
 d=data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(.4,.4,.4,.4,.4,.4), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
 NMC2_yr<- NMC2[NMC2$year > 1900,]
 
@@ -782,6 +782,7 @@ country_code <- member_alliances$ccode[match(countries, member_alliances$state_n
 
 
 NMC2_yr <- filter(NMC2_yr, NMC2_yr$ccode %in% country_code )
+NMC_orig_yr <- filter(NMC, NMC$ccode %in% country_code )
 
 NMC2_yr$irst <- as.numeric(NMC2_yr$irst)
 NMC2_yr$milex <- as.numeric(NMC2_yr$milex)
@@ -796,23 +797,42 @@ NMC2_yr$year <- as.numeric(NMC2_yr$year)
 
 a<- ggplot() + 
   geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=1, fill=Conflict),alpha=0.15) +
-  geom_line(data = NMC2_yr, aes(x = year, y = irst, color = stateabb, group = stateabb))
+  geom_line(data = NMC2_yr, aes(x = year, y = irst, color = stateabb, group = stateabb))+ theme(legend.position="none")
+
+a2<- ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=1, fill=Conflict),alpha=0.15) +
+  geom_line(data = NMC_orig_yr, aes(x = year, y = irst, color = stateabb, group = stateabb))+ theme(legend.position="none")
 
 b<-ggplot() + 
   geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=1, fill=Conflict),alpha=0.15) +
-  geom_line(data = NMC2_yr, aes(x = year, y = milex, color = stateabb, group = stateabb))
+  geom_line(data = NMC2_yr, aes(x = year, y = milex, color = stateabb, group = stateabb))+ theme(legend.position="none")
+
+b2<- ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=1, fill=Conflict),alpha=0.15) +
+  geom_line(data = NMC_orig_yr, aes(x = year, y = irst, color = stateabb, group = stateabb))+ theme(legend.position="none")
 
 
 c<-ggplot() + 
   geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=1, fill=Conflict),alpha=0.15) +
-  geom_line(data = NMC2_yr, aes(x = year, y = milper, color = stateabb, group = stateabb))
+  geom_line(data = NMC2_yr, aes(x = year, y = milper, color = stateabb, group = stateabb))+ theme(legend.position="none")
+
+c2<- ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=1, fill=Conflict),alpha=0.15) +
+  geom_line(data = NMC_orig_yr, aes(x = year, y = irst, color = stateabb, group = stateabb))+ theme(legend.position="none")
+
+d2<- ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=1, fill=Conflict),alpha=0.15) +
+  geom_line(data = NMC_orig_yr, aes(x = year, y = irst, color = stateabb, group = stateabb))+ theme(legend.position="none")
 
 
 d<-ggplot() + 
   geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=1, fill=Conflict),alpha=0.15) +
-  geom_line(data = NMC2_yr, aes(x = year, y = tpop, color = stateabb, group = stateabb))
+  geom_line(data = NMC2_yr, aes(x = year, y = tpop, color = stateabb, group = stateabb))+ theme(legend.position="none")
 
-grid.arrange(a,b,c,d, nrow = 4 )
+
+
+
+grid.arrange(a,a2, b, b2, c, c2, d ,nrow = 4 )
 
 
 ```
