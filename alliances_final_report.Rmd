@@ -24,14 +24,14 @@ library(extracat)
 path = "/Users/cynthiaclement/Desktop"
 
 ################################# Looking at US Alliances #################################
-dyad_al_0= read.csv(paste(path, "version4.1_csv/alliance_v4.1_by_dyad.csv", sep= "/"))
-dyad_al_year = read.csv(paste(path, "version4.1_csv/alliance_v4.1_by_dyad_yearly.csv", sep= "/"))
+dyad_al_0= read.csv("./data/version4.1_csv/alliance_v4.1_by_dyad.csv", sep= ",")
+dyad_al_year = read.csv("./data/version4.1_csv/alliance_v4.1_by_dyad_yearly.csv", sep= ",")
 
-member_alliances = read.csv(paste(path, "version4.1_csv/alliance_v4.1_by_member.csv", sep= "/"))
-member_al_year = read.csv(paste(path, "version4.1_csv/alliance_v4.1_by_member_yearly.csv", sep= "/"))
+member_alliances = read.csv("./data/version4.1_csv/alliance_v4.1_by_member.csv", sep= ",")
+member_al_year = read.csv("./data/version4.1_csv/alliance_v4.1_by_member_yearly.csv", sep= ",")
 
-dir_al_year= read.csv(paste(path, "version4.1_csv/alliance_v4.1_by_directed_yearly.csv", sep= "/"))
-dir_al= read.csv(paste(path, "version4.1_csv/alliance_v4.1_by_directed.csv", sep= "/"))
+dir_al_year= read.csv("./data/version4.1_csv/alliance_v4.1_by_directed_yearly.csv", sep= ",")
+dir_al= read.csv("./data/version4.1_csv/alliance_v4.1_by_directed.csv", sep= ",")
 
 d=data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
 

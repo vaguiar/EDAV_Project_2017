@@ -1,12 +1,9 @@
 ---
-title: "Tale of War"
+title: "NMC_Final Report "
 output: html_notebook
-author: "Cynthia Clement & Vineet Aguiar"
 ---
-```{r, Echo = FALSE}
 
-## Load Packages 
-
+```{r}
 library(ggplot2)
 library(grid)
 library(gridExtra)
@@ -16,180 +13,16 @@ library(viridis)
 library(gtools)
 library(RColorBrewer)
 
-
-##import data
-
-#NMC
-NMC_orig = read.csv("./data/NMC/NMC_v4_0.csv", sep= ",")
-
-#Alliances 
-dyad_al_0= read.csv("./data/version4.1_csv/alliance_v4.1_by_dyad.csv", sep= ",")
-dyad_al_year = read.csv("./data/version4.1_csv/alliance_v4.1_by_dyad_yearly.csv", sep= ",")
-
-member_alliances = read.csv("./data/version4.1_csv/alliance_v4.1_by_member.csv", sep= ",")
-member_al_year = read.csv("./data/version4.1_csv/alliance_v4.1_by_member_yearly.csv", sep= ",")
-
-dir_al_year= read.csv("./data/version4.1_csv/alliance_v4.1_by_directed_yearly.csv", sep= ",")
-dir_al= read.csv("./data/version4.1_csv/alliance_v4.1_by_directed.csv", sep= ",")
+```
 
 
-
-
-## Events Data Frame 
+```{r}
 
 d=data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
 
+member_alliances = read.csv("./data/version4.1_csv/alliance_v4.1_by_member.csv", sep= ",")
+NMC_orig = read.csv("./data/NMC/NMC_v4_0.csv", sep= ",")
 
-```
-
-
-##Introduction
-
-**Overview**  
-Wars are complex events born of geopolitical, cultural or economic strife, oftentimes spanning many years but ultimately costing us lives, our livelihood and peace. During wars, countries quickly adopt ideologies, form allegiances, and discipline their economic and scientific priorities while maintaining their military focus with a blind adherence. Although the causes of this displacement of peace may vary, is there a precursory pattern to it? Does the landscape change after the end of a prolonged conflict? Do certain actors benefit more? Do some lose more than others? And most importantly, could there be important predictors of these epic events that change the course of history? 
-
-**Our Aim**  
-We are particularly interested in studying the changes that happen to a country before and after they enter a war. We want to see the change of alliances and strategies, it's impact on trade and commerce and the economics at play. We also want to compare and contrast the characteristics of countries who won wars with the ones that lost. Our eventual goal is to find certain factors that indicate which countries will enter into a war and how these factors/predictors change over time. 
-
-**Scope and Timeline**  
-To limit our scope we will explore the data with a particular emphasis on the United States of America and the wars it has fought since 1900. At various points, we may have to include comparisons between countries and the US and we will explore the data breadth-wise to draw meaningful insights.  
-
-For our timeline, we plan to look at events/activity leading to, during and following the major US wars, namely;  
-WWI    -------------------------- 1914-1918  
-WWII  ------------------------- 1939-1945  
-Cold War -------------------- 1947-1991  
-Korean War ---------------- 1950-1953  
-Vietnam War --------------- 1955-1975  
-War in Afghanistan ------- 2001-2010 
-
-
-## The Data, Team Members and The Roles
-
-The [Correlates of War Project](http://www.correlatesofwar.org) is a treasure trove of information. We have a special interest in the following datasets: Trade, National Materials Capabilities, Alliances and Militarized Interstate Disputes. 
-
-**Our Plan**  
-We've decided to divide and conquer the work by each taking a subset of the data and exploring it. After sometime, we will regroup to see what we've learnt so far and switch data sets amongst ourselves to see if there are more insights to be learnt or different approaches to visualize the existing data. Lastly, we want to drill down into particular variables and plot correlations or predictors for the final output.
-
-*Phase 1:*  
-* Cynthia to analyze National Materials Capabilities and Alliances  
-* Vineet to analyze Militarized Interstate Disputes and Trade  
-
-*Phase 2:*  
-* We are going to switch the data sets we are looking at to see if the other person can discern any new insights or creative ways of presenting the data.  
-  + Cynthia to analyze Militarized Interstate Disputes and Trade  
-  + Vineet to analyze National Materials Capabilities and Alliances   
-
-*Phase 3:*
-* Cynthia and Vineet to come together and look at the interaction of different variables. For example how did a change in trade impact the NMC. 
-
-
-## Analysis of Data Quality 
-
-**Provide a detailed, well-organized description of data quality, including textual description, graphs, and code. **
-
-The Correlates of War datasets are a product of the Correlate of War Project (COW) founded in 1963. COW's goal is to "facilitate the collection, dissemination, and use of accurate and reliable quantitative data in international relations." [add source] From the COW datasets we focused on 4 datasets: NMC, MID, Alliances and Trade. 
-
-**Overall**
-
-*in this section we can talk about Consistency, conformity and integrity*
-
-
-Overall the consistency of these data sets is quite good. We have not found any evidence of conflicting information.
-
-
-
-*for each individual data set address accuracy, completeness, and dulpication*
-
-**National Materials Capabilities**
-  
-The overall data quality of NMC dataset is very good. There are roughly 14,000 entries and 89% of them did not have any missing values. There is one data entry for each country per year. The accuracy of the data is also very good because as countries are dissolved and new ones are formed, this data keeps track of them. For example, the graph depicts the CINC of Austria-Hungary from 1900-1918, the end of WWI when it the Austro-Hungarian Empire was dissolved. Immediately after that, you see data points for Austria and Hungary separately. 
-
-```{r}
-NMC_test <- NMC_orig
-NMC_test$cinc[NMC_test$cinc == -9] <- NA
-NMC_test$irst[NMC_test$irst == -9] <- NA
-NMC_test$milex[NMC_test$milex == -9] <- NA
-NMC_test$milper[NMC_test$milper== -9] <- NA
-NMC_test$pec[NMC_test$pec == -9] <- NA
-NMC_test$tpop[NMC_test$tpop == -9] <- NA
-NMC_test$upop[NMC_test$upop == -9] <- NA
-
-NMC_test <- filter(NMC_test, NMC_test$year %in% c(1900:2007))
-test <- c("Austria-Hungary", "Austria", "Hungary")
-test_ccode <- member_alliances$ccode[match(test, member_alliances$state_name)]
-
-NMC_test <- filter(NMC_test, NMC_test$ccode %in% test_ccode)
-
-ggplot() + 
-  scale_x_continuous(name="Year") + 
-  scale_y_continuous(name="CINC") +
-  labs(color ='Country Abbreviation')+
-  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=.09, fill=Conflict),alpha=0.15) +
-  geom_line(data = NMC_test, aes(x = year, y = cinc, color = stateabb, group = stateabb)) +
-  ggtitle("CINC for Austria-Hungary") + 
-  theme_classic()+
-  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"))+
-  scale_color_brewer(palette="Paired")+
-  theme(plot.title = element_text(hjust = .5), legend.position = "bottom") 
-
-```
-
-
-  
-**Alliances**
-  
-  
-**Trade** 
-   
-     
-**Militarized Interstate Disputes** 
-
-
-
-*Below for reference only - this is what we want to talk to in this section*
-
-
-
-Completeness: Is all the requisite information available? Are data values missing, or in an unusable state? In some cases, missing data is irrelevant, but when the information that is missing is critical to a specific business process, completeness becomes an issue. 
-
-Conformity: Are there expectations that data values conform to specified formats? If so, do all the values conform to those formats? Maintaining conformance to specific formats is important in data representation, presentation, aggregate reporting, search, and establishing key relationships.
-
-Consistency: Do distinct data instances provide conflicting information about the same underlying data object? Are values consistent across data sets? Do interdependent attributes always appropriately reflect their expected consistency? Inconsistency between data values plagues organizations attempting to reconcile between different systems and applications. 
-
-Accuracy: Do data objects accurately represent the “real-world” values they are expected to model? Incorrect spellings of product or person names, addresses, and even untimely or not current data can impact operational and analytical applications. 
-
-Duplication: Are there multiple, unnecessary representations of the same data objects within your data set? The inability to maintain a single representation for each entity across your systems poses numerous vulnerabilities and risks. 
-
-Integrity: What data is missing important relationship linkages? The inability to link related records together may actually introduce duplication across your systems. Not only that, as more value is derived from analyzing connectivity and relationships, the inability to link related data instance together impedes this valuable analysis. 
-
-Based on the data how strong are your observations   
-  
-## Executive Summary 
-  
-**Provide a short nontechnical summary of the most revealing findings of your analysis with no more than 3 static graphs or one interactive graph (or link), written for a nontechnical audience. The length should be approximately 2 pages (if we were using pages...) Do not show code, and take extra care to clean up your graphs, ensuring that best practices for presentation are followed.**  
-
-* in our case it makes sense to have 4 graphs - one for each factor*
-
-
-**National Materials Capabilities**
-  
-  
-**Alliances**
-  
-  
-**Trade** 
-   
-     
-**Militarized Interstate Disputes** 
-  
-  
-## Main Analysis 
-
-**Provide a detailed, well-organized description of your findings, including textual description, graphs, and code.  Your focus should be on both the results and the process. Include, as reasonable and relevant, approaches that didn't work, challenges, the data cleaning process, etc.**
-
-**National Materials Capabilities**
-
-```{r}
 NMC <- NMC_orig 
 NMC$cinc[NMC$cinc == -9| is.na(NMC$cinc)] <- 0
 NMC$irst[NMC$irst == -9| is.na(NMC$irst)] <- 0
@@ -516,6 +349,10 @@ With the Iron and Steel Production ratio, you can see that it follows to same pa
 **[Continue Making Observations]**
 
 
+
+
+
+
 To get even more into detail and context around certain characteristics, we want to look at specific events like pearl harbor or China’s invasion of Malaysia and other pivotal moments in wars to see how those events impact the CINC and its various components.  
 
 A problem with NMC is that there are many other factors that determine a power of a nation rather than the 6 NMC factors. One of the major considerations that is not taken into account are diplomatic relations and dealings. Diplomatic relations play a major role is the prevention and conclusion of conflicts. With this data, it was not possible to factor that in. 
@@ -530,18 +367,158 @@ Another drawback of NMC is that it cannot take into account changes in universal
 
 
 
-  
-**Alliances**
-  
-  
-**Trade** 
-   
-     
-**Militarized Interstate Disputes** 
-  
-  
-## Conclusion 
-**Discuss limitations and future directions, lessons learned**
 
-## Sources 
+#Ignore Anything below this 
+
+```{r}
+NMC_mp_ratios$conflict <- "0"
+
+for(i in c(1:length(d$x1))){
+  print(d$Conflict[i])
+  NMC_mp_ratios[NMC_mp_ratios$year >= d$x1[i] & NMC_mp_ratios$year <= d$x2[i],12] <- as.character(i)
+}
+```
+
+
+
+#### Looking Box Plot 
+
+```{r fig.width=15, fig.height=20}
+library(GGally)
+
+#ggparcoord(NMC_mp, columns = 4:10, scale = "uniminmax", alphaLines = .2, groupColumn = "stateabb")
+
+## Create 
+
+
+mylables <- c("No War" , "WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War")
+
+
+a<- ggplot() + 
+  xlab("Year") + 
+  geom_boxplot(data = NMC_mp_ratios, aes(x = as.factor(year), y = irst, fill = conflict)) +
+  ggtitle("Iron and Steel Production Ratio by Year for Major Powers Today") + 
+  theme(plot.title = element_text(hjust = .5), axis.text.x = element_text(angle = 90), legend.position="none")+
+  theme_classic() +
+  scale_fill_manual(values=c("white", "salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"), labels = mylables)
+
+b<-ggplot() + 
+  xlab("Year") + 
+  geom_boxplot(data = NMC_mp_ratios, aes(x = as.factor(year), y = milex, fill = conflict)) +
+  ggtitle("Military Expenditures Ratio by Year for Major Powers Today") + 
+  theme(plot.title = element_text(hjust = .5), axis.text.x = element_text(angle = 90),legend.position="none")+
+  theme_classic() +
+  scale_fill_manual(values=c("white", "salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"), labels = mylables)
+
+c<-ggplot() + 
+  xlab("Year") + 
+  geom_boxplot(data = NMC_mp_ratios, aes(x = as.factor(year), y = milper, fill = conflict)) +
+  ggtitle("Mlitary Personnel Ratio by Year for Major Powers Today") + 
+  theme(plot.title = element_text(hjust = .5), axis.text.x = element_text(angle = 90), legend.position="none")+
+  theme_classic() +
+  scale_fill_manual(values=c("white", "salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"), labels = mylables)
+
+d<-ggplot() + 
+  xlab("Year") + 
+  geom_boxplot(data = NMC_mp_ratios, aes(x = as.factor(year), y = upop, fill = conflict)) +
+  ggtitle("Urban Population Ratio by Year for Major Powers Today") + 
+  theme(plot.title = element_text(hjust = .5), axis.text.x = element_text(angle = 90),legend.position="none")+
+  theme_classic() +
+  scale_fill_manual(values=c("white", "salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"), labels = mylables)
+
+e<-ggplot() + 
+  xlab("Year") + 
+  geom_boxplot(data = NMC_mp_ratios, aes(x = as.factor(year), y = tpop, fill = conflict)) +
+  ggtitle("Total Population Ratio by Year for Major Powers Today") + 
+  theme(plot.title = element_text(hjust = .5), axis.text.x = element_text(angle = 90),legend.position="none")+
+  theme_classic() +
+  scale_fill_manual(values=c("white", "salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"), labels = mylables)
+
+f<-ggplot() + 
+  xlab("Year") + 
+  geom_boxplot(data = NMC_mp_ratios, aes(x = as.factor(year), y = cinc, fill = conflict)) +
+  ggtitle("CINC by Year for Major Powers Today") + 
+  theme(plot.title = element_text(hjust = .5), axis.text.x = element_text(angle = 90), legend.position="bottom")+
+  theme_classic() +
+  scale_fill_manual(values=c("white", "salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"), labels = mylables)
+
+
+
+```
+
+
+
+
+
+```{r  fig.width=25, fig.height=20 }
+
+#grid.arrange(a,b,c,e,d,f, nrow = 6)
+
+grid.arrange(ias, ias_r, a, mex, mex_r , b, mip, mip_r,c, urp, urp_r, d,top, top_r,e, nrow=6)
+
+```
+
+
+
+## NMC Findings 
+
+
+
+
+
+
+##Data Quality Analyiss 
+
+
+
+```{r fig.width=15, fig.height=10}
+
+## Visualize Missing Values 
+
+NMC_orig$cinc[NMC_orig$cinc == -9] <- NA
+NMC_orig$irst[NMC_orig$irst == -9] <- NA
+NMC_orig$milex[NMC_orig$milex == -9] <- NA
+NMC_orig$milper[NMC_orig$milper== -9] <- NA
+NMC_orig$pec[NMC_orig$pec == -9] <- NA
+NMC_orig$tpop[NMC_orig$tpop == -9] <- NA
+NMC_orig$upop[NMC_orig$upop == -9] <- NA
+
+NMC_orig <- filter(NMC_orig, NMC_orig$year %in% c(1900:2007))
+
+library(plyr)
+
+#k <-summaryBy(stateabb+ccode+year~ irst+milex+milper+pec+tpop+upop+cinc+version,
+
+
+col = c("stateabb", "ccode"   , "year")
+
+sapply(NMC_orig, function(x) sum(is.na(x)))
+```
+
+```{r}
+
+#complete cases
+nrow(NMC_orig[complete.cases(NMC_orig),])/nrow(NMC_orig)
+
+```
+
+```{r}
+test <- c("Austria-Hungary", "Austria", "Hungary")
+test_ccode <- member_alliances$ccode[match(test, member_alliances$state_name)]
+
+NMC_test <- filter(NMC, NMC$year %in% all_year)
+NMC_test <- filter(NMC_test, NMC_test$ccode %in% test_ccode)
+
+ggplot() + 
+  scale_x_continuous(name="Year") + 
+  scale_y_continuous(name="CINC") +
+  labs(color ='Country Abbreviation')+
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=.09, fill=Conflict),alpha=0.15) +
+  geom_line(data = NMC_test, aes(x = year, y = cinc, color = stateabb, group = stateabb)) +
+  ggtitle("CINC for Austria-Hungary") + 
+  theme_classic()+
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"))+
+  scale_color_brewer(palette="Paired")+
+  theme(plot.title = element_text(hjust = .5), legend.position = "bottom") 
+```
 
