@@ -17,7 +17,8 @@ library(vcdExtra)
 library(extracat)
 
 ## Set file path
-path = "/Users/cynthiaclement/Desktop"
+#path = "/Users/cynthiaclement/Desktop"
+path = "/home/vaguiar/col_hw/vis_hw/final/data"
 
 ## define year range to look at 
 year_min = 1910
