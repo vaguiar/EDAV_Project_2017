@@ -1,0 +1,162 @@
+---
+title: "MID_final"
+output: html_notebook
+---
+
+
+## About the data - Militarized Interstate Disputes  
+The data set records all instances of when one state threatened, displayed, or used force against another. 
+
+```{r fig.width=12, fig.height=8}
+library(ggplot2)
+library(dplyr)
+library(RColorBrewer)
+library(GGally)
+
+path = "/home/vaguiar/col_hw/vis_hw/final/data/"
+MIDA = read.csv(file="./data/MID/MIDA_4.01.csv", sep= ",")
+MIDB = read.csv(file="./data/MID/MIDB_4.01.csv", sep= ",")
+
+war_year <- function(x){
+  if(x >= 1914 & x <= 1918)
+   return('WWI')
+  if(x >= 1939 & x <= 1945)
+   return('WWII')
+  if(x >= 1950 & x <= 1953)
+   return('Korean War')
+  if(x >= 1955 & x <= 1975)
+   return('Vietnam War')
+  if(x >= 1947 & x <= 1991)
+   return('Cold War')
+  if(x >= 2001 & x <= 2010)
+   return('War in Afghanistan')
+  else
+    return('No War')
+}
+
+MIDA$wartime <- sapply(MIDA$StYear, war_year)
+
+##PCP PLot 
+alphabending = 0.4
+war <- ggparcoord(MIDA[MIDA$StYear>1900 & MIDA$wartime!='No War',], columns = c(9:12, 15:16), 
+                  scale = "uniminmax", 
+                  alphaLines = alphabending,
+                  groupColumn = "wartime", 
+                  title="Correlations In War Time Conflicts")
+peace <- ggparcoord(MIDA[MIDA$StYear>1900 & MIDA$wartime=='No War',], columns = c(9:12, 14:16), 
+                  scale = "uniminmax",
+                  alphaLines = alphabending,
+                  groupColumn = "wartime", 
+                  title="Correlations In Peace Time Conflicts")
+grid.arrange(war, peace, nrow = 2)  
+```
+
+
+## Fatalaties In Disputes Leading to War
+
+```{r fig.width=12, fig.height=10}
+
+# Overlay w/ rectangle theme
+y2_high =9
+d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+
+
+#Using distinct color palette
+cols <- colorRampPalette(brewer.pal(12, "Paired"))
+myPal <- cols(length(unique(nat_top10_exp$statename)))
+
+#Adding Labels for Facet titles
+facet_names <- as_labeller(c(
+  '0' = "None",
+  '1' = "1-25 deaths",
+  '2' = "26-100 deaths",
+  '3' = "101-250 deaths",
+  '4' = "251-500 deaths",
+  '5' = "501-999 deaths",
+  '6' = "More than 999 deaths",
+  '-9' = "Missing Data"
+))
+
+ggplot() + 
+  geom_bar(data=MIDA[MIDA$EndYear>1900 & MIDA$Fatality!=0 & MIDA$Fatality!=-9,], aes(x = EndYear),   stat="count") +
+  facet_wrap(~Fatality, nrow= 8, labeller=facet_names) +
+  scale_fill_manual(values = myPal) +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  ggtitle("Number Of Disputes With Fatalities By Year") +
+  xlab("End Year") +
+  ylab("Count")
+
+```
+
+
+** Explain Missing Data in the Fatalities
+
+## Settlement of Disputes Leading to War
+
+```{r fig.width=12, fig.height=6}
+
+# Overlay w/ rectangle theme
+y2_high = 9
+d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+
+
+#Adding Labels for Facet titles
+facet_names <- as_labeller(c(
+  '1' = "Negotiated",
+  '2' = "Imposed",
+  '3' = "None",
+  '4' = "Unclear",
+  '-9' = "Missing Data"
+))
+
+ggplot() + 
+  geom_bar(data=MIDA[MIDA$EndYear>1900 & MIDA$Settle!=3 & MIDA$Settle!='-9', ], aes(x = EndYear), stat="count") +
+  facet_wrap(~Settle, nrow= 5, labeller=facet_names) +
+  scale_fill_manual(values = myPal) +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  ggtitle("Number Of Disputes With Settlement Outcomes By Year") +
+  xlab("End Year") +
+  ylab("Count")
+```
+
+## Outcomes of Disputes Leading to War
+
+```{r fig.width=12, fig.height=10}
+
+# Overlay w/ rectangle theme
+y2_high =65
+d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+
+MIDA_o <- filter(MIDA, MIDA$Outcome %in% c(1,2,3,4,5,6,8,-9))
+war_outcome <- function(x){
+  if(x ==2)
+   return(1)
+  if(x == 4)
+   return(3)
+  else
+    return(x)
+}
+
+MIDA_o$WarOutcome <- sapply(MIDA_o$Outcome, war_outcome)
+
+
+#Adding Labels for Facet titles
+facet_names <- as_labeller(c(
+  '1' = "Victory For Either Side",
+  '3' = "Yield By Either Side",
+  '5' = "Stalemate",
+  '6' = "Compromise", 
+  '8' = "Unclear",
+  '-9' = "Missing Data"
+))
+
+ggplot() + 
+  geom_bar(data=MIDA_o[MIDA_o$EndYear>1900 & MIDA_o$WarOutcome!='-9' , ], 
+  aes(x = EndYear), stat="count") +
+  facet_wrap(~WarOutcome, nrow= 5, labeller=facet_names) +
+  scale_fill_manual(values = myPal) +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  ggtitle("Number Of Disputes With Outcomes By Year") +
+  xlab("End Year") +
+  ylab("Count")
+```
