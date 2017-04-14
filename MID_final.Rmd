@@ -1,6 +1,8 @@
 ---
 title: "MID_final"
-output: html_notebook
+output:
+  html_notebook: default
+  pdf_document: default
 ---
 
 
@@ -10,6 +12,8 @@ The data set records all instances of when one state threatened, displayed, or u
 ```{r fig.width=12, fig.height=8}
 library(ggplot2)
 library(dplyr)
+library(grid)
+library(gridExtra)
 library(RColorBrewer)
 library(GGally)
 
@@ -37,7 +41,7 @@ war_year <- function(x){
 MIDA$wartime <- sapply(MIDA$StYear, war_year)
 
 ##PCP PLot 
-alphabending = 0.4
+alphabending = 0.5
 war <- ggparcoord(MIDA[MIDA$StYear>1900 & MIDA$wartime!='No War',], columns = c(9:12, 15:16), 
                   scale = "uniminmax", 
                   alphaLines = alphabending,
@@ -51,6 +55,9 @@ peace <- ggparcoord(MIDA[MIDA$StYear>1900 & MIDA$wartime=='No War',], columns = 
 grid.arrange(war, peace, nrow = 2)  
 ```
 
+The data is rich with information about the Outcomes, Settlements, The Number of Fatalities, Minimum Duration, The Highest Action taken and Hostility Level during each militarized conflict during theat time period. We've selected a few important variables and plotted them in a pcp to see the correlation between them.
+
+Below we dig a little deeper into a few variables like Fatalities, Settlements and Outcomes of the conflicts last century. Each graph is overlayed with the time period of major wars. Through this exploration, we try to spot possible correlations between the variables and the start of a war.
 
 ## Fatalaties In Disputes Leading to War
 
