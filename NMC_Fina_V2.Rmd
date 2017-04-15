@@ -348,9 +348,41 @@ With the Iron and Steel Production ratio, you can see that it follows to same pa
 
 **[Continue Making Observations]**
 
+Heat Map
+
+```{r fig.width=15, fig.height=6 }
+ct <- c("United States of America", "United Kingdom", "France", "Russia","Germany", "Italy", "Japan", "China")
+ct_ccode <- member_alliances$ccode[match(ct, member_alliances$state_name)]
+
+NMC_ct <- filter(NMC, NMC$year %in% all_year)
+NMC_ct <- filter(NMC_ct, NMC_ct$ccode %in% ct_ccode)
+
+a<- ggplot(NMC_ct, aes(stateabb, year, fill = cinc)) + geom_tile()+
+   xlab("State Abbreviation") +
+   ylab("Year") +
+  scale_fill_viridis() + ggtitle("CINC Heatmap for Major Powers") + theme(plot.title = element_text(hjust = 0.5)) +coord_flip() +
+  labs(color ='CINC')
+topCas <- c("Netherlands", "Yugoslavia", "Lithuania", "Poland", "Austria", "Hungary", "Slovakia", "Romania", "Estonia", "Luxembourg")
+topCas_ccode <- member_alliances$ccode[match(topCas, member_alliances$state_name)]
+
+NMC_cas <- filter(NMC, NMC$year %in% all_year)
+NMC_cas <- filter(NMC_cas, NMC_cas$ccode %in% topCas_ccode)
+
+b<- ggplot(NMC_cas, aes(stateabb, year, fill = cinc)) + geom_tile()+
+   xlab("State Abbreviation") +
+   ylab("Year") +
+  scale_fill_viridis() + ggtitle("CINC Heatmap for Countries with the most Holocaust Casualties") + theme(plot.title = element_text(hjust = 0.5)) +coord_flip() +
+  labs(color ='CINC')
+
+grid.arrange(a,b, nrow = 1 )
+
+```
 
 
+The graph on the right shows thAnother observation that is unique to the cold war is that following the war, the CINC values are missing for Japan and Germany. Also the values are missing for a year for France right before the end of the war.
 
+
+**Next Steps**
 
 
 To get even more into detail and context around certain characteristics, we want to look at specific events like pearl harbor or China’s invasion of Malaysia and other pivotal moments in wars to see how those events impact the CINC and its various components.  
@@ -360,6 +392,26 @@ A problem with NMC is that there are many other factors that determine a power o
 Additionally, another thing to consider is differences in policies between different countries. We see that military expenditures have been increasing for the US since the Cold War but Russia’s military expenditures take a sudden drop at the end of the Cold War. Since then Russia has been cutting military spending till today. Even with its participation in the Afghanistan War, Russia’s military expenditures have not increase. On the contrary, in the US today, politicians are proposing a Federal Budgets with increases in military spending. This difference is due to differences in policies of the countries. Thus the reactions of countries to events will drastically vary based on their policies and it because hard to distinguish an overall pattern. 
 
 Another drawback of NMC is that it cannot take into account changes in universal priorities. For example, with an increased concern for climate change and scare natural resources, iron and steel production might start to decrease drastically in the future so it may no longer be a valid measure of power.  The issue with NMC is that it cannot take such policy concerns and changes into consideration to measure national power. 
+
+
+
+
+
+
+
+```{r}
+
+ct <- c("United States of America", "United Kingdom", "Russia", "Japan", "Italy", "Germany", "Turkey", "Austria-Hungary", "Romania", "Bulgaria", "Vietnam", "Afghanistan", "Israel", "China", "Cuba", "North Korea", "South Korea", "Yugoslavia")
+ct_ccode <- member_alliances$ccode[match(ct, member_alliances$state_name)]
+NMC_ct <- filter(NMC, NMC$year %in% all_year)
+NMC_ct <- filter(NMC_ct, NMC_ct$ccode %in% ct_ccode)
+
+ggplot(NMC_ct, aes(stateabb, year, fill = cinc)) + geom_tile()+
+  scale_fill_viridis() + ggtitle("Heatmap of cinc") + theme(axis.text.x = element_text(angle = 60, hjust = 1),plot.title = element_text(hjust = 0.5))
+
+
+```
+
 
 
 
@@ -521,4 +573,10 @@ ggplot() +
   scale_color_brewer(palette="Paired")+
   theme(plot.title = element_text(hjust = .5), legend.position = "bottom") 
 ```
+
+
+
+
+ggplot(, aes(stateabb, year, fill = cinc)) + geom_tile()+
+  scale_fill_viridis() + ggtitle("Heatmap of cinc") + theme(axis.text.x = element_text(angle = 60, hjust = 1),plot.title = element_text(hjust = 0.5))
 

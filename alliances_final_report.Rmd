@@ -24,7 +24,7 @@ library(extracat)
 path = "/Users/cynthiaclement/Desktop"
 
 ################################# Looking at US Alliances #################################
-dyad_al_0= read.csv("./data/version4.1_csv/alliance_v4.1_by_dyad.csv", sep= ",")
+dyad_al= read.csv("./data/version4.1_csv/alliance_v4.1_by_dyad.csv", sep= ",")
 dyad_al_year = read.csv("./data/version4.1_csv/alliance_v4.1_by_dyad_yearly.csv", sep= ",")
 
 member_alliances = read.csv("./data/version4.1_csv/alliance_v4.1_by_member.csv", sep= ",")
@@ -35,6 +35,8 @@ dir_al= read.csv("./data/version4.1_csv/alliance_v4.1_by_directed.csv", sep= ","
 
 d=data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
 
+
+mylables <- c("No War" , "WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War")
 ```
 
 
@@ -47,42 +49,384 @@ dyad_al_year$length = dyad_al_year$dyad_end_year - dyad_al_year$dyad_st_year
 dayd_al_year$conflict <- "0"
 dyad_al_year$count <- 1 
 
-
-mylables <- c("No War" , "WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War")
-```
-
-
-
-```{r}
-
 dir_alliances <- gather(dir_al_year, treaty_type, idicator, defense:entente)
 dir_alliances <- dir_alliances[!dir_alliances$idicator %in%  0,]
 dir_alliances$dyad_end_year[dir_alliances$dyad_end_year %in% NA] = 2016
 dir_alliances <- dir_alliances[dir_alliances$year>1900,]
 alliance_count <- dir_alliances[, c(2,3,14,16)]
 alliance_count$count <- 1 
+
 gp_ct <- aggregate(cbind(count) ~ ccode1+state_name1+year+treaty_type, data =alliance_count, FUN = sum )
-
-
-gp_ct$conflict <- "0"
+gp_ct$Conflict <- "0"
 
 for(i in c(1:length(d$x1))){
   gp_ct[gp_ct$year >= d$x1[i] & gp_ct$year <= d$x2[i], length(gp_ct)] <- as.character(i)
 }
 
+```
+
+```{r fig.width=20, fig.height=5}
+ggplot() +
+  xlab("Year") +
+  ylab("Count")+
+  geom_boxplot(data = gp_ct, aes(x = as.factor(year), y = count, fill = Conflict)) +
+  ggtitle("Total Alliances by Year") + 
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5), axis.text.x = element_text(angle = 90), legend.position="bottom")+
+  scale_fill_manual(values=c("white", "lightsteelblue3", "pink3", "paleturquoise3", "lightsteelblue2", "lightsteelblue4","salmon" ), labels = mylables)
+
+```
+The boxplots above show the number of alliances in effect between two countries each year. The colors represent different war periods and as you can see at the end of each war, the median number of alliances between 2 countries increases. This increase happens before the end of the war and could be related to the end of the war. 
+
+Next we looked at the types of alliances that were formed during the years. The COW data set has 4 possible treaty types.
+
+
+**When did the alliances form **
+
+
+
+
+
+```{r fig.width=20, fig.height=8}
+dir_al_0 <- filter(dir_al, dir_al$dyad_st_year %in% c(1900:2012))
+all_st <- gather(dir_al_0, treaty_type, idicator, defense:entente)
+all_st <- all_st[!all_st$idicator %in%  0,]
+all_st$dyad_end_year[all_st$dyad_end_year %in% NA] = 2016
+al_st_count <- all_st[, c(3,5,8,11,15)]
+al_st_count$count <- 1 
+
+gp_st <- aggregate(cbind(count) ~ dyad_st_year+treaty_type, data =al_st_count, FUN = sum )
+
+a <- ggplot() +
+  xlab("Year") +
+  ylab("Count")+
+  geom_bar(data = al_st_count, aes(x = dyad_st_year)) +
+  ggtitle("Total Alliances by Year they started")+
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=max(450), fill=Conflict),alpha=0.2)+
+  ggtitle("Number of Alliances Formed") +
+  theme_classic()+
+  theme(legend.position="bottom", plot.title = element_text(hjust = .5)) + 
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1 )
+
+b<- ggplot() +
+  xlab("Year") +
+  ylab("Count")+
+  geom_bar(data = al_st_count[al_st_count$dyad_end_year < 2016, ], aes(x = dyad_end_year)) +
+  ggtitle("Number of Alliances Terminated")+
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=max(450), fill=Conflict),alpha=0.2)+
+  theme_classic()+
+  theme(legend.position="bottom", plot.title = element_text(hjust = .5)) + 
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)
+
+grid.arrange(a,b, nrow =2)
+
 
 ```
 
-```{r fig.width=15, fig.height=5}
 
 
-ggplot() +
-  geom_boxplot(data = gp_ct, aes(x = as.factor(year), y = count, fill = conflict)) +
-  ggtitle("Number of Effective Alliances Each Year") + 
-  theme(plot.title = element_text(hjust = .5), axis.text.x = element_text(angle = 90), legend.position="bottom")+
+
+
+
+```{r fig.width=20, fig.height=8}
+
+```
+
+** US Alliances **
+
+
+```{r fig.width=12, fig.height=6}
+
+al_us_yr <- filter(dir_al_year, dir_al_year$state_name1 %in% "United States of America")
+al_us_yr <- gather(al_us_yr, Treaty, idicator, defense:entente)   
+al_us_yr <- al_us_yr[!al_us_yr$idicator %in%  0,]
+al_us_yr$dyad_end_year[al_us$dyad_end_year %in% NA] = 2016
+al_us_yr <- al_us_yr[, c(5,8,11,14,16)]
+al_us_yr$count = 1 
+al_us_yr_end <-  al_us_yr[al_us_yr$dyad_end_year < 2012, ]
+al_us_yr_ongoing <-  al_us_yr[al_us_yr$dyad_end_year == 2012, ]
+
+ggplot() + 
+  geom_point(data =al_us_yr_end, aes(x=year, y = state_name2), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  theme(legend.position="bottom") + 
+  ggtitle("Alliances that Ended for the US ")+
+  theme_classic()+
+  theme(legend.position="right", plot.title = element_text(hjust = .5)) + 
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)+
+    facet_wrap(~Treaty, nrow = 1 ) 
+
+```
+
+
+```{r fig.width=12, fig.height=8}
+ggplot() + 
+  geom_point(data =al_us_yr_ongoing, aes(x=year, y = state_name2), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  theme(legend.position="bottom") + 
+  ggtitle("Ongoing US Alliances")+
+  theme_classic()+
+  theme(legend.position="right", plot.title = element_text(hjust = .5)) + 
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)+
+    facet_wrap(~Treaty, nrow = 1 )
+
+```
+
+
+```{r fig.width=12, fig.height=10}
+al_gb_yr <- filter(dir_al_year2, dir_al_year2$state_name1 %in% c("United Kingdom"))
+al_gb_yr <- gather(al_gb_yr, Treaty, idicator, defense:entente)   
+al_gb_yr <- al_gb_yr[!al_gb_yr$idicator %in%  0,]
+
+al_gb_yr <- al_gb_yr[, c(5,8,11,14,16)]
+al_gb_yr$count = 1 
+al_gb_yr_end <-  al_gb_yr[al_gb_yr$dyad_end_year < 2012, ]
+al_gb_yr_ongoing <-  al_gb_yr[al_gb_yr$dyad_end_year == 2012, ]
+
+gb <- ggplot() + 
+  geom_point(data =al_gb_yr_end, aes(x=year, y = state_name2), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  ggtitle("Alliances that Ended for THE UK ")+
+  theme_classic()+
+  theme(legend.position="right", plot.title = element_text(hjust = .5)) + 
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)+
+    facet_wrap(~Treaty, nrow = 1 )
+gb_2<- ggplot() + 
+  geom_point(data =al_gb_yr_ongoing, aes(x=year, y = state_name2), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  ggtitle("OngoinG UK Alliances")+
+  theme_classic()+
+  theme(legend.position="right", plot.title = element_text(hjust = .5)) + 
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)+
+    facet_wrap(~Treaty, nrow = 1 )
+
+
+
+grid.arrange(gb,gb_2, nrow =2)
+```
+
+
+**Looking at German and Japan** 
+
+```{r fig.width=12, fig.height=8}
+al_gmy_yr <- filter(dir_al_year2, dir_al_year2$state_name1 %in% c("Germany"))
+al_gmy_yr <- gather(al_gmy_yr, Treaty, idicator, defense:entente)   
+al_gmy_yr <- al_gmy_yr[!al_gmy_yr$idicator %in%  0,]
+
+al_gmy_yr <- al_gmy_yr[, c(5,8,11,14,16)]
+al_gmy_yr$count = 1 
+al_gmy_yr_end <-  al_gmy_yr[al_gmy_yr$dyad_end_year < 2012, ]
+al_gmy_yr_ongoing <-  al_gmy_yr[al_gmy_yr$dyad_end_year == 2012, ]
+
+gmy <- ggplot() + 
+  geom_point(data =al_gmy_yr_end, aes(x=year, y = state_name2), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  ggtitle("Alliances that Ended for Germany ")+
+  theme_classic()+
+  theme(legend.position="right", plot.title = element_text(hjust = .5)) + 
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)+
+    facet_wrap(~Treaty, nrow = 1 )
+gm_2<- ggplot() + 
+  geom_point(data =al_gmy_yr_ongoing, aes(x=year, y = state_name2), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  ggtitle("Ongoing German  Alliances")+
+  theme_classic()+
+  theme(legend.position="right", plot.title = element_text(hjust = .5)) + 
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)+
+    facet_wrap(~Treaty, nrow = 1 )
+
+
+
+grid.arrange(gmy,gm_2, nrow =2)
+
+```
+
+
+
+```{r fig.width=25, fig.height=15}
+al_rus_yr <- filter(dir_al_year2, dir_al_year2$state_name1 %in% c("Russia"))
+al_rus_yr <- gather(al_rus_yr, Treaty, idicator, defense:entente)   
+al_rus_yr <- al_rus_yr[!al_rus_yr$idicator %in%  0,]
+
+al_rus_yr <- al_rus_yr[, c(5,8,11,14,16)]
+al_rus_yr$count = 1 
+al_rus_yr_end <-  al_rus_yr[al_rus_yr$dyad_end_year < 2012, ]
+al_rus_yr_ongoing <-  al_rus_yr[al_rus_yr$dyad_end_year == 2012, ]
+
+rus <- ggplot() + 
+  geom_point(data =al_rus_yr_end, aes(x=year, y = state_name2), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  ggtitle("Alliances that Ended for Russia")+
+  theme_classic()+
+  theme(legend.position="bottom", plot.title = element_text(hjust = .5)) + 
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)+
+    facet_wrap(~Treaty, nrow = 1 )
+rus_2<- ggplot() + 
+  geom_point(data =al_rus_yr_ongoing, aes(x=year, y = state_name2), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  ggtitle("Ongoing Russian Alliances")+
+  theme_classic()+
+  theme(legend.position="bottom", plot.title = element_text(hjust = .5)) + 
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)+
+    facet_wrap(~Treaty, nrow = 1 )
+
+
+
+grid.arrange(rus,rus_2, nrow =2)
+```
+
+
+
+
+
+
+
+** Duration of alliances started around war time ** 
+
+
+```{r}
+dyad_al_1 <- filter(dyad_al, dyad_al$dyad_st_year %in% c(1900:2012))
+dyad_al_1 <-gather(dyad_al_1, treaty_type, idicator, defense:entente)
+dyad_al_1 <- dyad_al_1[!dyad_al_1$idicator %in%  0,]
+dyad_al_1$dyad_end_year[dyad_al_1$dyad_end_year %in% NA] = 2016
+x <- as.numeric(dyad_al_1$dyad_st_year)
+y <- as.numeric(dyad_al_1$dyad_end_year)
+dyad_al_1$len = y-x
+
+
+dur_count <- dyad_al_1[, c(3,5,8,11,16,18)]
+dur_count$count <- 1 
+
+dur_count$conflict <- "0"
+
+for(i in c(1:length(d$x1))){
+  dur_count[dur_count$dyad_st_year >= d$x1[i] & dur_count$dyad_st_year <= d$x2[i], length(dur_count)] <- as.character(i)
+}
+
+
+dur_count2 <- dur_count
+dur_count2 <- aggregate(cbind(count) ~ treaty_type+dyad_st_year+conflict, data =dur_count2, FUN = sum )
+
+``` 
+
+```{r fig.width=10, fig.height=8}
+
+a<- ggplot() +
+  xlab("Year") +
+  ylab("Count")+
+  geom_boxplot(data = dur_count2, aes(x = treaty_type, y = count, fill = conflict)) +
+  ggtitle("Types of Alliances by War") + 
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5), legend.position="none")+
   scale_fill_manual(values=c("white", "salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"), labels = mylables)
 
+b<-ggplot() +
+  xlab("Year") +
+  ylab("Count")+
+  geom_boxplot(data = dur_count, aes(x = treaty_type, y = len, fill = conflict)) +
+  ggtitle("Duration of those Alliances") + 
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5), legend.position="bottom")+
+  scale_fill_manual(values=c("white", "salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"), labels = mylables)
+
+grid.arrange(a,b, nrow =2)
 ```
+
+
+
+```{r}
+ggplot(data = dur_count, aes(x = len)) + geom_histogram(binwidth = 1) + facet_wrap(~treaty_type)
+```
+
+
+
+
+
+```{r fig.width=24, fig.height=24}
+
+treaty_count <- aggregate(cbind(count) ~ treaty_type + dyad_end_year, data = dur_count, FUN =sum)
+treaty_count$dyad_end_year[treaty_count$dyad_end_year %in% 2016] = "On Going"
+
+```
+
+
+***things we tried that didnt work ***
+```{r fig.width=12, fig.height=12}
+
+US_alliances <- gather(dir_al_year, treaty_type, idicator, defense:entente)
+
+US_alliances <- US_alliances[!US_alliances$idicator %in%  0,]
+
+US_alliances$dyad_end_year[US_alliances$dyad_end_year %in% NA] = 2016
+US_alliances <- US_alliances[US_alliances$year>1900,]
+
+ggplot() + 
+  geom_point(data =US_alliances[US_alliances$ccode1 == 2, ], aes(x=year, y = state_name2, color = treaty_type)) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.25) + 
+  theme(legend.position="bottom") + ggtitle("United States Alliances") +
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"))
+
+
+
+```
+
+## Data Quality 
+
+
+1) for allianes that exptended beyond the  scope of the data NAs in regular but 2012 in year
+
+2) overlapping treaties ex: defense amd entente 
+
+3) US had only one alliance before 1925 and Japan has no more alliances now
+
+```{r}
+ggplot() + 
+  geom_point(data =al_us_yr_end, aes(x=year, y = state_name2, color = Treaty), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  theme_classic()+
+  theme(legend.position="bottom", plot.title = element_text(hjust = .5)) + 
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) 
+```
+
+
+```{r}
+
+al_jap_yr <- filter(dir_al_year2, dir_al_year2$state_name1 %in% c("Japan"))
+al_jap_yr <- gather(al_jap_yr, Treaty, idicator, defense:entente)   
+al_jap_yr <- al_jap_yr[!al_jap_yr$idicator %in%  0,]
+
+al_jap_yr <- al_jap_yr[, c(5,8,11,14,16)]
+al_jap_yr$count = 1 
+al_jap_yr_end <-  al_jap_yr[al_jap_yr$dyad_end_year < 2012, ]
+al_jap_yr_ongoing <-  al_jap_yr[al_jap_yr$dyad_end_year == 2012, ]
+
+jap<- ggplot() + 
+  geom_point(data =al_jap_yr_end, aes(x=year, y = state_name2), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  ggtitle("Alliances that Ended for Japan ")+
+  theme_classic()+
+  theme(legend.position="right", plot.title = element_text(hjust = .5)) + 
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)+
+    facet_wrap(~Treaty, nrow = 1 )
+
+```
+
+
+
+## Final Analysis
+
+
+
+
+
+
+
+
+
+
+
+
+#IGNORE ANYTHIG BEYOND THIS
 
 
 ```{r fig.width=15, fig.height=5}
@@ -96,6 +440,41 @@ gp_ct_wp <- filter(gp_ct, gp_ct$ccode1 %in% countires_code)
 ggplot() +
   geom_boxplot(data = gp_ct_wp, aes(x = as.factor(year), y = count, fill = conflict)) +
   ggtitle("Number of Effective Alliances for Major Players") + 
+  theme(plot.title = element_text(hjust = .5), axis.text.x = element_text(angle = 90), legend.position="bottom")+
+  scale_fill_manual(values=c("white", "salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"), labels = mylables)
+
+```
+
+```{r fig.width=20, fig.height=10}
+
+
+ggplot() +
+  geom_boxplot(data = gp_ct, aes(x = as.factor(year), y = count, fill = conflict)) +
+  ggtitle("Total Alliances by Year") + 
+  theme(plot.title = element_text(hjust = .5), axis.text.x = element_text(angle = 90), legend.position="bottom")+
+  scale_fill_manual(values=c("white", "salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"), labels = mylables) + facet_wrap(~treaty_type)
+
+```
+
+
+```{r fig.width=15, fig.height=5}
+
+
+gp_ct_type <- aggregate(cbind(count) ~ treaty_type+year, alliance_count, FUN = sum)
+
+ggplot() + 
+  geom_line(data =gp_ct_type, aes(x=year, y = count, color =treaty_type)) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=max(gp_ct_type$count), fill=Conflict),alpha=0.3) + 
+  
+  
+
+```
+
+
+```{r fig.width=15, fig.height=5}
+ggplot() +
+  geom_boxplot(data = dur_count, aes(x = as.factor(dyad_st_year), y = len, fill = conflict)) +
+  ggtitle("Duration of Alliance") + 
   theme(plot.title = element_text(hjust = .5), axis.text.x = element_text(angle = 90), legend.position="bottom")+
   scale_fill_manual(values=c("white", "salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"), labels = mylables)
 
@@ -130,111 +509,40 @@ ggplot() +
 ```
 
 
-```{r fig.width=15, fig.height=5}
+```{r fig.width=20, fig.height=8}
 
-gp_ct_type <- aggregate(cbind(count) ~ treaty_type+year, data =gp_ct, FUN = sum )
-
-ggplot() + 
-  geom_line(data =gp_ct_type, aes(x=year, y = count, color =treaty_type)) + 
-  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=max(gp_ct_type$count), fill=Conflict),alpha=0.3) + 
-  theme(legend.position="bottom", plot.title = element_text(hjust = .5)) + 
-  ggtitle("Number of Alliances by Year for Major Powers Today") +
-  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"))
-
-```
-
-
-** Duration of alliances started around war time ** 
-
-
-```{r}
-dyad_al <- filter(dyad_al_0, dyad_al_0$dyad_st_year %in% c(1900:2012))
-dyad_al <-gather(dyad_al, treaty_type, idicator, defense:entente)
-dyad_al <- dyad_al[!dyad_al$idicator %in%  0,]
-dyad_al$dyad_end_year[dyad_al$dyad_end_year %in% NA] = 2016
-dyad_al$length = dyad_al$dyad_end_year - dyad_al$dyad_st_year
-
-
-dur_count <- dyad_al[, c(8,16,18)]
-dur_count$count <- 1 
-
-dur_count$conflict <- "0"
-for(i in c(1:length(d$x1))){
-  dur_count[dur_count$dyad_st_year >= d$x1[i] & dur_count$dyad_st_year <= d$x2[i], length(dur_count)] <- as.character(i)
-}
-
-
-```
-
-
-
-
-
-
-
-
-```{r fig.width=15, fig.height=5}
-ggplot() +
-  geom_boxplot(data = dur_count, aes(x = as.factor(dyad_st_year), y = length, fill = conflict)) +
-  ggtitle("Duration of Alliance") + 
-  theme(plot.title = element_text(hjust = .5), axis.text.x = element_text(angle = 90), legend.position="bottom")+
-  scale_fill_manual(values=c("white", "salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"), labels = mylables)
-
-```
-
-
-** Duration of alliances started by treaty type** 
-
-
-```{r fig.width=10, fig.height=10}
-
-dur_count2 <- dur_count
-for(i in c(1:length(d$x1))){
-  dur_count2[dur_count2$dyad_st_year >= d$x1[i]-5 & dur_count2$dyad_st_year <= d$x2[i]+5, length(dur_count2)] <- as.character(i)
-}
-
-dur_count2 <- aggregate(cbind(count) ~ treaty_type+dyad_st_year+conflict, data =dur_count2, FUN = sum )
+al_us <- filter(dir_al, dir_al$state_name1 %in% "United States of America")
+al_us <- gather(al_us, treaty_type, idicator, defense:entente)   
+al_us <- al_us[!al_us$idicator %in%  0,]
+al_us$dyad_end_year[al_us$dyad_end_year %in% NA] = 2016
+al_us <- al_us[, c(5,8,11,15)]
+#al_us <- al_us[, c(5,8,11,14,16)]
+al_us$duration = 1     
+al_us$count = 1     
+us_duration <- aggregate(cbind(duration) ~ state_name2 +dyad_st_year+dyad_end_year+treaty_type, data = al_us, FUN =sum)
 
 a <- ggplot() +
-  
-  geom_boxplot(data = dur_count2, aes(x = treaty_type, y = count, fill = conflict)) +
-  ggtitle("Types of Alliances by War") + 
-  theme(plot.title = element_text(hjust = .5), legend.position="none")+
-  scale_fill_manual(values=c("white", "salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"), labels = mylables)
+  xlab("Year") +
+  ylab("Count")+
+  geom_bar(data = al_us, aes(x = dyad_st_year)) +
+  ggtitle("US: Total Alliances by Year they started")+
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=max(25), fill=Conflict),alpha=0.2)+
+  ggtitle("Number of Alliances Formed") +
+  theme_classic()+
+  theme(legend.position="bottom", plot.title = element_text(hjust = .5)) + 
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1 )
 
 b<- ggplot() +
-  geom_boxplot(data = dur_count, aes(x = treaty_type, y = length, fill = conflict)) +
-  ggtitle("Duration of those Alliances") + 
-  theme(plot.title = element_text(hjust = .5), legend.position="bottom")+
-  scale_fill_manual(values=c("white", "salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"), labels = mylables)
+  xlab("Year") +
+  ylab("Count")+
+  geom_bar(data = al_us[al_us$dyad_end_year < 2016, ], aes(x = dyad_end_year)) +
+  ggtitle("US: Number of Alliances Terminated")+
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=max(25), fill=Conflict),alpha=0.2)+
+  theme_classic()+
+  theme(legend.position="bottom", plot.title = element_text(hjust = .5)) + 
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)
 
 grid.arrange(a,b, nrow =2)
-```
-
-***things we tried that didnt work ***
-```{r fig.width=12, fig.height=12}
-
-US_alliances <- gather(dir_al_year, treaty_type, idicator, defense:entente)
-
-US_alliances <- US_alliances[!US_alliances$idicator %in%  0,]
-
-US_alliances$dyad_end_year[US_alliances$dyad_end_year %in% NA] = 2016
-US_alliances <- US_alliances[US_alliances$year>1900,]
-
-ggplot() + 
-  geom_point(data =US_alliances[US_alliances$ccode1 == 2, ], aes(x=year, y = state_name2, color = treaty_type)) + 
-  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.25) + 
-  theme(legend.position="bottom") + ggtitle("United States Alliances") +
-  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"))
-
 
 
 ```
-
-## Data Quality 
-
-
-1) for allianes that exptended beyond the  scope of the data NAs 
-
-
-## Final Analysis

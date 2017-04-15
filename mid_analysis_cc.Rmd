@@ -29,8 +29,8 @@ midAB$HiAct.x <- as.factor(midAB$HiAct.x)
 d=data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
 
 ggplot() + 
-geom_rect(data=d, mapping=aes(xmin = x1, xmax=x2, ymin=0, ymax=250, fill = Conflict ),alpha=0.5) +
-geom_histogram(data = midA, aes(midA$StYear), alpha = .4) 
+geom_rect(data=d, mapping=aes(xmin = x1, xmax=x2, ymin=0, ymax=75, fill = Conflict ),alpha=0.5) +
+geom_bar(data = midA, aes(midA$StYear), alpha = .4) 
 
 
 
@@ -201,17 +201,10 @@ geom_histogram(data = WWII, aes(WWII$StYear.x))
 
 
 ##Korean War 
-```{r fig.width=10, fig.height=14}
+```{r fig.width=8, fig.height=8}
 kwar <- midAB
-kwar <- midAB[midAB$StYear.x >= 1947,]
-kwar <- midAB[midAB$StYear.x <= 1955,]
-
-vwar <- midAB
-vwar <- midAB[midAB$StYear.x >= 1950,]
-vwar <- midAB[midAB$StYear.x <= 1980,]
-
-awar <- midAB
-awar <- midAB[midAB$StYear.x >= 1996,]
+kwar <- kwar[kwar$StYear.x >= 1947,]
+kwar <- kwar[kwar$StYear.x <= 1955,]
 
 
 a <- ggplot() + 
