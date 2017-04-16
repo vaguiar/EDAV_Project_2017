@@ -55,9 +55,9 @@ peace <- ggparcoord(MIDA[MIDA$StYear>1900 & MIDA$wartime=='No War',], columns = 
 grid.arrange(war, peace, nrow = 2)  
 ```
 
-The data is rich with information about the Outcomes, Settlements, The Number of Fatalities, Minimum Duration, The Highest Action taken and Hostility Level during each militarized conflict during theat time period. We've selected a few important variables and plotted them in a pcp to see the correlation between them.
+The data is rich with information about the Outcomes, Settlements, The Number of Fatalities, Minimum Duration, The Highest Action taken and Hostility Level during each militarized conflict during that time period. We've selected a few important variables and plotted them in a pcp to see if we can spot a correlation between them.
 
-Below we dig a little deeper into a few variables like Fatalities, Settlements and Outcomes of the conflicts last century. Each graph is overlayed with the time period of major wars. Through this exploration, we try to spot possible correlations between the variables and the start of a war.
+Below, we dig a little deeper into a few variables like Fatalities, Settlements and Outcomes of the conflicts last century. Each graph is overlayed with the time period of major wars. Through this exploration, we try to spot possible correlations between the variables and the start of a war.
 
 ## Fatalaties In Disputes Leading to War
 
@@ -94,6 +94,10 @@ ggplot() +
   ylab("Count")
 
 ```
+In the graph above we have plotted the Fatalites occuring due to militarized conflicts every year since the year 1900. We've faceted the graphs by the number of casualties starting from 1-25, 25-100 and so on.  
+  
+As we can see from the graphs above, there were conflicts resulting in more than 999 deaths in the years leading to the each and every major war. And in four of those years, namely 1913, 1938, 1955, and 2001, we see spikes in the number of deaths. This could be indicative of the fact that those conflicts forced countries to declare wars on each other.
+
 
 
 ** Explain Missing Data in the Fatalities
@@ -125,6 +129,9 @@ ggplot() +
   xlab("End Year") +
   ylab("Count")
 ```
+In the graph above we have plotted the Settlement outcomes of different militarized conflicts every year since the year 1900. We've faceted the graphs by the Settlement types and for simplicity we've left out missing data or settlements that were unclear.  
+  
+Surprisingly, we don't see any correlations between Imposed/Negotiated Settlements and the war. But on second though, the number of Settlements, would not be an important predictor of war. It's the quality and the intricacies of Settlement, such as the Treaty of Versailles, that had the most impact on certain wars. The data doesn't delve into the qualitative aspects of these Settlements and hence it is of little or no significance to our exploration.
 
 ## Outcomes of Disputes Leading to War
 
@@ -167,3 +174,10 @@ ggplot() +
   xlab("End Year") +
   ylab("Count")
 ```
+
+In the graph above we have plotted the Outcomes of different militarized conflicts every year since the year 1900. We've faceted the graphs by the Outcomes and for simplicity, we've left out missing data or outcomes that were unclear.  
+
+There is little evidence to show that certain types Outcomes were predictive of a war. But surprisingly so, we see that Stalemates peaked during the middle of an ongoing war. We see that in WWII, the Vietnam War and during War in Afghanistan.  
+
+
+  
