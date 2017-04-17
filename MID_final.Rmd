@@ -177,10 +177,12 @@ ggplot() +
 In the graph above we have plotted the Outcomes of different militarized conflicts every year since the year 1900. We've faceted the graphs by the Outcomes and for simplicity, we've left out missing data or outcomes that were unclear.  
 
 There is little evidence to show that certain types Outcomes were predictive of a war. But surprisingly so, we see that Stalemates peaked during the middle of an ongoing war. We see that in WWII, the Vietnam War and during War in Afghanistan.  
+  
+  
 
-### Plotting Originators of most conflicts 
+#### Viewing Initiators/Victims of most conflicts 
 
-```{r fig.width=12, fig.height=6}
+```{r fig.width=12, fig.height=12}
 library(ggrepel)
 
 MIDB = read.csv(file="./data/MID/MIDB_4.01.csv", sep= ",")
@@ -188,20 +190,33 @@ MIDB = read.csv(file="./data/MID/MIDB_4.01.csv", sep= ",")
 #Filter by countries that originated disputes.
 MIDB_O <- filter(MIDB, Orig==1)
 
-#summary(MIDB_O)
+#Filter by countries that attacked during various disputes.
+MIDB_A <- filter(MIDB, Orig==0)
+
+#summary(MIDB_A)
 
 #Count the conflicts originated by countries each year
 WarOrig <- MIDB_O %>% count(StAbb, sort=TRUE, vars=StYear)
+
+#Count the conflicts in which countries were attacked each year
+WarAttack <- MIDB_A %>% count(StAbb, sort=TRUE, vars=StYear)
 
 #Top Conflicts stared  Countries by Year
 for(yr in 1901:2010)
 {
   WarOrig_yr <- head(arrange(filter(WarOrig, vars==yr), desc(n)), 1)
-  
+  WarAttack_yr <- head(arrange(filter(WarAttack, vars==yr), desc(n)), 1)
+    
   if(yr == 1901)
+  {
     WarTopOrig <- WarOrig_yr
+    WarTopAttacked <- WarAttack_yr
+  }
   else
+  {
     WarTopOrig <- rbind(WarTopOrig, WarOrig_yr)
+    WarTopAttacked <- rbind(WarTopAttacked, WarAttack_yr)
+  }
 }
 
 #print(WarTopOrig)
@@ -210,26 +225,11 @@ for(yr in 1901:2010)
 y2_high =30
 d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
 
-#ggplot(data=WarTopOrig, aes(x = vars, y = n, label= ifelse(n>8, as.character(StAbb), ''))) + 
-#  geom_point(size = 1, color = 'red') +
- # geom_label_repel(
- #   aes(vars, n, fill = factor(StAbb)),
- #    fontface = 'bold', color = 'white',
-  #  box.padding = unit(0.35, "lines"),
-   # point.padding = unit(0.5, "lines"),
-    #segment.color = 'grey50') +
-  #geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
-#  theme_classic(base_size = 16) +
- # ggtitle("Top Countries Starting Conflicts") +
-#  xlab("Year") +
-#  ylab("Count") 
-  
-numOfConflicts = 6
-
-ggplot() + 
+confictsInitiated = 6
+orig <- ggplot() + 
   geom_point(data=WarTopOrig, aes(x = vars, y = n), size = 1, color = 'red') +
   geom_label_repel(data=WarTopOrig,
-    aes(x = vars, y = n, label= ifelse(n>=numOfConflicts, as.character(StAbb), ''), 
+    aes(x = vars, y = n, label= ifelse(n>=confictsInitiated, as.character(StAbb), ''), 
         fill = factor(StAbb)),
     fontface = 'bold', color = 'white',
     box.padding = unit(0.35, "lines"),
@@ -240,8 +240,29 @@ ggplot() +
   theme_classic(base_size = 16) +
   ggtitle("Top Countries Starting Conflicts") +
   xlab("Year") +
-  ylab("Count") 
+  ylab("Count") + theme(legend.position = "none")
 
+timesAttacked = 2
+yNew = 11
+attacked <- ggplot() + 
+  geom_point(data=WarTopAttacked, aes(x = vars, y = n), size = 1, color = 'red') +
+  geom_label_repel(data=WarTopAttacked,
+    aes(x = vars, y = n, label= ifelse(n>=timesAttacked, as.character(StAbb), ''), 
+        fill = factor(StAbb)),
+    fontface = 'bold', color = 'white',
+    box.padding = unit(0.35, "lines"),
+    point.padding = unit(0.5, "lines"),
+    segment.color = 'grey50') +
+    theme(legend.position = "none") +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=yNew, fill=Conflict), alpha=0.15) +
+  theme_classic(base_size = 16) +
+  ggtitle("Top Countries Attacked During Conflicts") +
+  xlab("Year") +
+  ylab("Count") + theme(legend.position = "none")
+
+grid.arrange(orig, attacked, nrow = 2)
 ```
 
-  
+The purpose of the graph above was to plot the most belligerent/victimized countries during conflicts happening each year.
+
+The graph sheds light on the number of conflicts happening before, during and towards the end of a war. In some cases, we see that the number of conflicts initiated by a particular country serve as valid predictor of their attitude towards a full scale conflict. 
