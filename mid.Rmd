@@ -1,0 +1,151 @@
+---
+title: "World Trade"
+author: "Vineet Aguiar"
+output:
+  html_notebook: default
+  html_document: default
+---
+
+```{r fig.width=12, fig.height=6}
+library(ggplot2)
+library(dplyr)
+library(RColorBrewer)
+
+path = "/home/vaguiar/col_hw/vis_hw/final/data/"
+MIDA = read.csv(file="./data/MID/MIDA_4.01.csv", sep= ",")
+MIDB = read.csv(file="./data/MID/MIDB_4.01.csv", sep= ",")
+
+## filter out data before 1900
+MIDA <- filter(MIDA, StYear >= 1900)
+MIDB <- filter(MIDB, StYear >= 1900)
+
+# Overlay w/ rectangle theme
+y2_high = 70
+d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+
+
+#Using distinct color palette
+cols <- colorRampPalette(brewer.pal(12, "Paired"))
+myPal <- cols(length(unique(nat_top10_exp$statename)))
+
+ggplot() + 
+  geom_bar(data=MIDA, aes(x = StYear), stat="count") +
+  scale_fill_manual(values = myPal) +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  ggtitle("Militarized Disputes By Year") 
+  
+
+```
+
+```{r fig.width=12, fig.height=6}
+library(ggplot2)
+library(dplyr)
+library(RColorBrewer)
+
+path = "/home/vaguiar/col_hw/vis_hw/final/data/"
+MIDA = read.csv(file="./data/MID/MIDA_4.01.csv", sep= ",")
+MIDB = read.csv(file="./data/MID/MIDB_4.01.csv", sep= ",")
+
+## filter out data before 1900
+MIDA <- filter(MIDA, StYear >= 1900)
+MIDB <- filter(MIDB, StYear >= 1900)
+
+# Overlay w/ rectangle theme
+y2_high = 60
+d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+
+
+#Using distinct color palette
+cols <- colorRampPalette(brewer.pal(12, "Paired"))
+myPal <- cols(length(unique(nat_top10_exp$statename)))
+
+#Adding Labels for Facet titles
+facet_names <- as_labeller(c(
+  '0' = "None",
+  '1' = "1-25 deaths",
+  '2' = "26-100 deaths",
+  '3' = "101-250 deaths",
+  '4' = "251-500 deaths",
+  '5' = "501-999 deaths",
+  '6' = "More than 999 deaths",
+  '-9' = "Missing Data"
+))
+
+ggplot() + 
+  geom_bar(data=MIDA, aes(x = StYear), stat="count") +
+  facet_wrap(~Fatality, nrow= 6, labeller=facet_names) +
+  scale_fill_manual(values = myPal) +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  ggtitle("Militarized Disputes By Year") 
+
+```
+
+
+
+```{r fig.width=12, fig.height=12}
+library(ggplot2)
+library(dplyr)
+library(RColorBrewer)
+library(grid)
+library(gridExtra)
+
+path = "/home/vaguiar/col_hw/vis_hw/final/data/"
+MIDA = read.csv(file="./data/MID/MIDA_4.01.csv", sep= ",")
+MIDB = read.csv(file="./data/MID/MIDB_4.01.csv", sep= ",")
+
+## filter out data before 1900
+MIDA <- filter(MIDA, StYear >= 1900)
+MIDB <- filter(MIDB, StYear >= 1900)
+
+# Overlay w/ rectangle theme
+y2_high = 60
+d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+
+# Filter data by fatalities
+MID_0_fat <- filter(MIDA, Fatality == 0)
+MIDA_1_100_fat <- filter(MIDA, Fatality == 1 | Fatality == 2)
+MIDA_101_500_fat <- filter(MIDA, Fatality == 3 | Fatality == 4)
+MIDA_501_999_fat <- filter(MIDA, Fatality == 5)
+MIDA_999_plus_fat <- filter(MIDA, Fatality == 6)
+
+#Using distinct color palette
+cols <- colorRampPalette(brewer.pal(12, "Paired"))
+myPal <- cols(length(unique(nat_top10_exp$statename)))
+
+f0 <- ggplot() + 
+  geom_bar(data=MID_0_fat, aes(x = StYear), stat="count") +
+  scale_fill_manual(values = myPal) +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  ggtitle("Militarized Disputes By Year (With 0 Fatalities)") 
+  
+f100 <- ggplot() + 
+  geom_bar(data=MIDA_1_100_fat, aes(x = StYear), stat="count") +
+  scale_fill_manual(values = myPal) +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  ggtitle("Militarized Disputes By Year (Between One to One Hundred Fatalities)") 
+
+f500 <- ggplot() + 
+  geom_bar(data=MIDA_101_500_fat, aes(x = StYear), stat="count") +
+  scale_fill_manual(values = myPal) +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  ggtitle("Militarized Disputes By Year (Between 101 to 500 Fatalities)") 
+
+f999 <- ggplot() + 
+  geom_bar(data=MIDA_501_999_fat, aes(x = StYear), stat="count") +
+  scale_fill_manual(values = myPal) +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  ggtitle("Militarized Disputes By Year (Between 501 to 900 Fatalities)") 
+
+f1000plus <- ggplot() + 
+  geom_bar(data=MIDA_999_plus_fat, aes(x = StYear), stat="count") +
+  scale_fill_manual(values = myPal) +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  ggtitle("Militarized Disputes By Year (More than 1000 Fatalities)") 
+
+grid.arrange(f0, f100, f500, f999, f1000plus, nrow = 5)
+
+```
+
+
+
+
