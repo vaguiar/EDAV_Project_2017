@@ -256,13 +256,13 @@ attacked <- ggplot() +
     theme(legend.position = "none") +
   geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=yNew, fill=Conflict), alpha=0.15) +
   theme_classic(base_size = 16) +
-  ggtitle("Top Countries Attacked During Conflicts") +
+  ggtitle("Countries Most Attacked") +
   xlab("Year") +
   ylab("Count") + theme(legend.position = "none")
 
 grid.arrange(orig, attacked, nrow = 2)
 ```
 
-The purpose of the graph above was to plot the most belligerent/victimized countries during conflicts happening each year.
+The purpose of the graph above was to plot the most belligerent/attacked countries during conflicts happening each year.
 
-The graph sheds light on the number of conflicts happening before, during and towards the end of a war. In some cases, we see that the number of conflicts initiated by a particular country serve as valid predictor of their attitude towards a full scale conflict. 
+The graph sheds light on the number of conflicts happening before, during and towards the end of a war. In quite a few cases the top initiators of conflicts had heavy involvement in the war.
