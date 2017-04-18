@@ -21,7 +21,6 @@ library(RColorBrewer)
 
 #NMC
 
-#NMC_orig = read.csv("/Users/cynthiaclement/EDAV_Project_2017/data/NMC_5_0/NMC_5_0.csv", sep= ",")
 NMC_orig = read.csv("./data/NMC_5_0/NMC_5_0.csv", sep= ",")
 
 #Alliances 
@@ -84,20 +83,8 @@ We've decided to divide and conquer the work by each taking a subset of the data
 
 ## Analysis of Data Quality 
 
-**Provide a detailed, well-organized description of data quality, including textual description, graphs, and code. **
 
-The Correlates of War datasets are a product of the Correlate of War Project (COW) founded in 1963. COW's goal is to "facilitate the collection, dissemination, and use of accurate and reliable quantitative data in international relations." [add source] From the COW datasets we focused on 4 datasets: NMC, MID, Alliances and Trade. 
-
-**Overall**
-
-*in this section we can talk about Consistency, conformity and integrity*
-
-
-Overall the consistency of these data sets is quite good. We have not found any evidence of conflicting information.
-
-
-
-*for each individual data set address accuracy, completeness, and dulpication*
+The Correlates of War datasets are a product of the Correlate of War Project (COW) founded in 1963. COW's goal is to "facilitate the collection, dissemination, and use of accurate and reliable quantitative data in international relations." [add source] From the COW datasets we focused on 4 datasets: National Materials Capabilities, Military Intertate Disputes, Alliances and Trade. As these data sets are part of the the COW project, the authority, accuracy and objectivity of the data sets are impeccable. All the data sets use a field called country code, a numeric ID given to each country. This is a consistent field that can be used to tie the data acorss the data sets in the COW project. 
 
 **National Materials Capabilities**
   
@@ -135,143 +122,134 @@ ggplot() +
   
 **Alliances**
 
-The overall data quality of the data set was very good. The information in the alliances data matched exactly with historical facts
 
-**Graph of NATO Alliance and when the members joined Members**
+There are 6 iterations of the same data, each serving a different purpose. The Alliances contains the alliance dataset distributed by member, with one observation for each alliance member initiation. There is also another file with same data but includes an additional field that has an observation for each year the member is in the alliance. There is another data set with one observation for each dyadic alliance initiation. This data set also list the details of the alliances. As with the alliances data set, the dyadic alliances data set contains another file that has an observation for each year the member is in the alliance. Finally, there is the directed dyad data set that has 2 observations per alliance, where it details the terms of the alliance of country A towards country B, then another point to details the terms of agreement of country B towards country A. As with the other alliances data sets, there is another directed dyad data set with one observation for each year the alliance is in effect. From all the data we have looked at it in our analysis, the data shows information that is in line with historical events. 
 
+Some of the inconsistencies that I noticed are in cases where the alliance is still in effect as of the 12/31/2012, which was when this data set was last updated. In some of the datasets, if the alliance is ongoing, it would have the dyad_end_year, the field that represents the year in which the alliance was terminated, set to 2012 and in other data sets it would have it set as ‘NA’. In the case that dyad_end_year is set to 2012, it was hard to know if there were any alliances that ended in 2012 or if they were an ongoing alliance.
 
-version id == 227
-
-Some of the inconsistencies that I noticed are in cases where the alliance is still in effect as of the 12/31/2012, which was when this data set was last updated. In some of the datasets, if the alliance is ongoing, it would have the dyad_end_year, the field that represents the year in which the alliance was terminated, set to 2012 and in other data sets it would have it set as ‘NA’. In the case that dyad_end_year is set to 2012, it was hard to know if there were any alliances that ended in 2012 or if they were an ongoing alliance. 
-
-
-3) US had only one alliance before 1925 and Japan has no more alliances now
-
-```{r fig.width=10, fig.height=8}
-qa <- filter(dir_al_year, dir_al_year$state_name1 %in% c("United States of America"))
-qa <- qa[, c(3,5,8,11,18)]
-qa$dyad_end_year[qa$dyad_end_year %in% NA] = 2016
-#qa <- gather(qa, st_ed, year, dyad_st_year:dyad_end_year )
-
-ggplot() + 
-  geom_point(data =qa, aes(x=year, y = state_name2), alpha = .5) +
-  xlab("Year") +
-  ylab("Country")+
-  ggtitle("")+
-  theme_classic() 
-
-```
-  
   
 **Trade** 
    
      
 **Militarized Interstate Disputes** 
 
-
-
-*Below for reference only - this is what we want to talk to in this section*
-
-
-
-Completeness: Is all the requisite information available? Are data values missing, or in an unusable state? In some cases, missing data is irrelevant, but when the information that is missing is critical to a specific business process, completeness becomes an issue. 
-
-Conformity: Are there expectations that data values conform to specified formats? If so, do all the values conform to those formats? Maintaining conformance to specific formats is important in data representation, presentation, aggregate reporting, search, and establishing key relationships.
-
-Consistency: Do distinct data instances provide conflicting information about the same underlying data object? Are values consistent across data sets? Do interdependent attributes always appropriately reflect their expected consistency? Inconsistency between data values plagues organizations attempting to reconcile between different systems and applications. 
-
-Accuracy: Do data objects accurately represent the “real-world” values they are expected to model? Incorrect spellings of product or person names, addresses, and even untimely or not current data can impact operational and analytical applications. 
-
-Duplication: Are there multiple, unnecessary representations of the same data objects within your data set? The inability to maintain a single representation for each entity across your systems poses numerous vulnerabilities and risks. 
-
-Integrity: What data is missing important relationship linkages? The inability to link related records together may actually introduce duplication across your systems. Not only that, as more value is derived from analyzing connectivity and relationships, the inability to link related data instance together impedes this valuable analysis. 
-
-Based on the data how strong are your observations   
   
 ## Executive Summary 
   
-**Provide a short nontechnical summary of the most revealing findings of your analysis with no more than 3 static graphs or one interactive graph (or link), written for a nontechnical audience. The length should be approximately 2 pages (if we were using pages...) Do not show code, and take extra care to clean up your graphs, ensuring that best practices for presentation are followed.**  
-
-
 **National Materials Capabilities**
+
+National Materials Capabilities is measure of the power of nation based on 6 values: iron and steel production, military expenditures, military personnel, primary energy consumption, urban population and total population. It is also a measure of the military and economic power a nation can have. We also looked at the ratios of the 6 metrics, which is calculated by summing the total of all countries for a given year and dividing the value for each country by the total. The ratios help us to normalize trends to look and how countries change their behavior before wars.
+ 
+
 ```{r, echo = FALSE}
-countries <- c("Germany", "Japan", "China")
+countries <- c("Germany")
 country_code <- member_alliances$ccode[match(countries, member_alliances$state_name)]
 
-NMC_execsum <- filter(NMC_orig, NMC_orig$year %in% all_year)
-NMC_execsum <- filter(NMC_execsum, NMC_execsum$ccode %in% country_code)
-NMC_execsum$country = ""
-for( i in c(1:length(country_code))){
-  NMC_execsum$country[NMC_execsum$ccode == country_code[i]] <- countries[i]
+NMC <- NMC_orig 
+NMC$cinc[NMC$cinc == -9| is.na(NMC$cinc)] <- 0
+NMC$irst[NMC$irst == -9| is.na(NMC$irst)] <- 0
+NMC$milex[NMC$milex == -9| is.na(NMC$milex)] <- 0
+NMC$milper[NMC$milper== -9| is.na(NMC$milper)] <- 0
+NMC$pec[NMC$pec == -9| is.na(NMC$pec)] <- 0
+NMC$tpop[NMC$tpop == -9| is.na(NMC$tpop)] <- 0
+NMC$upop[NMC$upop == -9| is.na(NMC$upop)] <- 0
+
+all_year <- c(1900:2007)
+
+NMC_ratios <- c("")
+for (year_t in all_year){
+  yr <- filter(NMC, NMC$year %in% year_t) 
+  max <- apply(yr[, c(4:9)], 2, sum)
+  #max <- as.numeric(max[4:9])
+  for (i in 4:9){
+    yr[,i] = as.numeric(yr[,i]/max[i-3])
+  }
+  NMC_ratios <- smartbind(NMC_ratios , yr)
 }
 
-NMC_execsum_ratios <- filter(NMC_ratios, NMC_ratios$year %in% all_year)
-NMC_execsum_ratios <- filter(NMC_ratios, NMC_ratios$ccode %in% country_code)
+NMC_ratios  <- NMC_ratios [c(2:nrow(NMC_ratios )), c(2:length(NMC_ratios))]
+
+NMC_execsum_ratios <- filter(NMC_ratios, NMC_ratios$year %in% c(1900:1950))
+NMC_execsum_ratios <- filter(NMC_execsum_ratios, NMC_execsum_ratios$ccode %in% country_code)
 NMC_execsum_ratios$country = ""
 for( i in c(1:length(country_code))){
   NMC_execsum_ratios$country[NMC_execsum_ratios$ccode == country_code[i]] <- countries[i]
 }
 
+names(NMC_execsum_ratios) <- c("stateabb", "ccode" ,  "year",     "Expenditures"  , "Personnel",   "irst"   , "pec",      "tpop"  ,"upop",     "cinc" ,  "version",  "country")
 
-mex_r_es<- ggplot() + 
-  scale_x_continuous(name="") + 
-  scale_y_continuous(name="Military Expenditures Ratio") +
-  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=max(NMC_execsum_ratios$milex), fill=Conflict),alpha=0.1) +
-  geom_line(data = NMC_execsum_ratios, aes(x = year, y = milex, color = country, group = country)) +
-  #ggtitle("CNIC by Year for Major Powers Today") + 
-  theme_classic() +
-  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"))+
-  theme(plot.title = element_text(hjust = .5),legend.position="none")
+d2=data.frame(x1=c(1914,1939), x2=c(1918, 1945), Conflict=c("WWI", "WWII"), r=c(1,2))
 
-mip_r_es<- ggplot() + 
-  scale_x_continuous(name="") + 
-  scale_y_continuous(name="Military Personnel Ratio") +
-  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=max(NMC_execsum_ratios$milper), fill=Conflict),alpha=0.1) +
-  geom_line(data = NMC_execsum_ratios, aes(x = year, y = milper, color = country, group = country)) +
-  #ggtitle("CNIC by Year for Major Powers Today") + 
-  theme_classic() +
-  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"))+
-  theme(plot.title = element_text(hjust = .5),legend.position="none")
+NMC_execsum_ratios <- gather(NMC_execsum_ratios, Type, Ratio, Expenditures:Personnel )
 
+NMC_execsum_ratios_1 <- filter(NMC_execsum_ratios, NMC_execsum_ratios$year %in% c(1912:1918))  
+NMC_execsum_ratios_1$Reriod <- "Reactive Investment"
+NMC_execsum_ratios_2 <- filter(NMC_execsum_ratios, NMC_execsum_ratios$year %in% c(1932:1941)) 
+NMC_execsum_ratios_2$Period<- "Proactive Investment"
 
-top_r_es<- ggplot() + 
+ ggplot() + 
   scale_x_continuous(name="Year") + 
-  scale_y_continuous(name="Total Population Ratio") +
-  labs(color ='Country')+
-  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=max(NMC_execsum_ratios$tpop), fill=Conflict),alpha=0.1) +
-  geom_line(data = NMC_execsum_ratios, aes(x = year, y = tpop, color = country, group = country)) +
-  #ggtitle("CNIC by Year for Major Powers Today") + 
+  scale_y_continuous(name="Ratio") +
+  geom_rect(data=d2, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=.5, fill=Conflict),alpha=0.2) +
+  geom_line(data = NMC_execsum_ratios, aes(x = year, y = Ratio), size = .5) +
+  geom_line(data = NMC_execsum_ratios_1, aes(x = year, y = Ratio), size = .5, color = "palegreen3") +
+  geom_line(data = NMC_execsum_ratios_2, aes(x = year, y = Ratio), size = .5, color = "orangered2") +
+  ggtitle("Germany: Military Investment Ratios") + 
   theme_classic() +
-  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"))+
-  theme(plot.title = element_text(hjust = .5),legend.position="bottom",legend.key.size = unit(1, "cm"), legend.title=element_text(size=10) , legend.text=element_text(size=10))
-  
-
-
-g_legend<-function(a.gplot){
-  tmp <- ggplot_gtable(ggplot_build(a.gplot))
-  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
-  legend <- tmp$grobs[[leg]]
-  return(legend)}
-
-mylegend<-g_legend(top_r_es)
-
-
-#grid_arrange_shared_legend(ias, ias_r, mex, mex_r, mip, mip_r, urp, urp_r, top, top_r, nrow = 6)
+  scale_fill_manual(values=c("lightsteelblue3", "pink3"))+
+  theme(plot.title = element_text(hjust = .5),legend.position="bottom") + facet_wrap(~Type)
 
 
 ```
 
+Above is a graph of Germany’s military expenditures ratio and military personnel ratio from the 1900 to 1950. What we found is that the military investment of a country that instigates a conflict and a country that reacts to the aggressors is very different. Germany is a good example because Germany was both a reactive participant and an instigator. Germany only got involved in WWI after Austria-Hungary declared war on Serbia but in WWII Germany was the instigator when it invaded Poland. 
 
+We found that for a reactive participant the military expenditures ratio and military personnel ratios increase during the war, not before. The part of the graph highlighted in green shows Germany increase its military investment during WWII, there was not much of change. On the other hand, the area highlighted in red before WWII, shows Germany proactively increasing military investment. There is sharp increase in military expenditures in the 10 years before WWII and an even sharper increase in military personnel in the 1-2 years before WWII. We found this pattern with several countries that instigated wars. Although there are many factors that determine if a country will instigate a war, monitoring the military investment can assist in determining the actions of a country in the near future.  
 
-```{r  fig.width=15, fig.height=6 , echo = FALSE}
-
-grid.arrange(arrangeGrob(mex_r_es,mip_r_es + theme(plot.title = element_text(hjust = .5), legend.position="none"),nrow=1, ncol =2),mylegend, heights=c(10,1))
-
-```
 
 **Alliances**
+
+Alliances between nations are very important in determining the course of events. World War I can be attributed to the various alliances in place that created a diplomatic chain of events to involve all the world powers at that time. Below is a series of boxplots to show the number of alliances in effect per year since 1900s. The colored box plots show the different events listed above. We see that the median number of alliances per country increase towards the end of each war, with the exception of the Afghanistan War.  We have found that alliances are a reactive to wars. For example, the North Atlantic Treaty Organization(NATO) and the Warsaw Pact were treaties created towards the end of WWII. Both alliances involved numerous countries and account for the increase the number of alliances towards the end of WWII and the beginning of the Cold War. We also found that once a military alliance is terminated or dissolved, countries try to join another treaty. Towards the end of the Cold War, the Soviet Union dissolved and with it the Warsaw Pact. Once that ended, many countries joined NATO which accounts for the increase in the alliances towards the end of the Cold War. Overall, looking at alliances is not a good predictor of events to come because there are a lot of diplomatic events going on in the background that is not captured in the data. For example, today the United Nations has a lot of control and regulation over wars that happen today, so looking at alliances will not be a sufficient to demined events. 
+
   
+```{r, echo = FALSE}
+
+dayd_al_year <- filter(dyad_al_year, dyad_al_year$year %in% c(1900:2012))
+dyad_al_year$length = dyad_al_year$dyad_end_year - dyad_al_year$dyad_st_year
+
+dayd_al_year$conflict <- "0"
+dyad_al_year$count <- 1 
+
+dir_alliances <- gather(dir_al_year, treaty_type, idicator, defense:entente)
+dir_alliances <- dir_alliances[!dir_alliances$idicator %in%  0,]
+dir_alliances$dyad_end_year[dir_alliances$dyad_end_year %in% NA] = 2016
+dir_alliances <- dir_alliances[dir_alliances$year>1900,]
+alliance_count <- dir_alliances[, c(2,3,14,16)]
+alliance_count$count <- 1 
+
+gp_ct <- aggregate(cbind(count) ~ ccode1+state_name1+year+treaty_type, data =alliance_count, FUN = sum )
+gp_ct$Conflict <- "0"
+
+for(i in c(1:length(d$x1))){
+  gp_ct[gp_ct$year >= d$x1[i] & gp_ct$year <= d$x2[i], length(gp_ct)] <- as.character(i)
+}
+
+```
   
+```{r fig.width=20, fig.height=8, echo = FALSE}
+ggplot() +
+  xlab("Year") +
+  ylab("Count")+
+  geom_boxplot(data = gp_ct, aes(x = as.factor(year), y = count, fill = Conflict)) +
+  ggtitle("Total Alliances by Year") + 
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5, size = 20), axis.text.x = element_text(angle = 90, size = 10),  axis.text.y = element_text(size = 15),  axis.title.y = element_text(size = 15), axis.title.x = element_text(size = 15),  legend.position="bottom", legend.text = element_text(size=15),  legend.title = element_text(size=15))+
+  scale_fill_manual(values=c("white", "lightsteelblue3", "pink3", "paleturquoise3", "lightsteelblue2", "lightsteelblue4","salmon" ), labels = mylables)
+
+```
+
+
+
 **Trade** 
    
      
@@ -279,8 +257,6 @@ grid.arrange(arrangeGrob(mex_r_es,mip_r_es + theme(plot.title = element_text(hju
   
   
 ## Main Analysis 
-
-**Provide a detailed, well-organized description of your findings, including textual description, graphs, and code.  Your focus should be on both the results and the process. Include, as reasonable and relevant, approaches that didn't work, challenges, the data cleaning process, etc.**
 
 ####National Materials Capabilities
 
@@ -324,9 +300,6 @@ CINC is the composite score to measure the power of a country using the average 
 
 Below is the CNIC score for major powers today who also participated the major wars in the past. Also highlighted are the years wars mentioned above. 
 
-
-
-#```{r fig.width=5, fig.height=2.5}
 ```{r fig.width=10, fig.height=5}
 countries <- c("United States of America", "United Kingdom", "France", "Russia","Germany", "Japan", "China")
 country_code <- member_alliances$ccode[match(countries, member_alliances$state_name)]
@@ -434,7 +407,7 @@ ww2 <- ggplot() +
 
 ```
 
-#```{r fig.width=5, fig.height=4}
+
 ```{r fig.width=10, fig.height=8}
 grid.arrange(ww1, ww2, nrow=2)
 
@@ -621,8 +594,6 @@ mylegend<-g_legend(top_r)
 ```
 
 
-
-#```{r  fig.width=8, fig.height=7 }
 ```{r fig.width=16, fig.height=14}
 
 grid.arrange(arrangeGrob(ias, ias_r, mex, mex_r, mip, mip_r + theme(plot.title = element_text(hjust = .5), legend.position="none"),nrow=3, ncol =2),mylegend, heights=c(10,1))
@@ -638,8 +609,6 @@ Looking at military expenditure we see that the US and Russia had been significa
 In the few years before WWII, you see Germany’s military expenditures ratio increase quite rapidly and the military personnel ratio saw a drastic increase in the one year before increasing quite rapidly. Although not as drastic, Japan and China follow a similar pattern where the military investment increased significantly a few years prior to WWII and the Korean War, respectively, and the military personnel ratio drastically increased right before the wars. This suggests that in years before the wars, these countries started investing in and preparing their militaries for war. The countries that were on the reactive side, the US, Russia and the UK, their military production ratios and military expenditures ratios only increased during the war. 
 
 
-
-##```{r  fig.width=3, fig.height=1}
 ```{r fig.width=10, fig.height=3}
 NMC_v<- filter(NMC_ratios, NMC_ratios$year %in% c(1970:2000))
 NMC_ratios_v<- filter(NMC_ratios, NMC_ratios$year %in% c(1970:2000))
@@ -678,8 +647,6 @@ grid.arrange(a,b,nrow = 1)
 
 We wanted to see if this this same pattern was present in other conflicts. During the Gulf War, Iraq invaded Kuwait and it was met with international condemnation and the US and other nations joined forces to stop Iraq. But before the invasion in war we see Iraq’s military expenditures and personnel ratios increasing. The gray shaded box indicates the time period of the Gulf War (1990-1991). In the 1980s, Iraq’s military expenditure ratio drastically increased and then there was a sudden spike in military personnel right before the start of the war.  
 
-
-#```{r fig.width=7.5, fig.height= 3}
 ```{r fig.width=14, fig.height=6}
 ct <- c("United States of America", "United Kingdom", "France", "Russia","Germany", "Italy", "Japan", "China")
 ct_ccode <- member_alliances$ccode[match(ct, member_alliances$state_name)]
@@ -729,7 +696,8 @@ Finally, using the heat maps, we looked at impact on CINC after a war. On the le
 
 
 
-**Next Steps ** 
+**Conclusions & Next Steps **
+
 To get even more into detail and context around certain characteristics, we want to look at specific events like pearl harbor or China’s invasion of Malaysia and other pivotal moments in wars to see how those events impact the CINC and its various components.  
 
 A problem with NMC is that there are many other factors that determine a power of a nation rather than the 6 NMC factors. One of the major considerations that is not taken into account are diplomatic relations and dealings. Diplomatic relations play a major role is the prevention and conclusion of conflicts. With this data, it was not possible to factor that in. 
@@ -774,7 +742,6 @@ WWI was triggered by the assassination of the Archduke Franz Ferdinand of Austri
 Below is boxplot of the total number of alliances that are in effect each year between any two countries. It is easy to see that the median number of alliances jumped up significantly during WWII and continued to grow during the Cold War and remained relatively level since then. An interesting pattern is that the median number of alliances increased more in the 1-3 before the end of war. You can see this patter with WWI, Korean War, Vietnam War and the end of the Cold War. Although the Cold War was only a state of severe political war there were many regional battles and the threat of a large-scale military war was constant. The number of alliances significantly increased from the start of the Cold War till the end.  
 
 
-#```{r fig.width=10, fig.height=5}
 ```{r fig.width=20, fig.height=8}
 ggplot() +
   xlab("Year") +
@@ -791,7 +758,6 @@ Next we looked at the types of alliances formed during this time. The COW data r
 The plots below show the number of alliances by alliance type. The top row shows the number of new alliances that were formed each year and the second row shows number of alliances that were terminated that year. Please note that if an alliance was formed between 4 states then there would 6 new alliances in the data set because there is an alliance between each of the 4 members. Similarly, if an alliance between 4 states were terminated that would be 6 less alliances.
 
 
-#```{r fig.width=8, fig.height=4}
 ```{r fig.width=12, fig.height=8}
 dir_al_0 <- filter(dir_al, dir_al$dyad_st_year %in% c(1900:2012))
 all_st <- gather(dir_al_0, treaty_type, idicator, defense:entente)
@@ -830,14 +796,11 @@ grid.arrange(a,b, nrow =2)
 
 Most of the alliances formed were at the end of WWII and during the Cold War. Also, the most frequently formed alliances were defense and entente. Surprisingly, in years that see a large increase in the number of alliances formed there is also an increase in the number of alliances that were terminated. To dig in further to get a better understand of what types of treaties were formed and why they ended, we looked at individual countries. 
 
-The following charts are all organized the same way, they show a timeline of when the alliances started till either the end of the alliance (shown in red) or till 2012 if the alliance was observed in effect as of December 31, 2012 (shown in blue). The charts are facetted to show the different types of alliances because many of the alliance types overlap. For example, one alliance could be both a defense and entente alliance, so to get a better visual representation we separated the types of alliances. We focused this part of the analysis on the United States, United Kingdom, Russia, and Germany because these countries are major powers and thus are involved in many of the military alliances throughout history. 
- 
- 
+The following charts are all organized the same way, they show a timeline of when the alliances started till either the end of the alliance (shown in red) or till 2012 if the alliance was observed in effect as of December 31, 2012 (shown in blue). The charts are facetted to show the different types of alliances because many of the alliance types overlap. For example, one alliance could be both a defense and entente alliance, so to get a better visual representation we separated the types of alliances. We focused this part of the analysis on the United States and Russia because these countries are major powers and thus are involved in many of the military alliances throughout history. 
 
 
 **United States of America ** 
 
-#```{r fig.width=7.5, fig.height =  5}
 ```{r fig.width=12, fig.height=9}
 al_us_yr <- filter(dir_al_year, dir_al_year$state_name1 %in% "United States of America")
 al_us_yr <- gather(al_us_yr, Treaty, idicator, defense:entente)   
@@ -868,71 +831,12 @@ You can also see a similar pattern of ongoing alliances for defense entente and 
 
 The entente alliances follow a similar pattern where the alliance ended and was immediately reformed. There were a few countries where there was an entente alliance formed towards the end of the Korean War and ended a few years after the end of the Vietnam war. The majority of the countries that follow the described patters are in Asia or Australia. This is reasonable considering they were participants is the Vietnam War. Also the defense and entente alliance between the US and Cuba ended during the Vietnam War, indicated in the graph above, when Cuba was providing military support to the Vietnamese. Also, during the Vietnam war, there was a neutrality alliance for a few years between the US and countries that participated in the Vietnam war. This alliance was called the International Agreement on the Neutrality of Laos starting in 1961 and was terminaded when was Democratic Republic of Vietnam violated the terms of the treaty 2 years later.  
 
-**United Kingdom ** 
-
-
-```{r fig.width=12, fig.height=9}
-dir_al_year2 <- filter(dir_al_year, dir_al_year$dyad_st_year %in% c(1900:2016))
-al_gb_yr <- filter(dir_al_year2, dir_al_year2$state_name1 %in% c("United Kingdom"))
-al_gb_yr <- gather(al_gb_yr, Treaty, idicator, defense:entente)   
-al_gb_yr <- al_gb_yr[!al_gb_yr$idicator %in%  0,]
-
-al_gb_yr <- al_gb_yr[, c(3,5,8,11,14,16)]
-al_gb_yr$count = 1 
-al_gb_yr$Status[al_gb_yr$dyad_end_year < 2012] <- "Ended"
-al_gb_yr$Status[al_gb_yr$dyad_end_year== 2012] <- "Ongoing"
-
-ggplot() + 
-  xlab("Year") +
-  ylab("Country")+
-  geom_point(data =al_us_yr, aes(x=year, y = state_name2, color =Status), alpha = .5) + 
-  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
-  ggtitle("United Kingdom Alliances")+
-  theme_classic()+
-  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)+
-  facet_wrap(~Treaty, nrow = 1 ) +
-  theme(legend.position="right", plot.title = element_text(hjust = .5)) 
-
-```
-
-
-The United Kingdom follows the same pattern as the United States. Most of the defense alliances started towards the end of WWII and are still in effect today. The United Kingdom is part of NATO so we see a high number of defense, entente and non-aggression treaty types formed in 1949 and continue till today. The UK was also part of the Neutrality of Laos alliance and we can see that in the neutrality plot. 
-
-
-**Germany ** 
-
-
-```{r fig.width=12, fig.height=6}
-al_gmy_yr <- filter(dir_al_year2, dir_al_year2$state_name1 %in% c("Germany"))
-al_gmy_yr <- gather(al_gmy_yr, Treaty, idicator, defense:entente)   
-al_gmy_yr <- al_gmy_yr[!al_gmy_yr$idicator %in%  0,]
-
-al_gmy_yr <- al_gmy_yr[, c(5,8,11,14,16)]
-al_gmy_yr$count = 1 
-al_gmy_yr$Status[al_gmy_yr$dyad_end_year < 2012] <- "Ended"
-al_gmy_yr$Status[al_gmy_yr$dyad_end_year== 2012] <- "Ongoing"
-
-ggplot() + 
-  xlab("Year") +
-  ylab("Country")+
-  geom_point(data =al_gmy_yr, aes(x=year, y = state_name2, color =Status), alpha = .5) + 
-  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
-  ggtitle("Germany Alliances")+
-  theme_classic()+
-  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)+
-  facet_wrap(~Treaty, nrow = 1 ) +
-  theme(legend.position="right", plot.title = element_text(hjust = .5)) 
-
-
-```
-As Germany was heavily impacted by WWII, we see all its alliances end by the end of the war. During its recovery period, Germany was not a part of any military alliance. This is to be as expected since Germany was so devastated by the war it could not afford to maintain the military. Germany was also going through a period of civil unrest. In 1990, Germany joined NATO after East and West Germany combined to from a unified Germany. 
-
-
 
 **Russia ** 
 
 
 ```{r fig.width=12, fig.height=6}
+dir_al_year2 <- filter(dir_al_year, dir_al_year$dyad_st_year %in% c(1900:2016))
 al_rus_yr <- filter(dir_al_year2, dir_al_year2$state_name1 %in% c("Russia"))
 al_rus_yr <- gather(al_rus_yr, Treaty, idicator, defense:entente)   
 al_rus_yr <- al_rus_yr[!al_rus_yr$idicator %in%  0,]
@@ -955,34 +859,10 @@ ggplot() +
 
 ```
 
-**China ** 
+Opposing the United States and NATO, USSR (Russia) entered into the Warsaw Pact in 1955. You can see
 
 
-
-```{r fig.width=12, fig.height=6}
-al_china_yr <- filter(dir_al_year2, dir_al_year2$state_name1 %in% c("China"))
-al_china_yr <- gather(al_china_yr, Treaty, idicator, defense:entente)   
-al_china_yr <- al_china_yr[!al_china_yr$idicator %in%  0,]
-
-al_china_yr <- al_china_yr[, c(5,8,11,14,16)]
-al_china_yr$count = 1 
-al_china_yr$Status[al_china_yr$dyad_end_year < 2012] <- "Ended"
-al_china_yr$Status[al_china_yr$dyad_end_year== 2012] <- "Ongoing"
-
-ggplot() + 
-  xlab("Year") +
-  ylab("Country")+
-  geom_point(data =al_rus_yr, aes(x=year, y = state_name2, color =Status), alpha = .5) + 
-  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
-  ggtitle("China Alliances")+
-  theme_classic()+
-  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)+
-  facet_wrap(~Treaty, nrow = 1 ) +
-  theme(legend.position="right", plot.title = element_text(hjust = .5)) 
-```
-
-
-**Conclusions**
+**Conclusions & Next Steps **
 
 Since we are mainly focusing on large-scale wars that involved various countries, many treaties were created and broken. For example, Warsaw Pact was created as a counter weight to the NATO Pact created at end of WWII. The US, Great Britain and their allies became part of NATO and the Soviet Union and its Allies became part of the Warsaw pact. Once the USSR dissolved many of the satellite nations, the Warsaw Pact members joined NATO. Such military. With NATO and the formation of the United Nations, it is hard to say which countries will participate in the next war. For example, before the beginning of the War on Afghanistan, the security council had to authorize the United States and NATO allies to organize an offensive against al-Qaeda. This type of regulation makes it hard to determine how future wars will play out. One thing that was interesting is that once a treaty falls apart, the members try to join another treaty which is why we see spikes is the median number of alliances towards the end of the wars. 
 
@@ -997,8 +877,11 @@ The other downfall of this data set is that it only considers formal military al
 **Militarized Interstate Disputes** 
   
   
-## Conclusion 
-**Discuss limitations and future directions, lessons learned**
-
 ## Sources 
+
+National Material Capabilities (v5.0). Singer, J. David, Stuart Bremer, and John Stuckey. (1972). "Capability Distribution, Uncertainty, and Major Power War, 1820-1965." in Bruce Russett (ed) Peace, War, and Numbers, Beverly Hills: Sage, 19-48.
+
+Formal Alliances (v4.1). Gibler, Douglas M. 2009. International military alliances, 1648-2008. CQ Press.  
+
+
 
