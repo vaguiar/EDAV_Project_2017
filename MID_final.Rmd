@@ -204,8 +204,16 @@ WarAttack <- MIDB_A %>% count(StAbb, sort=TRUE, vars=StYear)
 #Top Conflicts stared  Countries by Year
 for(yr in 1901:2010)
 {
-  WarOrig_yr <- head(arrange(filter(WarOrig, vars==yr), desc(n)), 1)
-  WarAttack_yr <- head(arrange(filter(WarAttack, vars==yr), desc(n)), 1)
+  
+  #Count of largest number of conflicts that year.
+  top_o <- head(arrange(filter(WarOrig, vars==yr), desc(n)), 1)[1, 3]
+  top_a <- head(arrange(filter(WarAttack, vars==yr), desc(n)), 1)[1, 3]
+
+  #Select rows of all countries with the top count of conflicts.
+  WarOrig_yr <- filter(WarOrig, vars==yr & n==top_o$n[[1]])
+  
+  #WarOrig_yr <- head(arrange(filter(WarOrig, vars==yr), desc(n)), 1)
+  WarAttack_yr <-filter(WarAttack, vars==yr & n==top_a$n[[1]])
     
   if(yr == 1901)
   {
@@ -266,3 +274,5 @@ grid.arrange(orig, attacked, nrow = 2)
 The purpose of the graph above was to plot the most belligerent/attacked countries during conflicts happening each year.
 
 The graph sheds light on the number of conflicts happening before, during and towards the end of a war. In quite a few cases the top initiators of conflicts had heavy involvement in the war.
+
+
