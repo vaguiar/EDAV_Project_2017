@@ -1,0 +1,172 @@
+=========================================================================== 1                                                                               
+Format of Militarized Interstate Dispute data (1/1/96)           S. Bremer  2                                                                               
+=========================================================================== 3                                                                               
+                                                                            4                                                                               
+The MID data set is composed of three files:                                5                                                                               
+  MIDA_210.TXT - which gives the essential attributes of each dispute       6                                                                               
+  MIDB_210.TXT - which describes the participants in each dispute           7                                                                               
+  MIDC_210.TXT - which gives the name of each dispute that has a name       8                                                                               
+                                                                            9                                                                               
+--------------------------------------------------------------------------- 10                                                                              
+Format of MIDA_210.TXT file                                                 11                                                                              
+Data fields are separated by commas with text enclosed in double quotes     12                                                                              
+First record contains field names in quotes                                 13                                                                              
+One record per dispute                                                      14                                                                              
+                                                                            15                                                                              
+Field Contents                                                              16                                                                              
+--------------                                                              17                                                                              
+  1   Dispute number                                                        18                                                                              
+  2   Start day of dispute (-9 = missing)                                   19                                                                              
+  3   Start month of dispute                                                20                                                                              
+  4   Start year of dispute                                                 21                                                                              
+  5   End day of dispute (-9 = missing)                                     22                                                                              
+  6   End month of dispute                                                  23                                                                              
+  7   End year of dispute                                                   24                                                                              
+  8   Outcome of dispute (see Table 1 below)                                25                                                                              
+  9   Settlement of dispute (see Table 2 below)                             26                                                                              
+ 10   Fatality level of dispute (see Table 3 below)                         27                                                                              
+ 11   Maximum duration of dispute                                           28                                                                              
+ 12   Minimum duration of dispute                                           29                                                                              
+ 13   Highest action in dispute (see Table 4 below)                         30                                                                              
+ 14   Hostility level of dispute (see Table 5 below)                        31                                                                              
+ 15   Reciprocated dispute (-1 = yes, 0 = no)                               32                                                                              
+ 16   Number of states on side A                                            33                                                                              
+ 17   Number of states on side B                                            34                                                                              
+ 18   Version number of data set                                            35                                                                              
+                                                                            36                                                                              
+--------------------------------------------------------------------------- 37                                                                              
+Format of MIDB_210.TXT file                                                 38                                                                              
+Data fields are separated by commas with text enclosed in double quotes     39                                                                              
+First record contains field names in quotes                                 40                                                                              
+One record per participant per dispute                                      41                                                                              
+                                                                            42                                                                              
+Field Contents                                                              43                                                                              
+--------------                                                              44                                                                              
+  1   Dispute number                                                        45                                                                              
+  2   State abbreviation of participant                                     46                                                                              
+  3   State number of participant                                           47                                                                              
+  4   Start day of participation in dispute (-9 = missing)                  48                                                                              
+  5   Start month of participation in dispute                               49                                                                              
+  6   Start year of participation in dispute                                50                                                                              
+  7   End day of participation in dispute (-9 = missing)                    51                                                                              
+  8   End month of participation in dispute                                 52                                                                              
+  9   End year of participation in dispute                                  53                                                                              
+ 10   Side A (-1 = yes; 0 = no)                                             54                                                                              
+ 11   Revisionist state (-1 = yes; 0 = no)                                  55                                                                              
+ 12   Revision type (see Table 6 below)                                     56                                                                              
+ 13   Fatality level (see Table 3 below)                                    57                                                                              
+ 14   Highest action by state in dispute (see Table 4 below)                58                                                                              
+ 15   Hostility level reached by state in dispute (see Table 5 below)       59                                                                              
+ 16   Originator of dispute (-1 = yes; 0 = no)                              60                                                                              
+ 17   Version number of data set                                            61                                                                              
+                                                                            62                                                                              
+(Note: an originator is a participant in a dispute that is                  63                                                                              
+involved on the first day of the dispute)                                   64                                                                              
+                                                                            65                                                                              
+--------------------------------------------------------------------------- 66                                                                              
+Format of MIDC_210.TXT file                                                 67                                                                              
+Data fields are separated by commas with text enclosed in double quotes     68                                                                              
+First record contains field names in quotes                                 69                                                                              
+                                                                            70                                                                              
+Field Contents                                                              71                                                                              
+--------------                                                              72                                                                              
+  1   Dispute number                                                        73                                                                              
+  2   Dispute name                                                          74                                                                              
+  3   Version number of data set                                            75                                                                              
+                                                                            76                                                                              
+Note: Not all disputes have names, and only those disputes with names are   77                                                                              
+found in this file.                                                         78                                                                              
+                                                                            79                                                                              
+--------------------------------------------------------------------------- 80                                                                              
+(1) Table of Outcome Codes                                                  81                                                                              
+                                                                            82                                                                              
+Code  Outcome                                                               83                                                                              
+-------------                                                               84                                                                              
+  1   Victory for side A                                                    85                                                                              
+  2   Victory for side B                                                    86                                                                              
+  3   Yield by side A                                                       87                                                                              
+  4   Yield by side B                                                       88                                                                              
+  5   Stalemate                                                             89                                                                              
+  6   Compromise                                                            90                                                                              
+  7   Released                                                              91                                                                              
+  8   Unclear                                                               92                                                                              
+  9   Joins ongoing war                                                     93                                                                              
+ -9   Missing                                                               94                                                                              
+                                                                            95                                                                              
+--------------------------------------------------------------------------- 96                                                                              
+(2) Table of Settlement Codes                                               97                                                                              
+                                                                            98                                                                              
+Code  Settlement                                                            99                                                                              
+----------------                                                            100                                                                             
+  1   Negotiated                                                            101                                                                             
+  2   Imposed                                                               102                                                                             
+  3   None                                                                  103                                                                             
+  4   Unclear                                                               104                                                                             
+ -9   Missing                                                               105                                                                             
+                                                                            106                                                                             
+--------------------------------------------------------------------------- 107                                                                             
+(3) Table of Fatality Codes                                                 108                                                                             
+                                                                            109                                                                             
+Code  Fatality level                                                        110                                                                             
+--------------------                                                        111                                                                             
+  0   None                                                                  112                                                                             
+  1   1-25 deaths                                                           113                                                                             
+  2   26-100 deaths                                                         114                                                                             
+  3   101-250 deaths                                                        115                                                                             
+  4   251-500 deaths                                                        116                                                                             
+  5   501-999 deaths                                                        117                                                                             
+  6   > 999 deaths                                                          118                                                                             
+ -9   Missing                                                               119                                                                             
+                                                                            120                                                                             
+--------------------------------------------------------------------------- 121                                                                             
+(4) Table of Action Codes with Hostility Levels                             122                                                                             
+                                                                            123                                                                             
+Code  Action [Hostility level]                                              124                                                                             
+------------------------------                                              125                                                                             
+  1   No militarized action [1]                                             126                                                                             
+  2   Threat to use force [2]                                               127                                                                             
+  3   Threat to blockade [2]                                                128                                                                             
+  4   Threat to occupy territory [2]                                        129                                                                             
+  5   Threat to declare war [2]                                             130                                                                             
+  6   Threat to use nuclear weapons [2]                                     131                                                                             
+  7   Show of troops [3]                                                    132                                                                             
+  8   Show of ships [3]                                                     133                                                                             
+  9   Show of planes [3]                                                    134                                                                             
+ 10   Alert [3]                                                             135                                                                             
+ 11   Nuclear alert [3]                                                     136                                                                             
+ 12   Mobilization [3]                                                      137                                                                             
+ 13   Fortify border [3]                                                    138                                                                             
+ 14   Border violation [3]                                                  139                                                                             
+ 15   Blockade [4]                                                          140                                                                             
+ 16   Occupation of territory [4]                                           141                                                                             
+ 17   Seizure [4]                                                           142                                                                             
+ 18   Clash [4]                                                             143                                                                             
+ 19   Raid [4]                                                              144                                                                             
+ 20   Declaration of war [4]                                                145                                                                             
+ 21   Use of CBR weapons [4]                                                146                                                                             
+ 22   Interstate war [5]                                                    147                                                                             
+ 23   Joins interstate war [5]                                              148                                                                             
+ -9   Missing [-9]                                                          149                                                                             
+                                                                            150                                                                             
+--------------------------------------------------------------------------- 151                                                                             
+(5) Table of Hostility Levels                                               152                                                                             
+                                                                            153                                                                             
+Code  Hostility Level                                                       154                                                                             
+---------------------                                                       155                                                                             
+  1   No militarized action                                                 156                                                                             
+  2   Threat to use force                                                   157                                                                             
+  3   Display of force                                                      158                                                                             
+  4   Use of force                                                          159                                                                             
+  5   War                                                                   160                                                                             
+                                                                            161                                                                             
+--------------------------------------------------------------------------- 162                                                                             
+(6) Table of Revision Types                                                 163                                                                             
+                                                                            164                                                                             
+Code  Revision Type                                                         165                                                                             
+-------------------                                                         166                                                                             
+  0   Not applicable                                                        167                                                                             
+  1   Territory                                                             168                                                                             
+  2   Policy                                                                169                                                                             
+  3   Regime/government                                                     170                                                                             
+  4   Other                                                                 171                                                                             
+ -9   Missing                                                               172                                                                             
