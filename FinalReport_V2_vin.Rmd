@@ -166,11 +166,29 @@ ggplot() +
 **Trade** 
    
      
-**Militarized Interstate Disputes** 
+**Militarized Interstate Disputes (MID)** 
+
+The MID data is thorough and well collated. As conflicts or wars can have multiple dimentions to them, the MID data is broken down into 2 main data sets. MIDA contains an observation per conflict  with details about the start and end of the conflict, the fatalities, the outcomes, the settlements, the highest action taken etc. The other part of the dataset- MIDB, contains one obeservation per actor in a conflict, thus adding a different dimension to the data.
+
+```{r fig.width=15, fig.height=6, echo = FALSE}
+library(grid)
+library(gridExtra)
+
+MIDA = read.csv(file="./data/MID/MIDA_4.01.csv", sep= ",")
+
+fatal <- ggplot() + geom_histogram(data = MIDA[MIDA$Fatality!=-9, ], aes(Fatality)) 
+outcm <- ggplot() + geom_histogram(data = MIDA[MIDA$Outcome!=-9, ], aes(Outcome))
+hiact <- ggplot() + geom_histogram(data = MIDA[MIDA$HiAct!=-9, ], aes(HiAct))
+hostl <- ggplot() + geom_histogram(data = MIDA[MIDA$HostLev!=-9, ], aes(HostLev))
+  
+grid.arrange(fatal, outcm, hiact, hostl, nrow = 2)  
+
+```
+As seen above, most categorical variables have been neatly factored to maintain comformance in formats such as 0 being the lowest and increasing there one. This aides in better data representation. 
+Also for this data, most cases of missing data, which is represented with -9 can be safely ignored. 
 
 
-
-*Below for reference only - this is what we want to talk to in this section*
+**Below for reference only - this is what we want to talk to in this section**
 
 
 
@@ -1073,12 +1091,190 @@ One of the things that was hard to work with this data set is that it was imposs
 The other downfall of this data set is that it only considers formal military alliances. It will not take into account other types of alliances such as the United Nations & security council or a trade agreement. For example, Japan is not in any military alliance currently but it does have very close ties to the United States today, and this information is not captured in the data set. 
 
   
-**Trade** 
-   
-     
-**Militarized Interstate Disputes** 
+#### Trade  
+
   
   
+  
+#### Militarized Interstate Disputes
+  
+The data is rich and contains multifaceted information such as the Outcomes, Settlements, The Number of Fatalities, Minimum Duration, The Highest Action taken and Hostility Level during each militarized conflict in the last century. We've selected a few important variables and plotted them in a pcp to see if we can spot correlations between them.  
+  
+```{r fig.width=15, fig.height=10}
+library(ggplot2)
+library(dplyr)
+library(grid)
+library(gridExtra)
+library(RColorBrewer)
+library(GGally)
+
+#path = "/home/vaguiar/col_hw/vis_hw/final/data/"
+MIDA = read.csv(file="./data/MID/MIDA_4.01.csv", sep= ",")
+
+war_year <- function(x){
+  if(x >= 1914 & x <= 1918)
+   return('WWI')
+  if(x >= 1939 & x <= 1945)
+   return('WWII')
+  if(x >= 1950 & x <= 1953)
+   return('Korean War')
+  if(x >= 1955 & x <= 1975)
+   return('Vietnam War')
+  if(x >= 1947 & x <= 1991)
+   return('Cold War')
+  if(x >= 2001 & x <= 2010)
+   return('War in Afghanistan')
+  else
+    return('No War')
+}
+
+MIDA$wartime <- sapply(MIDA$StYear, war_year)
+
+##PCP PLot 
+alphabending = 0.5
+war <- ggparcoord(MIDA[MIDA$StYear>1900 & MIDA$wartime!='No War',], columns = c(9:11, 14:16), 
+                  scale = "uniminmax", 
+                  alphaLines = alphabending,
+                  groupColumn = "wartime", 
+                  title="Correlations In War Time Conflicts") +
+                  theme_classic() +
+                  theme(legend.position = "bottom")
+                  #guides(fill=guide_legend(title="War Period", 
+                   #      title.position = "bottom",
+                    #     nrow=1)) 
+peace <- ggparcoord(MIDA[MIDA$StYear>1900 & MIDA$wartime=='No War',], columns = c(9:11, 14:16), 
+                  scale = "uniminmax",
+                  alphaLines = alphabending,
+                  groupColumn = "wartime", 
+                  title="Correlations In Peace Time Conflicts") +
+                  theme_classic() +
+                  theme(legend.position = "bottom")
+                  #guides(fill=guide_legend(title="War Period", 
+                   #      title.position = "bottom",
+                    #     nrow=1)) 
+grid.arrange(war, peace, nrow = 2)  
+```
+In the graph plotting War Time Correlations, we see that most of the datapoints for Fatality, Settlement and Outcome gravitate towards the top half. There's also a high level of correlation in there. As for the Peace Time Correlations, the first three variables seem pretty evenly distributed.
+
+Below, we dig a little deeper into variables like Fatalities, Settlements and Outcomes of the conflicts. Each graph is overlayed with the time period of the major wars. Through this exploration, we try to spot possible predictors of a war.  
+  
+**Fatalaties In Disputes Leading to War**  
+
+```{r fig.width=15, fig.height=10}
+
+# Overlay w/ rectangle theme
+y2_high =9
+d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+
+
+#Using distinct color palette
+cols <- colorRampPalette(brewer.pal(12, "Paired"))
+myPal <- cols(length(unique(nat_top10_exp$statename)))
+
+#Adding Labels for Facet titles
+facet_names <- as_labeller(c(
+  '0' = "None",
+  '1' = "1-25 deaths",
+  '2' = "26-100 deaths",
+  '3' = "101-250 deaths",
+  '4' = "251-500 deaths",
+  '5' = "501-999 deaths",
+  '6' = "More than 999 deaths",
+  '-9' = "Missing Data"
+))
+
+ggplot() + 
+  geom_bar(data=MIDA[MIDA$EndYear>1900 & MIDA$Fatality!=0 & MIDA$Fatality!=-9,], aes(x = EndYear),   stat="count") +
+  facet_wrap(~Fatality, nrow= 8, labeller=facet_names) +
+  scale_fill_manual(values = myPal) +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  ggtitle("Number Of Disputes With Fatalities By Year") +
+  xlab("End Year") +
+  ylab("Count")
+
+```
+In the graph above we have plotted the Fatalites occuring due to militarized conflicts every year since the year 1900. We've faceted the graphs by the number of casualties starting from 1-25, 25-100 and so on. 
+
+Within each facet, the data is mildly interspersed with more concentration during war years and lesser at other times. But, interestingly so, there were conflicts resulting in more than 999 deaths in the years leading to the each and every major war. And in four of those years, namely 1913, 1938, 1955, and 2001, we see spikes in the number of deaths. This could be indicative of the fact that those conflicts forced countries to fight wars.
+
+**Settlement of Disputes Leading to War**  
+```{r fig.width=15, fig.height=6}
+
+# Overlay w/ rectangle theme
+y2_high = 9
+d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+
+
+#Adding Labels for Facet titles
+facet_names <- as_labeller(c(
+  '1' = "Negotiated",
+  '2' = "Imposed",
+  '3' = "None",
+  '4' = "Unclear",
+  '-9' = "Missing Data"
+))
+
+ggplot() + 
+  geom_bar(data=MIDA[MIDA$EndYear>1900 & MIDA$Settle!=3 & MIDA$Settle!='-9', ], aes(x = EndYear), stat="count") +
+  facet_wrap(~Settle, nrow= 5, labeller=facet_names) +
+  scale_fill_manual(values = myPal) +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  ggtitle("Number Of Disputes With Settlement Outcomes By Year") +
+  xlab("End Year") +
+  ylab("Count")
+```
+In the graph above we have plotted the Settlement outcomes of different militarized conflicts every year since the year 1900. We've faceted the graphs by the Settlement types and for simplicity we've left out missing data or settlements that were unclear.  
+  
+Surprisingly, we don't see any correlations between Imposed/Negotiated Settlements and the war. But on second though, the number of Settlements, would not be an important predictor of war. This could be due to the fact that some Settlements, such as such as the Treaty of Versailles which was punitive and complex in nature, had a major role in the rise of the Nazi party. TBut since the data doesn't delve into the qualitative aspects of these Settlements and it is of little or no significance to our exploration.  
+  
+  
+
+**Outcomes of Disputes Leading to War**  
+
+```{r fig.width=15, fig.height=10}
+
+# Overlay w/ rectangle theme
+y2_high =65
+d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+
+MIDA_o <- filter(MIDA, MIDA$Outcome %in% c(1,2,3,4,5,6,8,-9))
+war_outcome <- function(x){
+  if(x ==2)
+   return(1)
+  if(x == 4)
+   return(3)
+  else
+    return(x)
+}
+
+MIDA_o$WarOutcome <- sapply(MIDA_o$Outcome, war_outcome)
+
+
+#Adding Labels for Facet titles
+facet_names <- as_labeller(c(
+  '1' = "Victory For Either Side",
+  '3' = "Yield By Either Side",
+  '5' = "Stalemate",
+  '6' = "Compromise", 
+  '8' = "Unclear",
+  '-9' = "Missing Data"
+))
+
+ggplot() + 
+  geom_bar(data=MIDA_o[MIDA_o$EndYear>1900 & MIDA_o$WarOutcome!='-9' , ], 
+  aes(x = EndYear), stat="count") +
+  facet_wrap(~WarOutcome, nrow= 5, labeller=facet_names) +
+  scale_fill_manual(values = myPal) +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  ggtitle("Number Of Disputes With Outcomes By Year") +
+  xlab("End Year") +
+  ylab("Count")
+```
+
+In the graph above we have plotted the Outcomes of different militarized conflicts every year since the year 1900. We've faceted the graphs by the Outcomes and for simplicity, we've left out missing data or outcomes that were unclear.  
+
+There is little evidence to show that certain types Outcomes were predictive of a war. But surprisingly so, we see that Stalemates peaked during the middle of an ongoing war. We see that in WWII, the Vietnam War and during War in Afghanistan.  
+
 ## Conclusion 
 **Discuss limitations and future directions, lessons learned**
 

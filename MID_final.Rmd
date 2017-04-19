@@ -41,12 +41,12 @@ MIDA$wartime <- sapply(MIDA$StYear, war_year)
 
 ##PCP PLot 
 alphabending = 0.5
-war <- ggparcoord(MIDA[MIDA$StYear>1900 & MIDA$wartime!='No War',], columns = c(9:12, 15:16), 
+war <- ggparcoord(MIDA[MIDA$StYear>1900 & MIDA$wartime!='No War',], columns = c(9:11, 14:16), 
                   scale = "uniminmax", 
                   alphaLines = alphabending,
                   groupColumn = "wartime", 
                   title="Correlations In War Time Conflicts")
-peace <- ggparcoord(MIDA[MIDA$StYear>1900 & MIDA$wartime=='No War',], columns = c(9:12, 14:16), 
+peace <- ggparcoord(MIDA[MIDA$StYear>1900 & MIDA$wartime=='No War',], columns = c(9:11, 14:16), 
                   scale = "uniminmax",
                   alphaLines = alphabending,
                   groupColumn = "wartime", 
