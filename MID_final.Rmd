@@ -233,7 +233,7 @@ for(yr in 1901:2010)
 y2_high =30
 d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
 
-confictsInitiated = 6
+confictsInitiated = 5
 orig <- ggplot() + 
   geom_point(data=WarTopOrig, aes(x = vars, y = n), size = 1, color = 'red') +
   geom_label_repel(data=WarTopOrig,
