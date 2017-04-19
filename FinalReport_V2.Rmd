@@ -44,13 +44,11 @@ mylables <- c("No War" , "WWI", "WWII", "Cold War", "Korean War", "Vietnam War",
 ##Introduction
 
 **Overview**  
-Wars are complex events born of geopolitical, cultural or economic strife, oftentimes spanning many years but ultimately costing us lives, our livelihood and peace. During wars, countries quickly adopt ideologies, form allegiances, and discipline their economic and scientific priorities while maintaining their military focus with a blind adherence. Although the causes of this displacement of peace may vary, is there a precursory pattern to it? Does the landscape change after the end of a prolonged conflict? Do certain actors benefit more? Do some lose more than others? And most importantly, could there be important predictors of these epic events that change the course of history? 
+Wars are complex events born of geopolitical, cultural or economic strife, often spanning many years but ultimately costing lives, livelihood and peace. During wars, countries quickly adopt ideologies, form allegiances, and discipline their economic and scientific priorities while maintaining their military focus with a blind adherence. Although the causes of this displacement of peace may vary, is there a precursory pattern to it? Does the landscape change after the end of a prolonged conflict? Do certain actors benefit more? Do some lose more than others? And most importantly, could there be important predictors of these epic events that change the course of history? 
 
-**Our Aim**  
-We are particularly interested in studying the changes that happen to a country before and after they enter a war. We want to see the change of alliances and strategies, it's impact on trade and commerce and the economics at play. We also want to compare and contrast the characteristics of countries who won wars with the ones that lost. Our eventual goal is to find certain factors that indicate which countries will enter into a war and how these factors/predictors change over time. 
+We are particularly interested in studying the changes that happen to a country before and after they enter a war. We want to see the change of alliances and strategies, it's impact on trade and commerce and the economics at play. We also want to compare and contrast the characteristics of countries who won wars with the ones that lost. Our eventual goal is to find certain factors that indicate which countries will enter a war and how these factors and predictors change over time. 
 
-**Scope and Timeline**  
-To limit our scope we will explore the data with a particular emphasis on the United States of America and the wars it has fought since 1900. At various points, we may have to include comparisons between countries and the US and we will explore the data breadth-wise to draw meaningful insights.  
+To limit our scope, we will explore the data with a particular emphasis on the United States of America and the wars it has fought since 1900. At various points, we may have to include comparisons between countries and the US and we will explore the data breadth-wise to draw meaningful insights.  
 
 For our timeline, we plan to look at events/activity leading to, during and following the major US wars, namely;  
 WWI    -------------------------- 1914-1918  
@@ -60,10 +58,12 @@ Korean War ---------------- 1950-1953
 Vietnam War --------------- 1955-1975  
 War in Afghanistan ------- 2001-2010 
 
+Although the Cold War was only a state of severe political tension between the Eastern Bloc and Western Bloc there were many regional battles and the threat of a large-scale military war was constant. We chose to include the Cold War in our analysis to see if there were any differences for a threat of war compared to an actual war. 
+
 
 ## The Data, Team Members and The Roles
 
-The [Correlates of War Project](http://www.correlatesofwar.org) is a treasure trove of information. We have a special interest in the following datasets: Trade, National Materials Capabilities, Alliances and Militarized Interstate Disputes. 
+The [Correlates of War Project](http://www.correlatesofwar.org) is a treasure trove of information. We have a special interest in the following datasets: Trade, National Materials Capabilities (NMC), Alliances and Militarized Interstate Disputes (MID
 
 **Our Plan**  
 We've decided to divide and conquer the work by each taking a subset of the data and exploring it. After sometime, we will regroup to see what we've learnt so far and switch data sets amongst ourselves to see if there are more insights to be learnt or different approaches to visualize the existing data. Lastly, we want to drill down into particular variables and plot correlations or predictors for the final output.
@@ -83,12 +83,11 @@ We've decided to divide and conquer the work by each taking a subset of the data
 
 ## Analysis of Data Quality 
 
-
-The Correlates of War datasets are a product of the Correlate of War Project (COW) founded in 1963. COW's goal is to "facilitate the collection, dissemination, and use of accurate and reliable quantitative data in international relations." [add source] From the COW datasets we focused on 4 datasets: National Materials Capabilities, Military Intertate Disputes, Alliances and Trade. As these data sets are part of the the COW project, the authority, accuracy and objectivity of the data sets are impeccable. All the data sets use a field called country code, a numeric ID given to each country. This is a consistent field that can be used to tie the data acorss the data sets in the COW project. 
+The Correlates of War datasets are a product of the Correlate of War Project (COW) founded in 1963. COW's goal is to "facilitate the collection, dissemination, and use of accurate and reliable quantitative data in international relations." [Correlates of War Project] From the COW datasets we focused on 4 datasets: National Materials Capabilities, Militarized Interstate Disputes, Alliances and Trade. As these data sets are part of the COW project, the authority, accuracy and objectivity of the data sets are impeccable. All the data sets use a field called country code, a numeric ID given to each country. This is a consistent field that can be used to tie the data across the data sets in the COW project. 
 
 **National Materials Capabilities**
   
-The overall data quality of NMC dataset is very good. There are roughly 14,000 entries and 89% of them did not have any missing values. There is one data entry for each country per year. The accuracy of the data is also very good because as countries are dissolved and new ones are formed, this data keeps track of them. For example, the graph depicts the CINC of Austria-Hungary from 1900-1918, the end of WWI when it the Austro-Hungarian Empire was dissolved. Immediately after that, you see data points for Austria and Hungary separately.This same accuracy hold true for many different coutries, where there is only data once the country has declared independence or has just been created. 
+The overall data quality of NMC dataset is very good. There are roughly 14,000 entries and 89% of them did not have any missing values. There is one data entry for each country per year. The accuracy of the data is also very good because as countries are dissolved and new ones are formed, this data keeps track of them. For example, the graph depicts the CINC of Austria-Hungary from 1900-1918, the end of WWI when it the Austro-Hungarian Empire was dissolved. Immediately after that, you see data points for Austria and Hungary separately. This same accuracy hold true for many different countries, where there is only data once the country has declared independence or has just been created. 
 
 ```{r fig.width=10, fig.height=5}
 NMC_test <- NMC_orig
@@ -120,6 +119,34 @@ ggplot() +
 
 ```
   
+  
+Also for any countires who have been devastated by war, the NMC values are not available. The heat map below shows the CINC values of countires that were destroyed by both the Holocaust and the fight for freedom from Communism. 
+
+```{r, fig.align='center'}
+topCas <- c("Netherlands", "Yugoslavia", "Lithuania", "Poland", "Austria", "Hungary", "Romania", "Estonia", "Luxembourg")
+topCas_ccode <- member_alliances$ccode[match(topCas, member_alliances$state_name)]
+
+
+NMC_cas <- filter(NMC_orig, NMC_orig$year %in% c(1900:2012))
+NMC_cas <- filter(NMC_cas, NMC_cas$ccode %in% topCas_ccode)
+for( i in c(1:length(topCas_ccode))){
+  NMC_cas$country[NMC_cas$ccode == topCas_ccode[i]] <- topCas[i]
+}
+
+ggplot(NMC_cas, aes(country, year, fill = cinc)) + geom_tile()+
+  xlab("Country") +
+  ylab("Year") +
+  scale_fill_viridis() + 
+  ggtitle("CINC Heatmap for Countries with the most Holocaust Casualties") + 
+  theme_classic()+
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_flip() +
+  labs(color ='CINC')
+  
+
+```
+
+
 **Alliances**
 
 
@@ -138,8 +165,8 @@ Some of the inconsistencies that I noticed are in cases where the alliance is st
   
 **National Materials Capabilities**
 
-National Materials Capabilities is measure of the power of nation based on 6 values: iron and steel production, military expenditures, military personnel, primary energy consumption, urban population and total population. It is also a measure of the military and economic power a nation can have. We also looked at the ratios of the 6 metrics, which is calculated by summing the total of all countries for a given year and dividing the value for each country by the total. The ratios help us to normalize trends to look and how countries change their behavior before wars.
- 
+National Materials Capabilities is measure of the power of nation based on 6 values: iron and steel production, military expenditures, military personnel, primary energy consumption, urban population and total population. It is also a measure of the military and economic power a nation can have. We also looked at the ratios of the 6 metrics, calculated by summing the total values of all countries for a given year and dividing the value for each country by the total. The ratios helped us to normalize trends to look and how countries change their behavior, relative to other countries.
+
 
 ```{r, echo = FALSE}
 countries <- c("Germany")
@@ -202,14 +229,14 @@ NMC_execsum_ratios_2$Period<- "Proactive Investment"
 
 ```
 
-Above is a graph of Germany’s military expenditures ratio and military personnel ratio from the 1900 to 1950. What we found is that the military investment of a country that instigates a conflict and a country that reacts to the aggressors is very different. Germany is a good example because Germany was both a reactive participant and an instigator. Germany only got involved in WWI after Austria-Hungary declared war on Serbia but in WWII Germany was the instigator when it invaded Poland. 
+Above is a graph of Germany’s military expenditures ratio and military personnel ratio from the 1900 to 1950. We found is that the military investment of a country that instigates a conflict vs a country that reacts to aggression is very different. Germany is a good example because Germany was a reactive participant in WWI, only engaging once Austria-Hungary declared war on Serbia and an instigator in WWI, when it invaded Poland officially starting WWII.
 
-We found that for a reactive participant the military expenditures ratio and military personnel ratios increase during the war, not before. The part of the graph highlighted in green shows Germany increase its military investment during WWII, there was not much of change. On the other hand, the area highlighted in red before WWII, shows Germany proactively increasing military investment. There is sharp increase in military expenditures in the 10 years before WWII and an even sharper increase in military personnel in the 1-2 years before WWII. We found this pattern with several countries that instigated wars. Although there are many factors that determine if a country will instigate a war, monitoring the military investment can assist in determining the actions of a country in the near future.  
-
+We found that for a reactive participant, the military expenditures ratio and military personnel ratios increase during the war, not before. The part of the graph highlighted in green shows Germany increase its military investment during WWI. There was not much indication of an increase in investment before the war started. On the other hand, the area highlighted in red before WWII, shows Germany proactively increasing military investment. There is sharp increase in military expenditures in the 10 years before WWII and an even sharper increase in military personnel in the 1-2 years before WWII. We found this pattern with several countries that instigated wars. Although there are many factors that determine if a country will instigate a war, monitoring the military investment can assist in determining the actions of a country in the near future.  
+ 
 
 **Alliances**
 
-Alliances between nations are very important in determining the course of events. World War I can be attributed to the various alliances in place that created a diplomatic chain of events to involve all the world powers at that time. Below is a series of boxplots to show the number of alliances in effect per year since 1900s. The colored box plots show the different events listed above. We see that the median number of alliances per country increase towards the end of each war, with the exception of the Afghanistan War.  We have found that alliances are a reactive to wars. For example, the North Atlantic Treaty Organization(NATO) and the Warsaw Pact were treaties created towards the end of WWII. Both alliances involved numerous countries and account for the increase the number of alliances towards the end of WWII and the beginning of the Cold War. We also found that once a military alliance is terminated or dissolved, countries try to join another treaty. Towards the end of the Cold War, the Soviet Union dissolved and with it the Warsaw Pact. Once that ended, many countries joined NATO which accounts for the increase in the alliances towards the end of the Cold War. Overall, looking at alliances is not a good predictor of events to come because there are a lot of diplomatic events going on in the background that is not captured in the data. For example, today the United Nations has a lot of control and regulation over wars that happen today, so looking at alliances will not be a sufficient to demined events. 
+Alliances between nations are very important in determining the course of events. World War I can be attributed to the various alliances in place that created a diplomatic chain of events to involve all the world powers at that time. Below is a series of boxplots to show the number of alliances in effect per year since 1900s; the colored box plots show the different events listed above. We see that the median number of alliances per country increase towards the end of each war, with the exception of the Afghanistan War.  We have found that alliances are a reactive to wars. For example, the North Atlantic Treaty Organization(NATO) and the Warsaw Pact were treaties created towards the end of WWII. Both alliances involved numerous countries and account for the increase the number of alliances towards the end of WWII and the beginning of the Cold War. We also found that once a military alliance is terminated or dissolved, countries try to join another treaty as quickly as possible. Towards the end of the Cold War, the Soviet Union dissolved and with it the Warsaw Pact. Once that ended, many countries joined NATO which accounts for the increase in the alliances towards the end of the Cold War. Overall, looking at alliances is not a good predictor of events to come because there are a lot of diplomatic events going on in the background that is not captured in the data. Additionally, today the United Nations has a lot of control and regulation over wars that happen today, so looking at alliances will not be a sufficient to determine future events. 
 
   
 ```{r, echo = FALSE}
@@ -293,12 +320,8 @@ cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2"
 
 National Materials Capability measures the power of a country based on 6 values: total population, urban population, military personnel, military expenditures, iron and steel production and energy consumption. NMC is purely a measure of military and economic means of influence rather than diplomacy or other forms of influence. 
 
-CINC is the composite score to measure the power of a country using the average of the ratios, calculated as described below. 
- 
-![] (./cinc_calc.png)
+CINC is the composite score to measure the power of a country using the average of the ratios of each country value to the total value of all countries for each of the 6 factors.   Below is the CNIC score for major powers today who also participated the major wars in the past. Also highlighted are the period wars mentioned above.
 
-
-Below is the CNIC score for major powers today who also participated the major wars in the past. Also highlighted are the years wars mentioned above. 
 
 ```{r fig.width=10, fig.height=5}
 countries <- c("United States of America", "United Kingdom", "France", "Russia","Germany", "Japan", "China")
@@ -329,9 +352,10 @@ ggplot() +
 ```
 
 
-As you can see CNIC is constantly changing. Interestingly, the CNIC spikes for the US right after WWI and WWII where the US had a major role in the outcome of the wars. There is also an increase in the US’s CINC score during the Korean War. Following the Korean War, the US’s CINC score shows a continuous decrease during the Vietnam where the US lost the war.  At the end of WWI, you see Russia’s CNIC dip low but it bounced back to its CNIC before WWI pretty quickly. During the Vietnam War, Russia supported the Vietnamese people and you see the its CINC score increase above that of the US as they start to gain ground in the war. Also Russia’s CINC score drops low towards the end of the Cold War as the satellite states start gaining their independence and the USSR was dissolved.
+As you can see CNIC is constantly changing. Interestingly, the CNIC spikes for the US right after WWI and WWII where the US had a major role in the outcome of the wars. There is also an increase in the US’s CINC score during the Korean War. Following the Korean War, the US’s CINC score shows a continuous decrease during the Vietnam where the US lost the war.  At the end of WWI, you see Russia’s CNIC dip low but it bounced back to its CNIC before WWI quickly. During the Vietnam War, Russia supported the Vietnamese people and you see the its CINC score increase above that of the US as they start to gain ground in the war. Also, Russia’s CINC score drops low towards the end of the Cold War as the satellite states start gaining their independence and the USSR was dissolved (Battlefield: Vietnam).
 
 To explore the trends more, the data was refined to only look at the major participants of each war. For example, with WWI we looked at the CINC values for major players in the Allied Powers and Central Powers a few years before and after the war. We replicated this process for all the events listed above. Below are CINC graphs using this approach for WWI and WWII.
+
 
 
 ```{r fig.width=10, fig.height=5, Echo = TRUE}
@@ -412,13 +436,12 @@ ww2 <- ggplot() +
 grid.arrange(ww1, ww2, nrow=2)
 
 ```
-As mentioned, with WWI the US’s CINC spiked right after the war and then began to steadily decrease till the beginning of the WWII. Russia’s CINC dropped but rose again pretty quickly and stayed on a relatively upward trend till WWII. Unlike the US and Russia, United Kingdom’s CINC was steadily decreasing after the war. Italy and Japan’s CINC remained steady. With the Central Powers after WWI, Germany’s CINC dropped but it did not rise again. Turkey’s, Romania’s and Bulgaria’s CINC remained steady. We see the Austria-Hungarian CINC disappear after the war since the Austro-Hungarian empire was dissolved at the end of the war.
+As mentioned, with WWI the US’s CINC spiked right after the war and then began to steadily decrease till the beginning of the WWII. Russia’s CINC dropped but rose again quickly and stayed on a relatively upward trend till WWII. Unlike the US and Russia, United Kingdom’s CINC was steadily decreasing after the war. Italy and Japan’s CINC remained steady. With the Central Powers after WWI, Germany’s CINC dropped but it did not rise again. Turkey’s, Romania’s and Bulgaria’s CINC remained steady. We see the Austria-Hungarian CINC disappear after the war since the Austro-Hungarian empire was dissolved at the end of the war (Royde-Smith).
 
 With WWII, we see a similar pattern for the US where the CNIC reaches a peak at the end of WWII and steadily decreases till the Korean war. Russia also shows a similar pattern to WWI where its CINC score reaches a low point towards the end of WWII and then continues to steadily increase till the Korean war. The UK also follows a similar pattern where it CINC peaks right after the war and then steadily decreases throughout the Cold War time period. With the Axis powers, Germany’s and Japan’s CINC drops off.
 
-To explore the patters above, we looked into the components that make up the CINC. We chose to focus on the major powers because they had the most drastic changes during this time period. We looked at both the actual value and the ratio because the absolute values gradually increased over time but the ratios show performance relative to the other countries each year. Looking at the ratios helped us to see trends that were not easy to spot when looking at the overall values. Below is a plot of five of the six CINC components, the values and the ratios
 
-
+To explore the patterns above, we considered the components that make up the CINC. We chose to focus on the major powers because they had the most drastic changes during this period. We looked at both the actual value and the ratio because the absolute values gradually increased over time but the ratios show performance relative to the other countries each year. Looking at the ratios helped us to see trends that were not easy to spot when looking at the overall values. Below is a plot of five of the six CINC components, the values and the ratios
 
 
 ```{r fig.width=25, fig.height=20 , echo=FALSE}
@@ -602,9 +625,9 @@ grid.arrange(arrangeGrob(ias, ias_r, mex, mex_r, mip, mip_r + theme(plot.title =
 ```
 
 
-With the Iron and Steel Production ratio, you can see that it follows to same pattern as the CINC for the US during this time period. The ratio peaks towards the end of WWI and WWII and decreases in the time period between the two wars. Till about the beginning of the Vietnam War, roughly 1955, the US dominated the world in Iron and Steel production and so this value had huge impact the US’s CINC score. Generally, during most wars, the US has the most military production but lost its position toward s the end of the Vietnam war when Russia surpassed the US. The United Kingdom maintained its iron and steel production, but since USA and Russia were increasing their production, the UKs ratio has been steadily decreasing since the 1900s, very similar to the pattern observed with the CINC score. 
+With the Iron and Steel Production ratio, you can see that it follows to same pattern as the CINC for the US during this period. The ratio peaks towards the end of WWI and WWII and decreases in the period between the two wars. Till about the beginning of the Vietnam War, roughly 1955, the US dominated the world in Iron and Steel production and so this value had huge impact the US’s CINC score. Generally, during most wars, the US has the most military production but lost its position toward s the end of the Vietnam war when Russia surpassed the US. The United Kingdom maintained its iron and steel production, but since USA and Russia were increasing their production, the UKs ratio has been steadily decreasing since the 1900s, very similar to that of the pattern observed with the CINC score. 
 
-Looking at military expenditure we see that the US and Russia had been significantly investing more in the military throughout the cold war. On the other hand, both countries decrease their military personnel after they peaked at the end of WWII. These findings are consistent with the Cold War where the US and Russia were in an arms race where they heavily invested in military technology but did not engage in any large scale battles. The US’s military expenditures ratio peaks the same year its CINC score and iron and steel production ratio.
+Looking at military expenditure we see that the US and Russia had been significantly investing more in the military throughout the cold war. On the other hand, both countries decrease their military personnel after they peaked at the end of WWII. These findings are consistent with the Cold War where the US and Russia were in an arms race where they heavily invested in military technology but did not engage in any large-scale battles. The US’s military expenditures ratio peaks the same year its CINC score and iron and steel production ratio.
 
 In the few years before WWII, you see Germany’s military expenditures ratio increase quite rapidly and the military personnel ratio saw a drastic increase in the one year before increasing quite rapidly. Although not as drastic, Japan and China follow a similar pattern where the military investment increased significantly a few years prior to WWII and the Korean War, respectively, and the military personnel ratio drastically increased right before the wars. This suggests that in years before the wars, these countries started investing in and preparing their militaries for war. The countries that were on the reactive side, the US, Russia and the UK, their military production ratios and military expenditures ratios only increased during the war. 
 
@@ -645,7 +668,7 @@ b<- ggplot() +
 grid.arrange(a,b,nrow = 1)
 ```
 
-We wanted to see if this this same pattern was present in other conflicts. During the Gulf War, Iraq invaded Kuwait and it was met with international condemnation and the US and other nations joined forces to stop Iraq. But before the invasion in war we see Iraq’s military expenditures and personnel ratios increasing. The gray shaded box indicates the time period of the Gulf War (1990-1991). In the 1980s, Iraq’s military expenditure ratio drastically increased and then there was a sudden spike in military personnel right before the start of the war.  
+We wanted to see if this this same pattern was present in other conflicts. During the Gulf War, Iraq invaded Kuwait and it was met with international condemnation and the US and other nations joined forces to stop Iraq (Persian Gulf War). But before the invasion in war we see Iraq’s military expenditures and personnel ratios increasing. The gray shaded box indicates the period of the Gulf War (1990-1991). In the 1980s, Iraq’s military expenditure ratio drastically increased and then there was a sudden spike in military personnel right before the start of the war.  
 
 ```{r fig.width=14, fig.height=6}
 ct <- c("United States of America", "United Kingdom", "France", "Russia","Germany", "Italy", "Japan", "China")
@@ -672,7 +695,7 @@ topCas <- c("Netherlands", "Yugoslavia", "Lithuania", "Poland", "Austria", "Hung
 topCas_ccode <- member_alliances$ccode[match(topCas, member_alliances$state_name)]
 
 
-NMC_cas <- filter(NMC, NMC$year %in% all_year)
+NMC_cas <- filter(NMC_orig, NMC$year %in% all_year)
 NMC_cas <- filter(NMC_cas, NMC_cas$ccode %in% topCas_ccode)
 for( i in c(1:length(topCas_ccode))){
   NMC_cas$country[NMC_cas$ccode == topCas_ccode[i]] <- topCas[i]
@@ -692,19 +715,18 @@ b<- ggplot(NMC_cas, aes(country, year, fill = cinc)) + geom_tile()+
 grid.arrange(a,b, nrow = 1 )
 ```
 
-Finally, using the heat maps, we looked at impact on CINC after a war. On the left is a heat map of the major powers. You can see that France, Germany and Japan had missing CINC values at the end of World War II. Those periods of missing values correspond to the recovery period for each of those countries following the war. Next, we looked to see what other coutries had gaps in their CINC data. Most of the countries that have missing gaps are Eastern European countries that where heaviliy impacted by the Holocaust and by the struggle to end Communism in the region. This indiactes that for countries that are going through intense destruction or reformation, they do not have any CINC information.
-
+Finally, using the heat maps, we looked at impact on CINC after a war. On the left is a heat map of the major powers. You can see that France, Germany and Japan had missing CINC values at the end of World War II. Those periods of missing values correspond to the recovery period for each of those countries following the war. Next, we looked to see what other countries had gaps in their CINC data. Most of the countries that have missing gaps are Eastern European countries that where heavily impacted by the Holocaust and by the struggle to end Communism in the region (Royde-Smith). This indicates that for countries that are going through intense destruction or reformation, they do not have any CINC information.
 
 
 **Conclusions & Next Steps **
 
 To get even more into detail and context around certain characteristics, we want to look at specific events like pearl harbor or China’s invasion of Malaysia and other pivotal moments in wars to see how those events impact the CINC and its various components.  
 
-A problem with NMC is that there are many other factors that determine a power of a nation rather than the 6 NMC factors. One of the major considerations that is not taken into account are diplomatic relations and dealings. Diplomatic relations play a major role is the prevention and conclusion of conflicts. With this data, it was not possible to factor that in. 
+A problem with NMC is that there are many other factors that determine a power of a nation rather than the 6 NMC factors. One of the major considerations that is not considered is the diplomatic relation between countries. Diplomatic relations play a major role is the prevention and conclusion of conflicts. With this data, it was not possible to factor that in. 
 
-Additionally, another thing to consider is differences in policies between different countries. We see that military expenditures have been increasing for the US since the Cold War but Russia’s military expenditures take a sudden drop at the end of the Cold War. Since then Russia has been cutting military spending till today. Even with its participation in the Afghanistan War, Russia’s military expenditures have not increase. On the contrary, in the US today, politicians are proposing a Federal Budgets with increases in military spending. This difference is due to differences in policies of the countries. Thus the reactions of countries to events will drastically vary based on their policies and it because hard to distinguish an overall pattern. 
+Additionally, another thing to consider is differences in policies between different countries. We see that military expenditures have been increasing for the US since the Cold War but Russia’s military expenditures take a sudden drop at the end of the Cold War. Since the end of the Cold War, Russia has been cutting military spending till today (Royde-Smith). Even with its participation in the Afghanistan War, Russia’s military expenditures have not increased. On the contrary, in the US today, politicians are proposing a Federal Budgets with increases in military spending. This difference is due to differences in policies of the countries. Thus, the reactions of countries to events will drastically vary based on their policies and it because hard to distinguish an overall pattern. 
 
-Another drawback of NMC is that it cannot take into account changes in universal priorities. For example, with an increased concern for climate change and scare natural resources and also with advancements in technology, iron and steel production might start to decrease drastically in the future so it may no longer be a valid measure of power.  Similarly, advancements in technoloy would decrease the need for military personeel. The issue with NMC is that it cannot take such policy concerns and changes into consideration to measure national power. 
+Another drawback of NMC is that it cannot consider changes in universal priorities. For example, with an increased concern for climate change and scare natural resources and with advancements in technology, iron and steel production might start to decrease drastically in the future so it may no longer be a valid measure of power.  Similarly, advancements in technology would decrease the need for military personnel. The issue with NMC is that it cannot take such policy concerns and changes into consideration to measure national power. 
 
 
 
@@ -753,9 +775,10 @@ ggplot() +
   scale_fill_manual(values=c("white", "lightsteelblue3", "pink3", "paleturquoise3", "lightsteelblue2", "lightsteelblue4","salmon" ), labels = mylables)
 
 ```
-Next we looked at the types of alliances formed during this time. The COW data reports on 4 types of alliances: defense, neutrality, entente and non-aggression. In a defense alliance, the member states agree to defend one or more states in alliance in the event of a conflict. With a neutrality alliance, there is an agreement to maintain neutrality towards the members of the alliance. In non-aggression alliance, the members agree to take no military action against one another. Finally, with an entente alliance there is an understanding that the states would consult with one another if a crisis occurred 
+Next we looked at the types of alliances formed during this time. The COW data reports on 4 types of alliances: defense, neutrality, entente and non-aggression. In a defense alliance, the member states agree to defend one or more states in alliance in the event of a conflict. With a neutrality alliance, there is an agreement to maintain neutrality towards the members of the alliance. In non-aggression alliance, the members agree to take no military action against one another. Finally, with an entente alliance there is an understanding that the states would consult with one another if a crisis occurred (Formal Alliances). 
 
 The plots below show the number of alliances by alliance type. The top row shows the number of new alliances that were formed each year and the second row shows number of alliances that were terminated that year. Please note that if an alliance was formed between 4 states then there would 6 new alliances in the data set because there is an alliance between each of the 4 members. Similarly, if an alliance between 4 states were terminated that would be 6 less alliances.
+
 
 
 ```{r fig.width=12, fig.height=8}
@@ -796,7 +819,8 @@ grid.arrange(a,b, nrow =2)
 
 Most of the alliances formed were at the end of WWII and during the Cold War. Also, the most frequently formed alliances were defense and entente. Surprisingly, in years that see a large increase in the number of alliances formed there is also an increase in the number of alliances that were terminated. To dig in further to get a better understand of what types of treaties were formed and why they ended, we looked at individual countries. 
 
-The following charts are all organized the same way, they show a timeline of when the alliances started till either the end of the alliance (shown in red) or till 2012 if the alliance was observed in effect as of December 31, 2012 (shown in blue). The charts are facetted to show the different types of alliances because many of the alliance types overlap. For example, one alliance could be both a defense and entente alliance, so to get a better visual representation we separated the types of alliances. We focused this part of the analysis on the United States and Russia because these countries are major powers and thus are involved in many of the military alliances throughout history. 
+The following charts are all organized the same way, they show a timeline of when the alliances started till either the end of the alliance (shown in red) or till 2012 if the alliance was observed in effect as of December 31, 2012 (shown in blue). The charts are facetted to show the different types of alliances because many of the alliance types overlap. For example, one alliance could be both a defense and entente alliance, so to get a better visual representation we separated the types of alliances. We focused this part of the analysis on the United States because it is a major power and thus is involved in many of the military alliances throughout history. 
+
 
 
 **United States of America ** 
@@ -806,7 +830,7 @@ al_us_yr <- filter(dir_al_year, dir_al_year$state_name1 %in% "United States of A
 al_us_yr <- gather(al_us_yr, Treaty, idicator, defense:entente)   
 al_us_yr <- al_us_yr[!al_us_yr$idicator %in%  0,]
 al_us_yr$dyad_end_year[al_us_yr$dyad_end_year %in% NA] = 2016
-al_us_yr <- al_us_yr[, c(5,8,11,14,16)]
+al_us_yr <- al_us_yr[, c(1,5,8,11,14,16)]
 al_us_yr$count = 1 
 al_us_yr$Status <- ""
 al_us_yr$Status[al_us_yr$dyad_end_year < 2012] <- "Ended"
@@ -825,50 +849,21 @@ ggplot() +
 
 ```
 
-Looking at the alliances for the US, we see that most defense alliances are still in effect today. There were handful of alliances with South American countries that ended towards the end of WWII but the US entered into a different alliance with those same countries immediately. The treaties in effect with the South American countries is the Inter-American Treaty of Reciprocal Assistance (Rio Pact) where if there is an attack against one country, it is considered an attack among all the Americas countries in the alliance. This alliance was created n 1949 and continues till today. 
+Looking at the alliances for the US, we see that most defense alliances are still in effect today. There were handful of alliances with South American countries that ended towards the end of WWII but the US entered a different alliance with those same countries immediately. The treaties in effect with the South American countries is the Inter-American Treaty of Reciprocal Assistance (Rio Pact) where if there is an attack against one country, it is considered an attack among all the Americas countries in the alliance. This alliance was created n 1949 and continues till today (The Rio Pact at a Glance). 
 
-You can also see a similar pattern of ongoing alliances for defense entente and nonaggression treaty types. NATO, a defensive, entente and nonaggression alliance, was formed in 1947 and is still in effect till today. NATO involves 28 countries and accounts for the high number of alliances formed in 1949 for the 3 types. 
+You can also see a similar pattern of ongoing alliances for defense entente and nonaggression treaty types. NATO, a defensive, entente and nonaggression alliance, was formed in 1947 and is still in effect till today. NATO involves 28 countries and accounts for the high number of alliances formed in 1949 for the 3 types (Formation of NATO). 
 
-The entente alliances follow a similar pattern where the alliance ended and was immediately reformed. There were a few countries where there was an entente alliance formed towards the end of the Korean War and ended a few years after the end of the Vietnam war. The majority of the countries that follow the described patters are in Asia or Australia. This is reasonable considering they were participants is the Vietnam War. Also the defense and entente alliance between the US and Cuba ended during the Vietnam War, indicated in the graph above, when Cuba was providing military support to the Vietnamese. Also, during the Vietnam war, there was a neutrality alliance for a few years between the US and countries that participated in the Vietnam war. This alliance was called the International Agreement on the Neutrality of Laos starting in 1961 and was terminaded when was Democratic Republic of Vietnam violated the terms of the treaty 2 years later.  
-
-
-**Russia ** 
-
-
-```{r fig.width=12, fig.height=6}
-dir_al_year2 <- filter(dir_al_year, dir_al_year$dyad_st_year %in% c(1900:2016))
-al_rus_yr <- filter(dir_al_year2, dir_al_year2$state_name1 %in% c("Russia"))
-al_rus_yr <- gather(al_rus_yr, Treaty, idicator, defense:entente)   
-al_rus_yr <- al_rus_yr[!al_rus_yr$idicator %in%  0,]
-
-al_rus_yr <- al_rus_yr[, c(5,8,11,14,16)]
-al_rus_yr$count = 1 
-al_rus_yr$Status[al_rus_yr$dyad_end_year < 2012] <- "Ended"
-al_rus_yr$Status[al_rus_yr$dyad_end_year== 2012] <- "Ongoing"
-
-ggplot() + 
-  xlab("Year") +
-  ylab("Country")+
-  geom_point(data =al_rus_yr, aes(x=year, y = state_name2, color =Status), alpha = .5) + 
-  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
-  ggtitle("Russia Alliances")+
-  theme_classic()+
-  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)+
-  facet_wrap(~Treaty, nrow = 1 ) +
-  theme(legend.position="right", plot.title = element_text(hjust = .5)) 
-
-```
-
-Opposing the United States and NATO, USSR (Russia) entered into the Warsaw Pact in 1955. You can see
+The entente alliances follow a similar pattern where the alliance ended and was immediately reformed. There were a few countries where there was an entente alliance formed towards the end of the Korean War and ended a few years after the end of the Vietnam war. The majority of the countries that follow the described patters are in Asia or Australia. This is reasonable considering they were participants is the Vietnam War. Also, the defense and entente alliance between the US and Cuba ended during the Vietnam War, indicated in the graph above, when Cuba was providing military support to the Vietnamese. Also, during the Vietnam war, there was a neutrality alliance for a few years between the US and countries that participated in the Vietnam war. This alliance was called the International Agreement on the Neutrality of Laos starting in 1961 and was terminated when was Democratic Republic of Vietnam violated the terms of the treaty 2 years later (Vietnam War History).  
 
 
 **Conclusions & Next Steps **
 
-Since we are mainly focusing on large-scale wars that involved various countries, many treaties were created and broken. For example, Warsaw Pact was created as a counter weight to the NATO Pact created at end of WWII. The US, Great Britain and their allies became part of NATO and the Soviet Union and its Allies became part of the Warsaw pact. Once the USSR dissolved many of the satellite nations, the Warsaw Pact members joined NATO. Such military. With NATO and the formation of the United Nations, it is hard to say which countries will participate in the next war. For example, before the beginning of the War on Afghanistan, the security council had to authorize the United States and NATO allies to organize an offensive against al-Qaeda. This type of regulation makes it hard to determine how future wars will play out. One thing that was interesting is that once a treaty falls apart, the members try to join another treaty which is why we see spikes is the median number of alliances towards the end of the wars. 
+Since we are mainly focusing on large-scale wars that involved various countries, many treaties were created and broken. For example, Warsaw Pact was created as a counter weight to the NATO Pact created at end of WWII. The US, Great Britain and their allies became part of NATO and the Soviet Union and its Allies became part of the Warsaw pact. Once the USSR dissolved many of the satellite nations, the Warsaw Pact members joined NATO. Such military. With NATO and the formation of the United Nations, it is hard to say which countries will participate in the next war. For example, before the beginning of the War on Afghanistan, the security council had to authorize the United States and NATO allies to organize an offensive against al-Qaeda (Witte). This type of regulation makes it hard to determine how future wars will play out. One thing that was interesting is that once a treaty falls apart, the members try to join another treaty which is why we see spikes is the median number of alliances towards the end of the wars. 
 
 One of the things that was hard to work with this data set is that it was impossible to tell which alliances were part of a larger treaty. For example, if there was a data point for an alliance between the US and the UK in 1967, there was no indication of if it was NATO or some other treaty.  This also made it hard to tell when a country joined an existing alliance. For example, when Germany joined NATO there were data points for an alliance between Germany and the NATO members but it is not easy to discern that Germany join NATO without some internet research. 
 
-The other downfall of this data set is that it only considers formal military alliances. It will not take into account other types of alliances such as the United Nations & security council or a trade agreement. For example, Japan is not in any military alliance currently but it does have very close ties to the United States today, and this information is not captured in the data set. 
+The other downfall of this data set is that it only considers formal military alliances. It does not consider other types of alliances such as the United Nations & security council or a trade agreement. For example, Japan is not in any military alliance currently but it does have very close ties to the United States today, and this information is not captured in the data set. 
+
 
   
 **Trade** 
@@ -879,9 +874,29 @@ The other downfall of this data set is that it only considers formal military al
   
 ## Sources 
 
-National Material Capabilities (v5.0). Singer, J. David, Stuart Bremer, and John Stuckey. (1972). "Capability Distribution, Uncertainty, and Major Power War, 1820-1965." in Bruce Russett (ed) Peace, War, and Numbers, Beverly Hills: Sage, 19-48.
+"About the Correlates of War Project." Correlates of War. N.p., 05 Apr. 2014. Web. 19 Apr. 2017.  
+  
+"Battlefield: Vietnam." PBS. Public Broadcasting Service, n.d. Web. 19 Apr. 2017.  
+  
+"Cold War." Encyclopædia Britannica. Encyclopædia Britannica, Inc., n.d. Web. 19 Apr. 2017.  
+  
+Formal Alliances (v4.1). Gibler, Douglas M. 2009. International military alliances, 1648-2008. CQ Press.     
+   
+"Formation of NATO." History.com. A&E Television Networks, 2010. Web. 19 Apr. 2017.  
 
-Formal Alliances (v4.1). Gibler, Douglas M. 2009. International military alliances, 1648-2008. CQ Press.  
-
+ National Material Capabilities (v5.0). Singer, J. David, Stuart Bremer, and John Stuckey. (1972). "Capability Distribution, Uncertainty, and Major Power War, 1820-1965." in Bruce Russett (ed) Peace, War, and Numbers, Beverly Hills: Sage, 19-48.  
+  
+"Persian Gulf War." Encyclopædia Britannica. Encyclopædia Britannica, Inc., n.d. Web. 19 Apr. 2017. 
+  
+"The Rio Pact at a Glance." The New York Times. The New York Times, 20 Apr. 1982. Web. 19 Apr. 2017.  
+   
+Royde-Smith, John Graham. "World War I." Encyclopædia Britannica. Encyclopædia Britannica, Inc., 09 Dec. 2016. Web. 19 Apr. 2017.  
+   
+Royde-Smith, John Graham. "World War II." Encyclopædia Britannica. Encyclopædia Britannica, Inc., 03 Feb. 2017. Web. 19 Apr. 2017.  
+    
+"Vietnam War History." History.com. A&E Television Networks, 2009. Web. 19 Apr. 2017.  
+    
+Witte, Griff. "Afghanistan War." Encyclopædia Britannica. Encyclopædia Britannica, Inc., 14 Oct. 2016. Web. 19 Apr. 2017.  
+     
 
 
