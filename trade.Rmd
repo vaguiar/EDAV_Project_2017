@@ -28,8 +28,8 @@ WW2_start <- 1939
 WW2_end <- 1945
 
 # Filtering data for the years for WW2 and 2 years before & after.
-nat_trade <- nat_trade[nat_trade$year >= (WW2_start-2), ]    
-nat_trade <- nat_trade[nat_trade$year <= (WW2_end+2), ] 
+#nat_trade <- nat_trade[nat_trade$year >= (WW2_start-2), ]    
+#nat_trade <- nat_trade[nat_trade$year <= (WW2_end+2), ] 
 
 #dyad_trade <- dyad_trade[dyad_trade$year > (WW2_start-2) ,]
 #dyad_trade = dyad_trade[dyad_trade$year < (WW2_end+2), ]
