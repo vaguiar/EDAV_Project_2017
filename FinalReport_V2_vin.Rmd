@@ -345,9 +345,14 @@ WarTopOrig <- arrange(WarTopOrig, desc(vars))
 
 # Overlay w/ rectangle theme
 y2_high =30
-d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+d = data.frame(x1=c(1914, 1939, 1947, 1950, 1955, 2001), 
+               x2=c(1918, 1945, 1991, 1953, 1975, 2010), 
+               y1=c(0,0,0,0,0,0),
+               y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high),
+               Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), 
+               r=c(1,2,3,4,5,6))
 
-confictsInitiated = 6
+confictsInitiated = 5
 ggplot() + 
   geom_point(data=WarTopOrig, aes(x = vars, y = n), size = 1, color = 'red') +
   geom_label_repel(data=WarTopOrig,
@@ -370,7 +375,7 @@ ggplot() +
                            nrow=1)) +
   scale_fill_manual( 
     breaks= c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"),
-    values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3", "green", "pink", "red", "orange", "grey", "blue", "salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"))
+    values=c("green", "red", "skyblue", "salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3", "green", "pink", "red", "orange", "yellow", "blue", "salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"))
   
 ```
 
@@ -1169,7 +1174,7 @@ d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1
 
 #Using distinct color palette
 cols <- colorRampPalette(brewer.pal(12, "Paired"))
-myPal <- cols(length(unique(nat_top10_exp$statename)))
+#myPal <- cols(length(unique(nat_top10_exp$statename)))
 
 #Adding Labels for Facet titles
 facet_names <- as_labeller(c(
@@ -1186,7 +1191,7 @@ facet_names <- as_labeller(c(
 ggplot() + 
   geom_bar(data=MIDA[MIDA$EndYear>1900 & MIDA$Fatality!=0 & MIDA$Fatality!=-9,], aes(x = EndYear),   stat="count") +
   facet_wrap(~Fatality, nrow= 8, labeller=facet_names) +
-  scale_fill_manual(values = myPal) +
+  #scale_fill_manual(values = myPal) +
   geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
   ggtitle("Number Of Disputes With Fatalities By Year") +
   xlab("End Year") +
@@ -1217,7 +1222,7 @@ facet_names <- as_labeller(c(
 ggplot() + 
   geom_bar(data=MIDA[MIDA$EndYear>1900 & MIDA$Settle!=3 & MIDA$Settle!='-9', ], aes(x = EndYear), stat="count") +
   facet_wrap(~Settle, nrow= 5, labeller=facet_names) +
-  scale_fill_manual(values = myPal) +
+  #scale_fill_manual(values = myPal) +
   geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
   ggtitle("Number Of Disputes With Settlement Outcomes By Year") +
   xlab("End Year") +
@@ -1264,7 +1269,7 @@ ggplot() +
   geom_bar(data=MIDA_o[MIDA_o$EndYear>1900 & MIDA_o$WarOutcome!='-9' , ], 
   aes(x = EndYear), stat="count") +
   facet_wrap(~WarOutcome, nrow= 5, labeller=facet_names) +
-  scale_fill_manual(values = myPal) +
+  #scale_fill_manual(values = myPal) +
   geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
   ggtitle("Number Of Disputes With Outcomes By Year") +
   xlab("End Year") +

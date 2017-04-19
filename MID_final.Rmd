@@ -193,6 +193,9 @@ MIDB_O <- filter(MIDB, Orig==1)
 #Filter by countries that attacked during various disputes.
 MIDB_A <- filter(MIDB, Orig==0)
 
+Temp <- filter(MIDB_O, StAbb=='ISR' & StYear > 1935 & StYear <1949)
+print (Temp)
+
 #summary(MIDB_A)
 
 #Count the conflicts originated by countries each year
