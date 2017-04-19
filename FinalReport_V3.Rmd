@@ -77,9 +77,6 @@ We've decided to divide and conquer the work by each taking a subset of the data
   + Cynthia to analyze Militarized Interstate Disputes and Trade  
   + Vineet to analyze National Materials Capabilities and Alliances   
 
-*Phase 3:*
-* Cynthia and Vineet to come together and look at the interaction of different variables. For example how did a change in trade impact the NMC. 
-
 
 ## Analysis of Data Quality 
 
@@ -119,8 +116,8 @@ ggplot() +
 
 ```
   
-  
-Also for any countires who have been devastated by war, the NMC values are not available. The heat map below shows the CINC values of countires that were destroyed by both the Holocaust and the fight for freedom from Communism. 
+Below is heat map of CINC values for a few countries and we can see that there are missing CINC values for certain countries. More specifically, this the heat map below shows the CINC values of countries that were destroyed by both the Holocaust and the fight for freedom from Communism. These countries had to go through a period of major reformation and recovery. In the data set, anytime that a country has been devastated it has missing CINC values.  
+
 
 ```{r, fig.align='center'}
 topCas <- c("Netherlands", "Yugoslavia", "Lithuania", "Poland", "Austria", "Hungary", "Romania", "Estonia", "Luxembourg")
@@ -160,7 +157,8 @@ Some of the inconsistencies that I noticed are in cases where the alliance is st
      
 **Militarized Interstate Disputes (MID)** 
 
-The MID data is thorough and well collated. As conflicts or wars can have multiple dimentions to them, the MID data is broken down into 2 main data sets. MIDA contains an observation per conflict  with details about the start and end of the conflict, the fatalities, the outcomes, the settlements, the highest action taken etc. The other part of the dataset- MIDB, contains one obeservation per actor in a conflict, thus adding a different dimension to the data.
+The MID data is thorough and well collated. As conflicts or wars can have multiple dimensions to them, the MID data is broken down into 2 main data sets. MIDA contains an observation per conflict with details about the start and end of the conflict, the fatalities, the outcomes, the settlements, the highest action taken etc. The other part of the dataset- MIDB, contains one observation per actor in a conflict, thus adding a different dimension to the data.
+
 
 ```{r fig.width=15, fig.height=6, echo = FALSE}
 library(grid)
@@ -176,7 +174,7 @@ hostl <- ggplot() + geom_histogram(data = MIDA[MIDA$HostLev!=-9, ], aes(HostLev)
 grid.arrange(fatal, outcm, hiact, hostl, nrow = 2)  
 
 ```
-As seen above, most categorical variables have been neatly factored to maintain comformance in formats such as 0 being the lowest and increasing there one. This aides in better data representation. 
+As seen above, most categorical variables have been neatly factored to maintain conformance in formats such as 0 being the lowest and increasing there one. This aides in better data representation. 
 Also for this data, most cases of missing data, which is represented with -9 can be safely ignored. 
 
   
@@ -185,6 +183,7 @@ Also for this data, most cases of missing data, which is represented with -9 can
 **National Materials Capabilities**
 
 National Materials Capabilities is measure of the power of nation based on 6 values: iron and steel production, military expenditures, military personnel, primary energy consumption, urban population and total population. It is also a measure of the military and economic power a nation can have. We also looked at the ratios of the 6 metrics, calculated by summing the total values of all countries for a given year and dividing the value for each country by the total. The ratios helped us to normalize trends to look and how countries change their behavior, relative to other countries.
+
 
 
 ```{r, echo = FALSE}
@@ -847,7 +846,7 @@ for(i in c(1:length(d$x1))){
 
 WWI was triggered by the assassination of the Archduke Franz Ferdinand of Austria. His death set off diplomatic crisis as countries that were not involved in the original conflict were forced to get involved. Once Austria declared war on Serbia for the death of the Arch Duke, Russia had to step into defend Serbia. Once Russia entered the conflict, Germany was forced to enter the conflict due to its alliance with Austria. During the conflict Germany invaded Belgium; in response, the United Kingdom mobilized due to their alliance with Belgium. This pattern continued to eventually involve all the major powers of the world for a devastating battle. Such alliances were the cause of World War I. Since then the number of Alliances has only grown and continues to grow. For this reason, we wanted to look at alliances and see how they change during wars. 
 
-Below is boxplot of the total number of alliances that are in effect each year between any two countries. It is easy to see that the median number of alliances jumped up significantly during WWII and continued to grow during the Cold War and remained relatively level since then. An interesting pattern is that the median number of alliances increased more in the 1-3 before the end of war. You can see this patter with WWI, Korean War, Vietnam War and the end of the Cold War. Although the Cold War was only a state of severe political war there were many regional battles and the threat of a large-scale military war was constant. The number of alliances significantly increased from the start of the Cold War till the end.  
+Below is boxplot of the total number of alliances that are in effect each year between any two countries. It is easy to see that the median number of alliances jumped up significantly during WWII and continued to grow during the Cold War and remained relatively level since then. An interesting pattern is that the median number of alliances increased more in the 1-3 before the end of war. You can see this pattern with WWI, Korean War, Vietnam War and the end of the Cold War. Although the Cold War was only a state of severe political war there were many regional battles and the threat of a large-scale military war was constant. The number of alliances significantly increased from the start of the Cold War till the end.  
 
 
 ```{r fig.width=20, fig.height=8}
@@ -1013,9 +1012,9 @@ peace <- ggparcoord(MIDA[MIDA$StYear>1900 & MIDA$wartime=='No War',], columns = 
                     #     nrow=1)) 
 grid.arrange(war, peace, nrow = 2)  
 ```
-In the graph plotting War Time Correlations, we see that most of the datapoints for Fatality, Settlement and Outcome gravitate towards the top half. There's also a high level of correlation in there. As for the Peace Time Correlations, the first three variables seem pretty evenly distributed.
+In the graph plotting War Time Correlations, we see that most of the data points for Fatality, Settlement and Outcome gravitate towards the top half. There's also a high level of correlation in there. As for the Peace Time Correlations, the first three variables seem pretty evenly distributed.
 
-Below, we dig a little deeper into variables like Fatalities, Settlements and Outcomes of the conflicts. Each graph is overlayed with the time period of the major wars. Through this exploration, we try to spot possible predictors of a war.  
+Below, we dig a little deeper into variables like Fatalities, Settlements and Outcomes of the conflicts. Each graph is overlaid with the time period of the major wars. Through this exploration, we try to spot possible predictors of a war.  
   
 **Fatalaties In Disputes Leading to War**  
 
@@ -1052,9 +1051,10 @@ ggplot() +
   ylab("Count")
 
 ```
-In the graph above we have plotted the Fatalites occuring due to militarized conflicts every year since the year 1900. We've faceted the graphs by the number of casualties starting from 1-25, 25-100 and so on. 
+In the graph above we have plotted the Fatalities occurring due to militarized conflicts every year since the year 1900. We've faceted the graphs by the number of casualties starting from 1-25, 25-100 and so on. 
 
 Within each facet, the data is mildly interspersed with more concentration during war years and lesser at other times. But, interestingly so, there were conflicts resulting in more than 999 deaths in the years leading to the each and every major war. And in four of those years, namely 1913, 1938, 1955, and 2001, we see spikes in the number of deaths. This could be indicative of the fact that those conflicts forced countries to fight wars.
+
 
 **Settlement of Disputes Leading to War**  
 ```{r fig.width=15, fig.height=6}
@@ -1084,7 +1084,7 @@ ggplot() +
 ```
 In the graph above we have plotted the Settlement outcomes of different militarized conflicts every year since the year 1900. We've faceted the graphs by the Settlement types and for simplicity we've left out missing data or settlements that were unclear.  
   
-Surprisingly, we don't see any correlations between Imposed/Negotiated Settlements and the war. But on second though, the number of Settlements, would not be an important predictor of war. This could be due to the fact that some Settlements, such as such as the Treaty of Versailles which was punitive and complex in nature, had a major role in the rise of the Nazi party. TBut since the data doesn't delve into the qualitative aspects of these Settlements and it is of little or no significance to our exploration.  
+Surprisingly, we don't see any correlations between Imposed/Negotiated Settlements and the war. But on second thought, the number of Settlements, would not be an important predictor of war. This could be due to the fact that some Settlements, such as such as the Treaty of Versailles which was punitive and complex in nature, had a major role in the rise of the Nazi party. But since the data doesn't delve into the qualitative aspects of these Settlements and it is of little or no significance to our exploration.  
   
   
 
