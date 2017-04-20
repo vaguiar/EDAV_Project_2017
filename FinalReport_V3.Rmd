@@ -174,7 +174,7 @@ hostl <- ggplot() + geom_histogram(data = MIDA[MIDA$HostLev!=-9, ], aes(HostLev)
 grid.arrange(fatal, outcm, hiact, hostl, nrow = 2)  
 
 ```
-As seen above, the authors of the dataset have used techniques to categorize certain subjective variables and then futher factor them to the number format. For instance, the "Outcome" of a dispute was factored as follows:  
+As seen above, the authors of the dataset have used techniques to categorize certain subjective variables and then futher factor them to the number format. For instance, the "Outcome" of a dispute was factored as follows [Palmer, Glenn]:  
 Victory for side A: 1  
 Victory for side B: 2  
 Yield by side A: 3  
@@ -955,7 +955,7 @@ The entente alliances follow a similar pattern where the alliance ended and was 
 
 **Conclusions & Next Steps **
 
-Since we are mainly focusing on large-scale wars that involved various countries, many treaties were created and broken. For example, Warsaw Pact was created as a counter weight to the NATO Pact created at end of WWII. The US, Great Britain and their allies became part of NATO and the Soviet Union and its Allies became part of the Warsaw pact. Once the USSR dissolved many of the satellite nations, the Warsaw Pact members joined NATO. Such military. With NATO and the formation of the United Nations, it is hard to say which countries will participate in the next war. For example, before the beginning of the War on Afghanistan, the security council had to authorize the United States and NATO allies to organize an offensive against al-Qaeda (Witte). This type of regulation makes it hard to determine how future wars will play out. One thing that was interesting is that once a treaty falls apart, the members try to join another treaty which is why we see spikes is the median number of alliances towards the end of the wars. 
+Since we are mainly focusing on large-scale wars that involved various countries, many treaties were created and broken. For example, Warsaw Pact was created as a counter weight to the NATO Pact created at end of WWII. The US, Great Britain and their allies became part of NATO and the Soviet Union and its Allies became part of the Warsaw pact. Once the USSR dissolved many of the satellite nations, the Warsaw Pact members joined NATO. With NATO and the formation of the United Nations, it is hard to say which countries will participate in the next war. For example, before the beginning of the War on Afghanistan, the security council had to authorize the United States and NATO allies to organize an offensive against al-Qaeda (Witte). This type of regulation makes it hard to determine how future wars will play out. One thing that was interesting is that once a treaty falls apart, the members try to join another treaty which is why we see spikes is the median number of alliances towards the end of the wars. 
 
 One of the things that was hard to work with this data set is that it was impossible to tell which alliances were part of a larger treaty. For example, if there was a data point for an alliance between the US and the UK in 1967, there was no indication of if it was NATO or some other treaty.  This also made it hard to tell when a country joined an existing alliance. For example, when Germany joined NATO there were data points for an alliance between Germany and the NATO members but it is not easy to discern that Germany join NATO without some internet research. 
 
@@ -968,7 +968,7 @@ The other downfall of this data set is that it only considers formal military al
      
 #### Militarized Interstate Disputes
   
-The data is rich and contains multifaceted information such as the Outcomes, Settlements, The Number of Fatalities, Minimum Duration, The Highest Action taken and Hostility Level during each militarized conflict in the last century. We've selected a few important variables and plotted them in a pcp to see if we can spot correlations between them.  
+The data is rich and contains many dimensions such as the outcomes, settlements, the number of fatalities, minimum duration, the highest action taken and hostility level during each militarized conflict in the last century. Hence as the first step, we selected a few variables and plotted them in a pcp to try and spot correlations.
   
 ```{r fig.width=15, fig.height=10}
 library(ggplot2)
@@ -1024,7 +1024,7 @@ peace <- ggparcoord(MIDA[MIDA$StYear>1900 & MIDA$wartime=='No War',], columns = 
                     #     nrow=1)) 
 grid.arrange(war, peace, nrow = 2)  
 ```
-In the graph plotting War Time Correlations, we see that most of the data points for Fatality, Settlement and Outcome gravitate towards the top half. There's also a high level of correlation in there. As for the Peace Time Correlations, the first three variables seem pretty evenly distributed.
+In the graph plotting War Time Correlations, we see that most of the data points for Fatality, Settlement and Outcome gravitate towards the top half. There's also a high level of correlation between those three. Minimum Duration was partly skewed and the rest were evenly distributed. As for the Peace Time Correlations, the first three variables seem pretty evenly distributed too.
 
 Below, we dig a little deeper into variables like Fatalities, Settlements and Outcomes of the conflicts. Each graph is overlaid with the time period of the major wars. Through this exploration, we try to spot possible predictors of a war.  
   
@@ -1058,10 +1058,7 @@ ggplot() +
   ylab("Count")
 
 ```
-In the graph above we have plotted the Fatalities occurring due to militarized conflicts every year since the year 1900. We've faceted the graphs by the number of casualties starting from 1-25, 25-100 and so on. 
-
-Within each facet, the data is mildly interspersed with more concentration during war years and lesser at other times. But, interestingly so, there were conflicts resulting in more than 999 deaths in the years leading to the each and every major war. And in four of those years, namely 1913, 1938, 1955, and 2001, we see spikes in the number of deaths. This could be indicative of the fact that those conflicts forced countries to fight wars.
-
+In the graph above we have plotted the Fatalities occurring due to militarized conflicts every year since the year 1900. We've faceted the graphs by the number of fatalities starting from 1-25, 25-100, 101-250 and so on. Within each facet, the data is mildly interspersed with a larger concentration during the war years and sparse distribution at other times. But, interestingly so, there were conflicts resulting in more than 999 deaths in the years leading to the each and every major war. And in four of those years, namely 1913, 1938, 1955, and 2001, we see spikes in the number of deaths. This could be indicative of the fact that those conflicts forced an international involvement in the wars.
 
 **Settlement of Disputes Leading to War**  
 ```{r fig.width=15, fig.height=6}
@@ -1091,10 +1088,8 @@ ggplot() +
 ```
 In the graph above we have plotted the Settlement outcomes of different militarized conflicts every year since the year 1900. We've faceted the graphs by the Settlement types and for simplicity we've left out missing data or settlements that were unclear.  
   
-Surprisingly, we don't see any correlations between Imposed/Negotiated Settlements and the war. But on second thought, the number of Settlements, would not be an important predictor of war. This could be due to the fact that some Settlements, such as such as the Treaty of Versailles which was punitive and complex in nature, had a major role in the rise of the Nazi party. But since the data doesn't delve into the qualitative aspects of these Settlements and it is of little or no significance to our exploration.  
+Surprisingly, we don't see any correlations between Imposed/Negotiated Settlements and the war. But on second thought, the number of Settlements, would not be an important predictor of war. This could be due to the fact that some Settlements, such as such as the Treaty of Versailles [Treaty of Versailles] which was punitive and complex in nature, had a major role in shaping the political climate of Nazi Germany. But since the data doesn't delve into the qualitative aspects of these Settlements and it is of little or no significance to our exploration.  
   
-  
-
 **Outcomes of Disputes Leading to War**  
 
 ```{r fig.width=15, fig.height=10}
@@ -1137,10 +1132,12 @@ ggplot() +
   ylab("Count")
 ```
 
-In the graph above we have plotted the Outcomes of different militarized conflicts every year since the year 1900. We've faceted the graphs by the Outcomes and for simplicity, we've left out missing data or outcomes that were unclear.  
+In the graph above we have plotted the Outcomes of different militarized conflicts every year since the year 1900. We've faceted the graphs by the Outcomes and for simplicity, we've left out missing data or outcomes that were unclear. There is little evidence to show that certain types Outcomes were predictive of a war. But surprisingly so, we see that Stalemates peaked during the middle of an ongoing war. We see that in WWII, the Vietnam War and during War in Afghanistan. On further analysis, the years that correspond to the spike in stalemates in WW2 and the Vietnam War were the exact years in which the US entered both those wars; namely 1942 [The United States Declares War on Japan] and 1964 [Gulf of Tonkin Resolution]. The introduction of a major military power could explain the shift in the power.
 
-There is little evidence to show that certain types Outcomes were predictive of a war. But surprisingly so, we see that Stalemates peaked during the middle of an ongoing war. We see that in WWII, the Vietnam War and during War in Afghanistan.
-  
+**Conclusions & Next Steps **  
+The face of modern warfare has changed dramatically in the past few decades. With technological advancements, militaries now resort to elite electronic warfare which enables them to target their enemies without any human presence on site. Cyber war is also widely employed to conduct espionage or to influence biases in the world. Countries maintain huge arsenals of strategic defense weapons such as Intercontinental Ballistic Missiles [ICBM] and Ballistic Missile Nuclear Submarines [SSBN] to serve as important deterrents to international conflicts. And learning from the past ravages of war, many countries stand united in collectively punishing rogue nations through trade embargoes or economic maneuvers. With such a shift in military strategy, the MID data may contain newer dimensions in the future. The involvement of certain actors may be harder to prove or pin point and the existing variables may not serve as valid predictors of an imminent war. 
+
+But for the next steps of this exploration, we could work to consider the interplay of trade and economic reliance on the peace between borders. Through the MIDB data set we could drill down into the individual disputes between countries and their occurrences over time. Superimpose that over economic or trading ties during the same time periods, or the forming of other international alliances and we could have valuable findings.
   
 ## Sources 
 
@@ -1165,8 +1162,19 @@ Royde-Smith, John Graham. "World War I." Encyclopædia Britannica. Encyclopædia
 Royde-Smith, John Graham. "World War II." Encyclopædia Britannica. Encyclopædia Britannica, Inc., 03 Feb. 2017. Web. 19 Apr. 2017.  
     
 "Vietnam War History." History.com. A&E Television Networks, 2009. Web. 19 Apr. 2017.  
-    
+  
 Witte, Griff. "Afghanistan War." Encyclopædia Britannica. Encyclopædia Britannica, Inc., 14 Oct. 2016. Web. 19 Apr. 2017.  
+
+Jones, Daniel M., Stuart A. Bremer and J. David Singer. 1996 ."Militarized Interstate Disputes, 1816-1992: Rationale, Coding Rules, and Empirical Patterns." Conflict Management and Peace Science 15:163-213.
+
+Palmer, Glenn, Vito D'Orazio, Michael Kenwick, and Matthew Lane.  2015.  "The MID4 Data Set: Procedures, Coding Rules, and Description."  Conflict Management and Peace Science.  Forthcoming.
      
+"Treaty of Versailles." Encyclopædia Britannica. Encyclopædia Britannica, Inc., n.d. Web. 19 Apr. 2017.
 
+"Gulf of Tonkin Resolution." Wikipedia. Wikimedia Foundation, 18 Apr. 2017. Web. 19 Apr. 2017.
 
+"The United States Declares War on Japan." History.com. A&E Television Networks, n.d. Web. 19 Apr. 2017.
+
+"ICBM - Intercontinental Ballistic Missile." Wikipedia. Wikimedia Foundation, 19 Apr. 2017. Web. 20 Apr. 2017.
+
+"SSBN - Ballistic Missile Submarine." Wikipedia. Wikimedia Foundation, 08 Apr. 2017. Web. 20 Apr. 2017.
