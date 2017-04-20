@@ -63,7 +63,7 @@ Although the Cold War was only a state of severe political tension between the E
 
 ## The Data, Team Members and The Roles
 
-The [Correlates of War Project](http://www.correlatesofwar.org) is a treasure trove of information. We have a special interest in the following datasets: Trade, National Materials Capabilities (NMC), Alliances and Militarized Interstate Disputes (MID
+The [Correlates of War Project](http://www.correlatesofwar.org) is a treasure trove of information. We have a special interest in the following datasets: Trade, National Materials Capabilities (NMC), Alliances and Militarized Interstate Disputes (MID)
 
 **Our Plan**  
 We've decided to divide and conquer the work by each taking a subset of the data and exploring it. After sometime, we will regroup to see what we've learnt so far and switch data sets amongst ourselves to see if there are more insights to be learnt or different approaches to visualize the existing data. Lastly, we want to drill down into particular variables and plot correlations or predictors for the final output.
@@ -174,9 +174,19 @@ hostl <- ggplot() + geom_histogram(data = MIDA[MIDA$HostLev!=-9, ], aes(HostLev)
 grid.arrange(fatal, outcm, hiact, hostl, nrow = 2)  
 
 ```
-As seen above, most categorical variables have been neatly factored to maintain conformance in formats such as 0 being the lowest and increasing there one. This aides in better data representation. 
-Also for this data, most cases of missing data, which is represented with -9 can be safely ignored. 
-
+As seen above, the authors of the dataset have used techniques to categorize certain subjective variables and then futher factor them to the number format. For instance, the "Outcome" of a dispute was factored as follows:  
+Victory for side A: 1  
+Victory for side B: 2  
+Yield by side A: 3  
+Yield by side B: 4  
+Stalemate: 5  
+Compromise: 6  
+Released: 7  
+Unclear: 8  
+Joins ongoing war: 9  
+Missing: -9  
+That created a conformity among all recorded obervations which made it easier to work with.  
+Another arrangement that made the data effective was that certain datapoints were clearly marked unclear or missing and based on the context of the graph, we were able to easily sift through them.  
   
 ## Executive Summary 
   
@@ -298,7 +308,8 @@ ggplot() +
 **Trade** 
    
      
-**Militarized Interstate Disputes** 
+**Militarized Interstate Disputes**  
+In the years leading to a war, certain countries increased their military arsenal, recruited more personnel and tested out their weapons and warfare strategies on a smaller scale with a feeble opponent. Though our exploration of Militarized Interstate Disputes, we see exactly that. For instance, in the years leading to WWII, Italy and Germany had initiated the most number of disputes. Clearly all the preparation and war-readiness prepared them for larger scale encounters and against more formidable foes. This graph below plots the most belligerent countries each year against the number of conflicts that it had initiated. The information is superimposed with different war periods. To reduce clutter, we’ve omitted observations below six conflicts each year. As seen above, the top initiators of conflicts had a ready predisposition towards an escalation or impending war. Once we delved into the different dimensions of the data, we paid special attention to the boundary years surrounding a war. Based on our observations, we could tell that the number of fatalities in conflicts during the years before a war was indicative of the fact that a international involvement in a war seemed imminent.
 ```{r fig.width=15, fig.height=7, echo=FALSE}
 library(ggrepel)
 
@@ -337,7 +348,12 @@ WarTopOrig <- arrange(WarTopOrig, desc(vars))
 y2_high =30
 d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
 
-confictsInitiated = 6
+
+#Using distinct color palette
+cols <- colorRampPalette(brewer.pal(12, "Paired"))
+myPal <- cols(length(unique(WarTopOrig$StAbb)))
+
+confictsInitiated = 5
 ggplot() + 
   geom_point(data=WarTopOrig, aes(x = vars, y = n), size = 1, color = 'red') +
   geom_label_repel(data=WarTopOrig,
@@ -351,7 +367,7 @@ ggplot() +
       segment.color = 'grey50') +
   geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15, show.legend = TRUE) +
   theme_classic(base_size = 16) +
-  ggtitle("Countries Initiating Most Number Of Conflicts That Year") +
+  ggtitle("Countries Initiating Most Number Of Conflicts Each Year") +
   xlab("Year") +
   ylab("Count") +
   theme(legend.position = "bottom") +
@@ -359,14 +375,10 @@ ggplot() +
                            title.position = "left",
                            nrow=1)) +
   scale_fill_manual( 
-    breaks= c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"),
-    values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3", "green", "pink", "red", "orange", "grey", "blue", "salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"))
+    breaks= c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), values= myPal)
   
 ```
 
-
-This graph plots the most belligerent countries each year against the number of conflicts that it had initiated. The information is superimposed with different war periods. To reduce clutter, we've omitted observations below six conflicts each year. As seen above, the top initiators of conflicts had ready predisposition towards an escalation or impending war. Bearing this in mind and with the intentional goal of finding predictors, we later delved into the different dimensions of a conflict that were visible in the data before, during and after a major war was fought.
-  
   
 ## Main Analysis 
 
@@ -1023,11 +1035,6 @@ Below, we dig a little deeper into variables like Fatalities, Settlements and Ou
 # Overlay w/ rectangle theme
 y2_high =9
 d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
-
-
-#Using distinct color palette
-cols <- colorRampPalette(brewer.pal(12, "Paired"))
-myPal <- cols(length(unique(nat_top10_exp$statename)))
 
 #Adding Labels for Facet titles
 facet_names <- as_labeller(c(
