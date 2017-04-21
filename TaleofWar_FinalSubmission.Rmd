@@ -1023,6 +1023,149 @@ Since we are mainly focusing on large-scale wars that involved various countries
 One of the things that was hard to work with this data set is that it was impossible to tell which alliances were part of a larger treaty. For example, if there was a data point for an alliance between the US and the UK in 1967, there was no indication of if it was NATO or some other treaty.  This also made it hard to tell when a country joined an existing alliance. For example, when Germany joined NATO there were data points for an alliance between Germany and the NATO members but it is not easy to discern that Germany join NATO without some internet research. 
 
 The other downfall of this data set is that it only considers formal military alliances. It does not consider other types of alliances such as the United Nations & security council or a trade agreement. For example, Japan is not in any military alliance currently but it does have very close ties to the United States today, and this information is not captured in the data set. 
+  
+  
+  
+#### Trade
+
+Given the large scale participation of countries in WWII, we were interested in viewing the effect that the war years had on trade. 
+
+```{r fig.width=12, fig.height=10}
+library(ggplot2)
+library(dplyr)
+library(RColorBrewer)
+library(grid)
+library(gridExtra)
+library(scales)
+
+# Reading both raw DataSets - 
+nat_trade <-read.csv(file="./data/COW_Trade_4.0/National_COW_4.0.csv", head=TRUE, sep=",")
+
+#Using Dict values
+WW2_start <- 1939
+WW2_end <- 1945
+
+# Top 10 exporters in the war years
+nat_top10_exp <- data.frame(colnames(nat_trade))
+nat_top10_imp <- data.frame(colnames(nat_trade))
+#print(nat_top10_exp)
+
+top <-5 
+for(yr in (WW2_start-2):(WW2_end+2))
+{
+  nat_top10_yr <- head(arrange(filter(nat_trade, year == yr), desc(exports)), top)
+  nat_top10_yr_imp <- head(arrange(filter(nat_trade, year == yr), desc(imports)), top)
+  
+  if(yr == (WW2_start-2))
+  {
+    nat_top10_exp <- nat_top10_yr
+    nat_top10_imp <- nat_top10_yr_imp
+  }
+  else
+  {
+    nat_top10_exp <- rbind(nat_top10_exp, nat_top10_yr)
+    nat_top10_imp <- rbind(nat_top10_imp, nat_top10_yr_imp)
+  }
+}
+
+#Using distinct color palette
+cols <- colorRampPalette(brewer.pal(12, "Paired"))
+myPal <- cols(length(unique(nat_top10_exp$statename)))
+
+exp <- ggplot(data=nat_top10_exp, aes(x = year, y = exports, fill = statename, label = round(exports, digits=0))) + 
+  geom_bar(stat="identity") +
+  geom_text(size = 3, position = position_stack(vjust = 0.5)) +
+  scale_fill_manual(values = myPal) +
+  ggtitle("Top Exporters during WW2") +
+  ylab("Exports (In Million US Dollars)")
+  
+imp <- ggplot(data=nat_top10_imp,  aes(x = year, y = imports, fill = statename, label = round(imports, digits=0))) + 
+  geom_bar(stat="identity") +
+  geom_text(size = 3, position = position_stack(vjust = 0.5)) +
+  scale_fill_manual(values = myPal) +
+  ggtitle("Top Importers during WW2") +   
+  ylab("Imports (In Million US Dollars)")
+
+grid.arrange(exp, imp, nrow = 2)  
+
+```
+
+```{r fig.width=12, fig.height=8}
+
+library(ggplot2)
+library(dplyr)
+library(scales)
+library(RColorBrewer)
+library(grid)
+library(gridExtra)
+
+US_trad_partners <- filter(dyad_trade, ccode1==2)
+
+#Using Dict values
+yr_start <- 1900
+yr_end <- 2010
+
+# Top 10 exporters in the war years
+US_top_trade_partner <- data.frame(colnames(US_trad_partners))
+
+for(yr in (yr_start):(yr_end))
+{
+  #print(yr)
+  US_top_trade_partner_curr_yr <- head(arrange(filter(US_trad_partners, year == yr), desc(smoothtotrade)), 1)
+  US_top_exporter_to_curr_yr <- head(arrange(filter(US_trad_partners, year == yr), desc(flow2)), 1)
+  Top_importer_from_US_curr_yr <- head(arrange(filter(US_trad_partners, year == yr), desc(flow1)), 1)
+    
+  if(yr == (yr_start))
+  {
+    US_top_trade_partner <- US_top_trade_partner_curr_yr
+    US_top_exporter_to <- US_top_exporter_to_curr_yr
+    Top_importer_from_US <- Top_importer_from_US_curr_yr
+  }
+  else
+  {
+    US_top_trade_partner <- rbind(US_top_trade_partner, US_top_trade_partner_curr_yr)
+    US_top_exporter_to   <- rbind(US_top_exporter_to, US_top_exporter_to_curr_yr)
+    Top_importer_from_US <- rbind(Top_importer_from_US, Top_importer_from_US_curr_yr)
+  }
+}
+
+# Arrage information by year
+US_top_trade_partner <- arrange(US_top_trade_partner, year)
+
+# Overlay w/ rectangle theme
+y2_high =9
+d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+
+US_top <- ggplot() + 
+  #geom_bar(stat="identity") +
+  geom_point(data=US_top_trade_partner, aes(x = year, y = importer2),  size=2) +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  scale_fill_manual(values=c("white", "lightsteelblue3", "pink3", "paleturquoise3", "lightsteelblue2", "lightsteelblue4","salmon" ), labels = mylables) +
+  ggtitle("Top US Trade Partners (Exports + Imports)")
+
+US_exp_to <- ggplot() + 
+  #geom_bar(stat="identity") +
+  geom_point(data=US_top_exporter_to, aes(x = year, y = importer2),  size=2, color="green") +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=8, fill=Conflict), alpha=0.15) +
+  scale_fill_manual(values=c("white", "lightsteelblue3", "pink3", "paleturquoise3", "lightsteelblue2", "lightsteelblue4","salmon" ), labels = mylables) +
+  ggtitle("Top US Exports To") +
+  ylab("Partner Countries")
+
+US_imp_from <- ggplot() + 
+  #geom_bar(stat="identity") +
+  geom_point(data=Top_importer_from_US, aes(x = year, y = importer2), size=2, color = "red") +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=7, fill=Conflict), alpha=0.15) +
+  scale_fill_manual(values=c("white", "lightsteelblue3", "pink3", "paleturquoise3", "lightsteelblue2", "lightsteelblue4","salmon" ), labels = mylables) +
+  ggtitle("Top US Imports From") +
+  ylab("Partner Countries")
+
+grid.arrange(US_exp_to, US_imp_from, nrow = 2)  
+```
+
+  
+  
+  
+  
 
 #### Militarized Interstate Disputes
   
