@@ -62,7 +62,7 @@ Although the Cold War was only a state of severe political tension between the E
 
 ## The Data, Team Members and The Roles
 
-The [Correlates of War Project](http://www.correlatesofwar.org) is a treasure trove of information. We have a special interest in the following datasets: Trade, National Materials Capabilities (NMC), Alliances and Militarized Interstate Disputes (MID)
+The [Correlates of War Project](http://www.correlatesofwar.org) is a treasure trove of information. We have a special interest in the following datasets: Trade, National Materials Capabilities (NMC), Alliances and Militarized Interstate Disputes (MID). For simplicity, we've extracted all our data into our project repository: [EDAV_Project_2017](https://github.com/vaguiar/EDAV_Project_2017/tree/vineet/data)
 
 **Our Plan**  
 We've decided to divide and conquer the work by each taking a subset of the data and exploring it. After sometime, we will regroup to see what we've learnt so far and switch data sets amongst ourselves to see if there are more insights to be learnt or different approaches to visualize the existing data. Lastly, we want to drill down into particular variables and plot correlations or predictors for the final output.
@@ -303,6 +303,8 @@ ggplot() +
   
 **Trade**  
   
+Global economic activity and trade are considered the main factors in the prosperity of countries. Countries strive to sustain that hegemony and invest heavily in protecting the smooth flow of goods and materials though international waters. Throughout history we've seen many disputes arising in efforts to takeover or protect existing trading routes and in controlling mercantile activity within a region. Even the slightest threat to the continuity of trade activity has often caused a stir in the world order. Below we've explored the effects of trade and specifically in a country's exports by being directly involved in a ongoing war.
+  
 ```{r fig.width=12, fig.height=10, echo=FALSE}
 library(ggplot2)
 library(dplyr)
@@ -354,6 +356,13 @@ grid.arrange(Exports, Export_log, nrow=2)
 #grid.arrange(Export_log, nrow=1)
 
 ```
+  
+As seen in first the graph above, the trading activity of countries has risen dramatically over the past century. In the second, log scaled graph, we've get a better picture of the rate of growth of countries. In particular, the exports of the US increased considerably during both the world wars. And that trend is continued during the Vietnam war as well. On the contrary the countries that were defeated in WWI and WWII had their exports plummet drastically as seen in the case of Germany and Japan. Both France and the UK were able to bounce back steadily. Similarly during the peak of the Vietnam War, Soviet Russia and China had a major dips in exports and Russia again had milder one in the years leading to the fall of the Soviet Union.  
+
+  
+  
+  
+  
 
 
 **Militarized Interstate Disputes**  
@@ -1229,7 +1238,7 @@ Witte, Griff. "Afghanistan War." Encyclopædia Britannica. Encyclopædia Britann
 
 "Treaty of Versailles." Encyclopædia Britannica. Encyclopædia Britannica, Inc., n.d. Web. 19 Apr. 2017.
 
-
+Vaguiar. "Vaguiar/EDAV_Project_2017." GitHub. N.p., 17 Apr. 2017. Web. 20 Apr. 2017.
 
 
 

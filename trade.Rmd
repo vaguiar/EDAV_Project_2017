@@ -92,7 +92,7 @@ myPal <- cols(length(unique(nat_top10_imp$statename)))
 
 ggplot() + 
   geom_bar(data=nat_top10_imp, aes(x = year, y = imports, fill = statename), stat="identity") +
-  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=5000, color='black'), alpha=0.15) +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=30000, color='black'), alpha=0.15) +
   scale_fill_manual(values = myPal) +
   ggtitle("Top Importers during WW2")
 ```
