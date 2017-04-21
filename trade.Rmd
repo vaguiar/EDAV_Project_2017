@@ -134,35 +134,56 @@ ggplot() +
 ```
 Track the Export strength of major countries of the world.
 
-```{r}
+```{r fig.width=12, fig.height=10}
 library(ggplot2)
 library(dplyr)
 library(scales)
 library(RColorBrewer)
 
-G4 <- c("United States of America", "United Kingdom", "Russia", "China", "France", "Italy", "Germany")
+all_year <- c(1900:2010)
+G4 <- c("United States of America", "United Kingdom", "France", "Russia","Germany", "Japan", "China")
 G4_ccode <- member_alliances$ccode[match(G4, member_alliances$state_name)]
 
-G4_trade <- filter(nat_trade, nat_trade$statename %in% G4, year>=1900)
+# Filter data by country code and year
+G4_trade <- filter(nat_trade, nat_trade$year %in% all_year)
+G4_trade <- filter(G4_trade, G4_trade$ccode %in% G4_ccode)
 
+G4_trade$country = ""
+for( i in c(1:length(G4_ccode))){
+  G4_trade$country[G4_trade$ccode == G4_ccode[i]] <- G4[i]
+}
 
 # Overlay w/ rectangle theme
 y2_high = 3000000
 d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
 
-#Using distinct color palette
-cols <- colorRampPalette(brewer.pal(12, "Spectral"))
-myPal <- cols(length(unique(nat_top10_imp$statename)))
-
-ggplot() + 
-  scale_x_continuous(name="x") + 
-  #scale_y_continuous(name="y") +  
-  scale_y_continuous(trans = log_trans()) + 
-  scale_fill_manual(values = myPal) +
+Exports <- ggplot() + 
+  scale_x_continuous(name="Year") + 
+  scale_y_continuous(name="Exports in Million USD") +
+  labs(color ='Country')+
   geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
-  geom_line(data=G4_trade, aes(year, exports, color = stateabb, group = stateabb)) +
-  ggtitle("Exports of World Powers (log scale)") 
-  #theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5)) 
+  geom_line(data=G4_trade, aes(year, exports, color = country, group = stateabb)) +
+  theme_classic()+
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"))+
+  scale_color_brewer(palette="Paired")+
+  ggtitle("Exports of World Powers") +
+  theme(legend.position = "bottom") 
+
+Export_log <- ggplot() + 
+  scale_x_continuous(name="Year") + 
+  scale_y_continuous(name="Exports in Million USD", trans = log_trans(base=exp(10))) + 
+  geom_line(data=G4_trade, aes(year, exports, color = country, group = stateabb)) +
+  #labs(color ='Country')+
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  theme_classic()+
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"))+
+  scale_color_brewer(palette="Paired")+
+  ggtitle("Exports of World Powers (log scale)") +
+  theme(legend.position = "bottom") 
+
+grid.arrange(Exports, Export_log, nrow=2)
+#grid.arrange(Export_log, nrow=1)
+
 ```
 
 
