@@ -305,7 +305,7 @@ ggplot() +
   
 Global economic activity and trade are considered the main factors in the prosperity of countries. Countries strive to sustain that hegemony and invest heavily in protecting the smooth flow of goods and materials though international waters. Throughout history we've seen many disputes arising in efforts to takeover or protect existing trading routes and in controlling mercantile activity within a region. Even the slightest threat to the continuity of trade activity has often caused a stir in the world order. Below we've explored the effects of trade and specifically in a country's exports by being directly involved in a ongoing war.
   
-```{r fig.width=12, fig.height=10, echo=FALSE}
+```{r fig.width=12, fig.height=6, echo=FALSE}
 library(ggplot2)
 library(dplyr)
 library(scales)
@@ -338,7 +338,7 @@ Exports <- ggplot() +
   scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"))+
   scale_color_brewer(palette="Paired")+
   ggtitle("Exports of World Powers") +
-  theme(legend.position = "bottom") 
+  theme(plot.title = element_text(hjust = .5, size = 20), legend.position = "bottom") 
 
 Export_log <- ggplot() + 
   scale_x_continuous(name="Year") + 
@@ -350,14 +350,14 @@ Export_log <- ggplot() +
   scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"))+
   scale_color_brewer(palette="Paired")+
   ggtitle("Exports of World Powers (log scale)") +
-  theme(legend.position = "bottom") 
+  theme(plot.title = element_text(hjust = .5, size = 20), legend.position = "bottom")
 
-grid.arrange(Exports, Export_log, nrow=2)
-#grid.arrange(Export_log, nrow=1)
+#grid.arrange(Exports, Export_log, nrow=2)
+grid.arrange(Export_log, nrow=1)
 
 ```
   
-As seen in first the graph above, the trading activity of countries has risen dramatically over the past century. In the second, log scaled graph, we've get a better picture of the rate of growth of countries. In particular, the exports of the US increased considerably during both the world wars. And that trend is continued during the Vietnam war as well. On the contrary the countries that were defeated in WWI and WWII had their exports plummet drastically as seen in the case of Germany and Japan. Both France and the UK were able to bounce back steadily. Similarly during the peak of the Vietnam War, Soviet Russia and China had a major dips in exports and Russia again had milder one in the years leading to the fall of the Soviet Union.  
+In the graph above, i.e. the log scaled graph, we've get a better picture of the rate of growth of trade for countries. In particular, the exports of the US increased considerably during both the world wars. And that trend is continued during the Vietnam war as well. On the contrary the countries that were defeated in WWI and WWII had their exports plummet drastically as seen in the case of Germany and Japan. Both France and the UK were able to bounce back steadily. Similarly during the peak of the Vietnam War, Soviet Russia and China had a major dips in exports and Russia again had milder one in the years leading to the fall of the Soviet Union.  
 
   
   
@@ -1028,7 +1028,7 @@ The other downfall of this data set is that it only considers formal military al
   
 #### Trade
 
-Given the large scale participation of countries in WWII, we were interested in viewing the effect that the war years had on trade. 
+Given the large scale participation of countries in WWII, we were interested in viewing the effect that the war years had on trade. Below we've plotted all the top 5 countries by exports and imports during the period of WWII.
 
 ```{r fig.width=12, fig.height=10}
 library(ggplot2)
@@ -1089,6 +1089,9 @@ imp <- ggplot(data=nat_top10_imp,  aes(x = year, y = imports, fill = statename, 
 grid.arrange(exp, imp, nrow = 2)  
 
 ```
+
+For the top exporting countries, the US stayed at the top throughout the war period. If anything, the war led to increased consumption among the Allies which in turn fueled the export capacity within the US. In the initial years of the war, the UK was another top exporter, but the ravages of war and the naval skirmishes that it had with the German and Italian fleet, quickly weakened it's position. Accordingly, the German exports capacity hit its peak during the middle of the war. War stricken UK consistently made it to the top of the table for the largest importer throughout the period of the war.  
+
 
 ```{r fig.width=12, fig.height=8}
 
@@ -1161,7 +1164,13 @@ US_imp_from <- ggplot() +
 
 grid.arrange(US_exp_to, US_imp_from, nrow = 2)  
 ```
+To further our exploration of the trade trends within the US, we plotted America's top exports to and imports from by year for the last century. An interesting observation was that for all the US's top trading partners by year, it has maintained a bilateral relationship. For instance, the US had both the largest exports to and imports from the UK around the turn of the 19th century. In time Spain took over followed by Cuba, Japan and then for the longest period of time, with Canada. However, China is the only exception to have becomes the US's largest exporter, but it doesn't rank high as an importer from the US.  
 
+  
+**Conclusions & Next Steps **  
+While examining trade and economic activity one has to be particularly careful about causation and correlations. A good number of of historians posit that the spike in wartime spending towards military and defense related activities helped to alleviate the joblessness and economic strife caused during the Great Depression and eventually brought it to an end. However, some economists have challenged that theory and have suggested that "by building tanks and feeding soldiers - necessary for winning the war -- we merely traded debt for unemployment. In other words, the war had only postponed the issue of recovery." [Folsom, Burton]
+
+Thus, any future research calls for a thorough attention to the context of the data being explored. Currently the data lacks that contextual depth. Secondly, even among the amount of traded goods, we lack information about the nature of those goods. Meaning, we cannot make any observations on whether the goods exported or imported were finished products or raw materials or even food and ammunition.  And lastly, economist increasing point out that the current measure of a country's trade activity is outmoded for the modern economies of the world. For instance, the US may have a lower GDP that that of China, but the nature of the US economy vastly differs from that of China's. Knowledge and technological services power the US economy while China's is a largely agrarian and manufacturing economy.  
   
   
   
@@ -1383,8 +1392,11 @@ Witte, Griff. "Afghanistan War." Encyclopædia Britannica. Encyclopædia Britann
 
 Vaguiar. "Vaguiar/EDAV_Project_2017." GitHub. N.p., 17 Apr. 2017. Web. 20 Apr. 2017.
 
+Folsom, Burton W. "What Ended the Great Depression? | Burton W. Folsom." FEE. Foundation for Economic Education, 24 Feb. 2010. Web. 20 Apr. 2017.
 
+Barbieri, Katherine and Omar M. G. Omar Keshk. 2016. Correlates of War Project Trade Data Set Codebook, Version 4.0. Online: http://correlatesofwar.org. 
 
+Barbieri, Katherine, Omar M. G. Keshk, and Brian Pollins. 2009. “TRADING DATA: Evaluating our Assumptions and Coding Rules.” Conflict Management and Peace Science. 26(5): 471-491.
 
 
 
