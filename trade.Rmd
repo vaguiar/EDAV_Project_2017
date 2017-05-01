@@ -1,0 +1,316 @@
+---
+title: "World Trade"
+author: "Vineet Aguiar"
+output:
+  html_notebook: default
+  html_document: default
+---
+
+```{r}
+path = "/home/vaguiar/col_hw/vis_hw/final/data/"
+member_alliances = read.csv(file="./data/version4.1_csv/alliance_v4.1_by_member.csv", sep= ",")
+nat_trade <-read.csv(file="./data/COW_Trade_4.0/National_COW_4.0.csv", head=TRUE, sep=",")
+
+```
+
+
+```{r fig.width=12, fig.height=10}
+library(ggplot2)
+library(dplyr)
+library(RColorBrewer)
+library(grid)
+library(gridExtra)
+library(scales)
+
+# Reading both raw DataSets - 
+nat_trade <-read.csv(file="./data/COW_Trade_4.0/National_COW_4.0.csv", head=TRUE, sep=",")
+
+#Using Dict values
+WW2_start <- 1939
+WW2_end <- 1945
+
+# Top 10 exporters in the war years
+nat_top10_exp <- data.frame(colnames(nat_trade))
+nat_top10_imp <- data.frame(colnames(nat_trade))
+#print(nat_top10_exp)
+
+top <-5 
+for(yr in (WW2_start-2):(WW2_end+2))
+{
+  nat_top10_yr <- head(arrange(filter(nat_trade, year == yr), desc(exports)), top)
+  nat_top10_yr_imp <- head(arrange(filter(nat_trade, year == yr), desc(imports)), top)
+  
+  if(yr == (WW2_start-2))
+  {
+    nat_top10_exp <- nat_top10_yr
+    nat_top10_imp <- nat_top10_yr_imp
+  }
+  else
+  {
+    nat_top10_exp <- rbind(nat_top10_exp, nat_top10_yr)
+    nat_top10_imp <- rbind(nat_top10_imp, nat_top10_yr_imp)
+  }
+}
+
+#Using distinct color palette
+cols <- colorRampPalette(brewer.pal(12, "Paired"))
+myPal <- cols(length(unique(nat_top10_exp$statename)))
+
+exp <- ggplot(data=nat_top10_exp, aes(x = year, y = exports, fill = statename, label = round(exports, digits=0))) + 
+  geom_bar(stat="identity") +
+  geom_text(size = 3, position = position_stack(vjust = 0.5)) +
+  scale_fill_manual(values = myPal) +
+  ggtitle("Top Exporters during WW2")
+  
+imp <- ggplot(data=nat_top10_imp,  aes(x = year, y = imports, fill = statename, label = round(imports, digits=0))) + 
+  geom_bar(stat="identity") +
+  geom_text(size = 3, position = position_stack(vjust = 0.5)) +
+  scale_fill_manual(values = myPal) +
+  ggtitle("Top Importers during WW2")
+
+grid.arrange(exp, imp, nrow = 2)  
+
+```
+
+```{r}
+
+
+# Top 10 importers in the war years
+nat_top10_imp <- data.frame(colnames(nat_trade))
+
+for(yr in (WW2_start-2):(WW2_end+2))
+{
+  nat_top10_yr <- head(arrange(filter(nat_trade, year == yr), desc(imports)), 10)
+  
+  if(yr == (WW2_start-2))
+    nat_top10_imp <- nat_top10_yr
+  else
+    nat_top10_imp <- rbind(nat_top10_imp, nat_top10_yr)
+}
+
+#print(nat_top10_imp)
+
+#Using distinct color palette
+cols <- colorRampPalette(brewer.pal(12, "Paired"))
+myPal <- cols(length(unique(nat_top10_imp$statename)))
+
+ggplot() + 
+  geom_line(data=nat_top10_imp, aes(x = year, y = imports, fill = statename)) +
+  #geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=30000, color='black'), alpha=0.15) +
+  scale_fill_manual(values = myPal) +
+  ggtitle("Top Importers during WW2")
+```
+
+
+
+
+
+#### Trade for the top 
+```{r}
+library(ggplot2)
+library(dplyr)
+library(RColorBrewer)
+
+G4 <- c("United States of America", "United Kingdom", "Russia", "China", "France", "Italy", "Germany")
+G4_ccode <- member_alliances$ccode[match(G4, member_alliances$state_name)]
+
+G4_trade <- filter(nat_trade, nat_trade$statename %in% G4, year>=1900)
+
+
+# Overlay w/ rectangle theme
+y2_high = 3000000
+d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+
+#Using distinct color palette
+cols <- colorRampPalette(brewer.pal(12, "Spectral"))
+myPal <- cols(length(unique(nat_top10_imp$statename)))
+
+ggplot() + 
+  scale_x_continuous(name="x") + 
+  scale_y_continuous(name="y") +
+  scale_fill_manual(values = myPal) +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  geom_line(data=G4_trade, aes(year, exports, color = stateabb, group = stateabb)) +
+  ggtitle("Exports of World Powers") 
+  #theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5)) 
+
+
+```
+Track the Export strength of major countries of the world.
+
+```{r fig.width=12, fig.height=10}
+library(ggplot2)
+library(dplyr)
+library(scales)
+library(RColorBrewer)
+
+all_year <- c(1900:2010)
+G4 <- c("United States of America", "United Kingdom", "France", "Russia","Germany", "Japan", "China")
+G4_ccode <- member_alliances$ccode[match(G4, member_alliances$state_name)]
+
+# Filter data by country code and year
+G4_trade <- filter(nat_trade, nat_trade$year %in% all_year)
+G4_trade <- filter(G4_trade, G4_trade$ccode %in% G4_ccode)
+
+G4_trade$country = ""
+for( i in c(1:length(G4_ccode))){
+  G4_trade$country[G4_trade$ccode == G4_ccode[i]] <- G4[i]
+}
+
+# Overlay w/ rectangle theme
+y2_high = 3000000
+d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+
+Exports <- ggplot() + 
+  scale_x_continuous(name="Year") + 
+  scale_y_continuous(name="Exports in Million USD") +
+  labs(color ='Country')+
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  geom_line(data=G4_trade, aes(year, exports, color = country, group = stateabb)) +
+  theme_classic()+
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"))+
+  scale_color_brewer(palette="Paired")+
+  ggtitle("Exports of World Powers") +
+  theme(legend.position = "bottom") 
+
+Export_log <- ggplot() + 
+  scale_x_continuous(name="Year") + 
+  scale_y_continuous(name="Exports in Million USD", trans = log_trans(base=exp(10))) + 
+  geom_line(data=G4_trade, aes(year, exports, color = country, group = stateabb)) +
+  #labs(color ='Country')+
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  theme_classic()+
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3"))+
+  scale_color_brewer(palette="Paired")+
+  ggtitle("Exports of World Powers (log scale)") +
+  theme(legend.position = "bottom") 
+
+grid.arrange(Exports, Export_log, nrow=2)
+#grid.arrange(Export_log, nrow=1)
+
+```
+
+
+
+
+
+
+```{r}
+US_trade <- filter(nat_trade, stateabb == 'USA', year>=1900)
+
+ggplot() + 
+  scale_x_continuous(name="x") + 
+  #scale_y_continuous(name="y") +
+  scale_y_continuous(trans = log_trans()) + 
+  #scale_color_manual(name="Legend") +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  geom_line(data=US_trade, aes(year, exports, color="black"))+
+  geom_line(data=US_trade, aes(year, imports)) +
+  ggtitle("Export Import Trade Trends in the US") 
+  #theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5)) 
+```
+The US used to export more than it imported. Now it imports more.
+
+
+```{r}
+China_trade <- filter(nat_trade, stateabb == 'CHN', year>=1900)
+
+ggplot() + 
+  scale_x_continuous(name="x") + 
+  #scale_y_continuous(name="y") +
+  scale_y_continuous(trans = log_trans()) + 
+  #scale_color_manual(name="Legend") +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  geom_line(data=China_trade, aes(year, exports, color="black"))+
+  geom_line(data=China_trade, aes(year, imports)) +
+  ggtitle("Export Import Trade Trends in China") 
+  #theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5)) 
+```
+
+
+```{r fig.width=12, fig.height=8}
+
+library(ggplot2)
+library(dplyr)
+library(scales)
+library(RColorBrewer)
+library(grid)
+library(gridExtra)
+
+#dyad_trade <-read.csv(file="./data/COW_Trade_4.0/Dyadic_COW_4.0.csv", head=TRUE, sep=",")
+
+US_trad_partners <- filter(dyad_trade, ccode1==2)
+
+#Using Dict values
+yr_start <- 1900
+yr_end <- 2010
+
+# Top 10 exporters in the war years
+US_top_trade_partner <- data.frame(colnames(US_trad_partners))
+#print(US_top_trade_partner)
+
+for(yr in (yr_start):(yr_end))
+{
+  #print(yr)
+  US_top_trade_partner_curr_yr <- head(arrange(filter(US_trad_partners, year == yr), desc(smoothtotrade)), 1)
+  US_top_exporter_to_curr_yr <- head(arrange(filter(US_trad_partners, year == yr), desc(flow2)), 1)
+  Top_importer_from_US_curr_yr <- head(arrange(filter(US_trad_partners, year == yr), desc(flow1)), 1)
+    
+  if(yr == (yr_start))
+  {
+    US_top_trade_partner <- US_top_trade_partner_curr_yr
+    US_top_exporter_to <- US_top_exporter_to_curr_yr
+    Top_importer_from_US <- Top_importer_from_US_curr_yr
+  }
+  else
+  {
+    US_top_trade_partner <- rbind(US_top_trade_partner, US_top_trade_partner_curr_yr)
+    US_top_exporter_to   <- rbind(US_top_exporter_to, US_top_exporter_to_curr_yr)
+    Top_importer_from_US <- rbind(Top_importer_from_US, Top_importer_from_US_curr_yr)
+  }
+}
+
+#Using distinct color palette
+cols <- colorRampPalette(brewer.pal(12, "Set3"))
+myPal <- cols(length(unique(US_top_trade_partner$importer2)))
+
+# Arrage information by year
+US_top_trade_partner <- arrange(US_top_trade_partner, year)
+
+# Overlay w/ rectangle theme
+y2_high =9
+d = data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(y2_high,y2_high,y2_high,y2_high,y2_high,y2_high), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+
+US_top <- ggplot() + 
+  #geom_bar(stat="identity") +
+  geom_point(data=US_top_trade_partner, aes(x = year, y = importer2),  size=2) +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=y2, fill=Conflict), alpha=0.15) +
+  scale_fill_manual(values = myPal) +
+  ggtitle("Top US Trade Partners (Exports + Imports)")
+
+US_exp_to <- ggplot() + 
+  #geom_bar(stat="identity") +
+  geom_point(data=US_top_exporter_to, aes(x = year, y = importer2),  size=2, color="green") +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=8, fill=Conflict), alpha=0.15) +
+  scale_fill_manual(values=c("white", "lightsteelblue3", "pink3", "paleturquoise3", "lightsteelblue2", "lightsteelblue4","salmon" ), labels = mylables) +
+  ggtitle("Top US Exports To")
+
+US_imp_from <- ggplot() + 
+  #geom_bar(stat="identity") +
+  geom_point(data=Top_importer_from_US, aes(x = year, y = importer2), size=2, color = "red") +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=7, fill=Conflict), alpha=0.15) +
+  scale_fill_manual(values=c("white", "lightsteelblue3", "pink3", "paleturquoise3", "lightsteelblue2", "lightsteelblue4","salmon" ), labels = mylables) +
+  ggtitle("Top US Imports From")
+
+grid.arrange(US_exp_to, US_imp_from, nrow = 2)
+
+```
+The largest trading partner of the US. 
+WE CAN ALSO PLOT -
+- Top US Import from
+- Top US Exports to
+- Trade value for each of those years
+
+
+
+

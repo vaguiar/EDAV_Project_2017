@@ -1,0 +1,78 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+
+# List of US fought War List
+US_War <- c('WW1', 'WW2', 'KoreanWar', 'VietnamWar', 'ColdWar', 'AfghanWar')
+
+# US War Start/End dates
+WW1_start <- 1914
+WW1_end <- 1918
+
+WW2_start <- 1939
+WW2_end <- 1945
+
+KoreanWar_start <- 1950
+KoreanWar_end <- 1953
+
+VietnamWar_start <- 1955
+VietnamWar_end <- 1975
+
+ColdWar_start <- 1947
+ColdWar_end <- 1991
+
+AfghanWar_start <- 2001
+AfghanWar_end <- 2010
+
+
+# List of countries
+
+# WWI
+allied <- c("United States of America", "United Kingdom", "Russia", "Japan", "Italy")
+allied_ccode <- member_alliances$ccode[match(allied, member_alliances$state_name)]
+
+central <- c("Germany", "Turkey", "Austria-Hungary", "Romania", "Bulgaria")
+central_ccode <- member_alliances$ccode[match(central, member_alliances$state_name)]
+
+
+# WWII
+allies <- c("United States of America", "United Kingdom", "France", "Russia", "Australia", "Belgium", "Brazil", "Canada", "China", "Denmark", "Greece", "Netherlands", "New Zealand", "Norway", "Poland", "South Africa", "Yugoslavia")
+allies_ccode <- member_alliances$ccode[match(allies, member_alliances$state_name)]
+
+axis <- c("Germany", "Italy", "Japan", "Hungary", "Romania", "Bulgaria")
+axis_ccode <- member_alliances$ccode[match(axis, member_alliances$state_name)]
+
+# Cold war
+NATO <- c("United States of America", "United Kingdom", "Belgium", "Netherlands", "France","Canada", "Portugal", "Italy", "Norway", "Denmark", "Icealnd", "Turkey", "Greece")
+nato_ccode  <- member_alliances$ccode[match(NATO, member_alliances$state_name)]
+
+warsaw <- c("Russia", "Czechoslovakia", "Romania", "Bulgaria", "Poland", "Hungary")
+warsaw_ccode  <- member_alliances$ccode[match(warsaw, member_alliances$state_name)]
+
+# Korean war
+sk <- c("United States of America", "United Kingdom", "South Korea")
+sk_ccode  <- member_alliances$ccode[match(sk, member_alliances$state_name)]
+
+nk <- c("Russia", "North Korea", "China")
+nk_ccode  <- member_alliances$ccode[match(nk, member_alliances$state_name)]
+
+# Vietnam War
+us <- c("United States of America", "South Korea", "China", "New Zealand", "Australia")
+us_ccode  <- member_alliances$ccode[match(us, member_alliances$state_name)]
+
+viet <- c("Russia", "North Korea", "Vietnam", "Cuba")
+viet_ccode  <- member_alliances$ccode[match(viet, member_alliances$state_name)]
+
+# afghanistan war
+us <- c("United States of America", "United Kingdom", "Canada", "Germany", "Australia")
+us_ccode  <- member_alliances$ccode[match(us, member_alliances$state_name)]
+
+afg <- c("Afghanistan")
+afg_ccode  <- member_alliances$ccode[match(afg, member_alliances$state_name)]
+
+```
+

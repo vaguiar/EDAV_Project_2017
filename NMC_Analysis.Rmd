@@ -1,0 +1,840 @@
+---
+title: "NMC Analysis"
+output: html_notebook
+---
+
+
+```{r}
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(tidyr)
+library(dplyr)
+library(viridis)
+library(oce)
+library(vcd)
+library(vcdExtra)
+library(extracat)
+
+## Set file path
+#path = "/Users/cynthiaclement/Desktop"
+path = "/home/vaguiar/col_hw/vis_hw/final/data"
+
+## define year range to look at 
+year_min = 1910
+year_usdev_max = 2010 
+
+member_alliances = read.csv(paste(path, "version4.1_csv/alliance_v4.1_by_member.csv", sep= "/"))
+NMC = read.csv(paste(path, "NMC/NMC_v4_0.csv", sep= "/"))
+
+NMC$cinc[NMC$cinc == -9] <- 0
+NMC$irst[NMC$irst == -9] <- 0
+NMC$milex[NMC$milex == -9] <- 0
+NMC$milper[NMC$milper== -9] <- 0
+NMC$pec[NMC$pec == -9] <- 0
+NMC$tpop[NMC$tpop == -9] <- 0
+NMC$upop[NMC$upop == -9] <- 0
+
+
+d=data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+```
+
+
+
+#NMC Overall 
+
+The Composite Index of National Capability (CINC) is a statistical measure of national. It uses an average of percentages of world totals in six different components.The components represent demographic, economic, and military strength.  
+  
+TPR = total population of country ratio  
+UPR = urban population of country ratio  
+ISPR = iron and steel production of country ratio  
+ECR = primary energy consumption ratio  
+MER = military expenditure ratio  
+MPR = military personnel ratio  
+
+### Current World Powers
+
+```{r fig.width=12, fig.height=12}
+countries <- c("United States of America", "United Kingdom", "France", "Russia","Germany", "Italy", "Japan", "China")
+country_code <- member_alliances$ccode[match(countries, member_alliances$state_name)]
+
+nmc_c  <- c("")
+for(code in country_code){
+  nmc_c <- rbind(nmc_c, NMC[NMC$ccode == as.numeric(code),])
+}
+
+nmc_c <- nmc_c[c(2:nrow(nmc_c)),]
+nmc_c$irst <- as.numeric(nmc_c$irst)
+nmc_c$milex <- as.numeric(nmc_c$milex)
+nmc_c$milper <- as.numeric(nmc_c$milper)
+nmc_c$pec <- as.numeric(nmc_c$pec)
+nmc_c$tpop <- as.numeric(nmc_c$tpop)
+nmc_c$upop <- as.numeric(nmc_c$upop)
+nmc_c$cinc <- as.numeric(nmc_c$cinc)
+nmc_c$year <- as.numeric(nmc_c$year)    
+
+
+## create individual plots of the 6 factors in CINC
+
+irst <- ggplot(nmc_c[nmc_c$year > 1930,], aes(year , irst, color = stateabb, group = stateabb)) + geom_point(alpha = 1/100) + geom_line()  + theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5)) + ggtitle("Iron and Steel Production")
+ex <- ggplot(nmc_c[nmc_c$year > 1930,], aes(year , milex, color = stateabb, group = stateabb)) + geom_point(alpha = 1/100) + geom_line()  + theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5)) + ggtitle("Military Expenditures")
+per <- ggplot(nmc_c[nmc_c$year > 1930,], aes(year , milper, color = stateabb, group = stateabb)) + geom_point(alpha = 1/100) + geom_line()  + theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5)) + ggtitle("Military Personell")
+pec <- ggplot(nmc_c[nmc_c$year > 1930,], aes(year , pec, color = stateabb, group = stateabb)) + geom_point(alpha = 1/100) + geom_line()  + theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5)) + ggtitle("Primary Energy Consumption Ratio")
+tpop <- ggplot(nmc_c[nmc_c$year > 1930,], aes(year , tpop, color = stateabb, group = stateabb)) + geom_point(alpha = 1/100) + geom_line()  + theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5)) + ggtitle("Total Population")
+upop <- ggplot(nmc_c[nmc_c$year > 1930,], aes(year , upop, color = stateabb, group = stateabb)) + geom_point(alpha = 1/100) + geom_line()  + theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5)) + ggtitle("Urban Population")
+grid.arrange(irst, ex, per, pec, tpop, upop , nrow = 3)
+
+```
+
+```{r}
+## create plots of CINC and mark the different conflicts we are looking at 
+
+d=data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(.4,.4,.4,.4,.4,.4), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+nmc_yr<- nmc_c[nmc_c$year > 1900,]
+ggplot() + 
+  scale_x_continuous(name="x") + 
+  scale_y_continuous(name="y") +
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=y1, ymax=max(nmc_yr$pec), fill=Conflict),alpha=0.15) +
+  geom_rect(data = d, mapping = aes(xmin=1932, xmax=1939, ymin=0, ymax=max(nmc_yr$pec)), alpha = 1, color = "red")+
+  geom_rect(data = d, mapping = aes(xmin=1941, xmax=1941, ymin=0, ymax=max(nmc_yr$pec)), alpha =1, color = "blue") +
+  geom_line(data = nmc_yr, aes(x = year, y = pec, color = stateabb, group = stateabb))
+
+
+```
+
+
+```{r}
+## Heatmap of CNIC 
+
+ggplot(nmc_c[nmc_c$year > 1900,], aes(stateabb, year, fill = cinc)) + geom_tile()+
+  scale_fill_viridis() + ggtitle("Heatmap of cinc") + theme(axis.text.x = element_text(angle = 60, hjust = 1),plot.title = element_text(hjust = 0.5))
+
+
+```
+
+
+```{r}
+##PCP PLot 
+library(GGally)
+ct <- ggparcoord(nmc_c[nmc_c$year>1930,], columns = 4:10, scale = "uniminmax", alphaLines = .2, groupColumn = "stateabb")
+yr <- ggparcoord(nmc_c[nmc_c$year>1930,], columns = 4:10, scale = "uniminmax", alphaLines = .2, groupColumn = "year")
+grid.arrange(ct, yr, nrow = 2)
+
+
+```
+
+
+
+##World War I
+  
+In the aftermath of the war, four empires disappeared: the German, Austro-Hungarian, Ottoman, and Russian. Numerous nations regained their former independence, and new ones were created.Four dynasties, together with their ancillary aristocracies, all fell as a result of the war: the Romanovs, the Hohenzollerns, the Habsburgs, and the Ottomans. Belgium and Serbia were badly damaged, as was France, with 1.4 million soldiers dead,[183] not counting other casualties. Germany and Russia were similarly affected
+
+```{r}
+allied <- c("United States of America", "United Kingdom", "Russia", "Japan", "Italy")
+allied_ccode <- member_alliances$ccode[match(allied, member_alliances$state_name)]
+
+central <- c("Germany", "Turkey", "Austria-Hungary", "Romania", "Bulgaria")
+central_ccode <- member_alliances$ccode[match(central, member_alliances$state_name)]
+
+
+WWI_yrMax = 1928
+WWI_yrMin = 1904
+
+WWI <- NMC
+
+alliedP_nmc <- c("")
+for(code in allied_ccode){
+  alliedP_nmc <- rbind(alliedP_nmc, WWI[WWI$ccode == as.numeric(code),])
+}
+alliedP_nmc  <- alliedP_nmc [c(2:nrow(alliedP_nmc )),]
+alliedP_nmc$side = "Allied Powers"
+
+centralP_nmc <- c("")
+for(code in central_ccode){
+  centralP_nmc <- rbind(centralP_nmc, NMC[NMC$ccode == as.numeric(code),])
+}
+centralP_nmc <- centralP_nmc[c(2:nrow(centralP_nmc)),]
+centralP_nmc$side = "Central Powers"
+
+
+WWI <-rbind(alliedP_nmc,centralP_nmc)
+WWI$milex <- as.numeric(WWI$milex)
+WWI$milper <- as.numeric(WWI$milper)
+WWI$pec <- as.numeric(WWI$pec)
+WWI$tpop <- as.numeric(WWI$tpop)
+WWI$upop <- as.numeric(WWI$upop)
+WWI$cinc <- as.numeric(WWI$cinc)
+WWI$year <- as.numeric(WWI$year)
+WWI$irst <- as.numeric(WWI$irst)
+
+
+WWI <- WWI[WWI$year >= WWI_yrMin, ]
+WWI <- WWI[WWI$year <= WWI_yrMax, ]
+
+```
+
+
+```{r}
+d=data.frame(x1=c(1939), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(.4,.4,.4,.4,.4,.4), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=1914, xmax=1918, ymin=0, ymax=.4),alpha=0.1, fill = "salmon") +
+  geom_line(data = WWI, aes(x = year, y = cinc, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+
+```
+
+```{r}
+ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=1914, xmax=1918, ymin=0, ymax=max(WWI$irst)),alpha=0.1, fill = "salmon") +
+  geom_line(data = WWI, aes(x = year, y = irst, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+```
+
+```{r}
+ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=1914, xmax=1918, ymin=0, ymax= max(WWI$milex)),alpha=0.1, fill = "salmon") +
+  geom_line(data = WWI, aes(x = year, y = milex, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+```
+
+```{r}
+ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=1914, xmax=1918, ymin=0, ymax= max(WWI$milex)),alpha=0.1, fill = "salmon") +
+  geom_line(data = WWI, aes(x = year, y = milex, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+```
+
+
+```{r}
+ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=1914, xmax=1918, ymin=0, ymax=max(WWI$milper)),alpha=0.1, fill = "salmon") +
+  geom_line(data = WWI, aes(x = year, y = milper, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+```
+
+```{r}
+ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=1914, xmax=1918, ymin=0, ymax=max(WWI$pec)),alpha=0.1, fill = "salmon") +
+  geom_line(data = WWI, aes(x = year, y = pec, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+
+```
+
+
+```{r}
+ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=1914, xmax=1918, ymin=0, ymax=max(WWI$tpop)),alpha=0.1, fill = "salmon") +
+  geom_line(data = WWI, aes(x = year, y = tpop, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+```
+
+```{r}
+ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=1914, xmax=1918, ymin=0, ymax=max(WWI$upop)),alpha=0.1, fill = "salmon") +
+  geom_line(data = WWI, aes(x = year, y = upop, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+
+```
+
+
+##World War II (1939-1945)
+
+```{r}
+
+allies <- c("United States of America", "United Kingdom", "France", "Russia", "Australia", "Belgium", "Brazil", "Canada", "China", "Denmark", "Greece", "Netherlands", "New Zealand", "Norway", "Poland", "South Africa", "Yugoslavia")
+allies_ccode <- member_alliances$ccode[match(allies, member_alliances$state_name)]
+
+axis <- c("Germany", "Italy", "Japan", "Hungary", "Romania", "Bulgaria")
+axis_ccode <- member_alliances$ccode[match(axis, member_alliances$state_name)]
+
+## US, GB,JAP, Germn, France, Italy, Russia
+
+WWII_year_st = 1939
+WWII_year_end = 1945
+
+allies_nmc <- c("")
+for(code in allies_ccode){
+  allies_nmc <- rbind(allies_nmc, NMC[NMC$ccode == as.numeric(code),])
+}
+allies_nmc  <- allies_nmc [c(2:nrow(allies_nmc )),]
+allies_nmc$side = "Allied Powers"
+axis_nmc <- c("")
+for(code in axis_ccode){
+  axis_nmc <- rbind(axis_nmc, NMC[NMC$ccode == as.numeric(code),])
+}
+axis_nmc <- axis_nmc[c(2:nrow(axis_nmc)),]
+axis_nmc$side = "Axis Powers"
+
+WWII <-rbind(allies_nmc,axis_nmc)
+WWII$irst <- as.numeric(WWII$irst)
+WWII$milex <- as.numeric(WWII$milex)
+WWII$milper <- as.numeric(WWII$milper)
+WWII$pec <- as.numeric(WWII$pec)
+WWII$tpop <- as.numeric(WWII$tpop)
+WWII$upop <- as.numeric(WWII$upop)
+WWII$cinc <- as.numeric(WWII$cinc)
+WWII$year <- as.numeric(WWII$year)
+
+WWII <- WWII[WWII$year < 1950,]
+WWII <- WWII[WWII$year > 1934,]
+
+```
+
+
+```{r}
+## create plots of CINC and mark the different conflicts we are looking at year 
+d=data.frame(x1=c(1939), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(.4,.4,.4,.4,.4,.4), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+ggplot() + 
+  scale_x_continuous(name="x") + 
+  scale_y_continuous(name="y") +
+  geom_rect(data=d, mapping=aes(xmin=1939, xmax=1945, ymin=0, ymax=.4),alpha=0.1, fill = "salmon") +
+  geom_line(data = WWII, aes(x = year, y = cinc, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+```
+
+
+```{r fig.width=16, fig.height=12}
+
+irst<-  ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=WWII_year_st, xmax=WWII_year_end, ymin=0, ymax=max(WWII$irst)),alpha=0.1, fill = "salmon") +
+  geom_line(data = WWII, aes(x = year, y = irst, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+ex<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=WWII_year_st, xmax=WWII_year_end, ymin=0, ymax=max(WWII$milex)),alpha=0.1, fill = "salmon") +
+  geom_line(data = WWII, aes(x = year, y = milex, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+per<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=WWII_year_st, xmax=WWII_year_end, ymin=0, ymax=max(WWII$milper)),alpha=0.1, fill = "salmon") +
+  geom_line(data = WWII, aes(x = year, y = milper, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+pec<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=WWII_year_st, xmax=WWII_year_end, ymin=0, ymax=max(WWII$pec)),alpha=0.1, fill = "salmon") +
+  geom_line(data = WWII, aes(x = year, y = pec, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+upop<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=WWII_year_st, xmax=WWII_year_end, ymin=0, ymax=max(WWII$upop)),alpha=0.1, fill = "salmon") +
+  geom_line(data = WWII, aes(x = year, y = upop, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+tpop<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=WWII_year_st, xmax=WWII_year_end, ymin=0, ymax=max(WWII$tpop)),alpha=0.1, fill = "salmon") +
+  geom_line(data = WWII, aes(x = year, y = tpop, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+grid.arrange(irst, ex, per, pec, tpop, upop , nrow = 3)
+```
+
+
+
+
+##Cold War (1947-1991)
+
+[Cold War Wikipedia](https://en.wikipedia.org/wiki/Cold_War)
+
+The Cold War was a state of geopolitical tension after World War II between powers in the Eastern Bloc (the Soviet Union and its satellite states) and powers in the Western Bloc (the United States, its NATO allies and others). Historians do not fully agree on the dates, but a common timeframe is the period between 1947, the year the Truman Doctrine (a U.S. foreign policy pledging to aid nations threatened by Soviet expansionism) was announced, and 1991, the year the Soviet Union collapsed.
+
+The term "cold" is used because there was no large-scale fighting directly between the two sides, although there were major regional wars, known as proxy wars, supported by the two sides. The Cold War split the temporary wartime alliance against Nazi Germany, leaving the Soviet Union and the United States as two superpowers with profound economic and political differences. 
+
+After the dissolution of the Soviet Union, Russia drastically cut military spending, and restructuring the economy left millions unemployed.[281] The capitalist reforms culminated in a recession in the early 1990s more severe than the Great Depression as experienced by the United States and Germany.[282]
+
+The Cold War continues to influence world affairs. The post-Cold War world is considered to be unipolar, with the United States the sole remaining superpower.The Cold War defined the political role of the United States after World War II—by 1989 the United States had military alliances with 50 countries, with 526,000 troops stationed abroad,[286] with 326,000 in Europe (two-thirds of which in west Germany)[287] and 130,000 in Asia (mainly Japan and South Korea).[286] The Cold War also marked the zenith of peacetime military–industrial complexes, especially in the United States, and large-scale military funding of science.[288] These complexes, though their origins may be found as early as the 19th century, snowballed considerably during the Cold War.[289]
+
+```{r}
+NATO <- c("United States of America", "United Kingdom", "Belgium", "Netherlands", "France","Canada", "Portugal", "Italy", "Norway", "Denmark", "Icealnd", "Turkey", "Greece")
+nato_ccode  <- member_alliances$ccode[match(NATO, member_alliances$state_name)]
+
+warsaw <- c("Russia", "Czechoslovakia", "Romania", "Bulgaria", "Poland", "Hungary")
+warsaw_ccode  <- member_alliances$ccode[match(warsaw, member_alliances$state_name)]
+
+
+cw_year_st = 1991
+cw_year_end = 1947
+
+cw <- NMC
+
+nato_nmc <- c("")
+for(code in nato_ccode ){
+  nato_nmc <- rbind(nato_nmc, cw[cw$ccode == as.numeric(code),])
+}
+nato_nmc  <- nato_nmc [c(2:nrow(nato_nmc )),]
+nato_nmc$side = "US and Allies "
+
+warsaw_nmc <- c("")
+for(code in warsaw_ccode ){
+  warsaw_nmc <- rbind(warsaw_nmc, cw[cw$ccode == as.numeric(code),])
+}
+warsaw_nmc <- warsaw_nmc[c(2:nrow(warsaw_nmc)),]
+warsaw_nmc$side = "USSR and Allies"
+
+cw <-rbind(nato_nmc,warsaw_nmc)
+cw$milex <- as.numeric(cw$milex)
+cw$milper <- as.numeric(cw$milper)
+cw$pec <- as.numeric(cw$pec)
+cw$tpop <- as.numeric(cw$tpop)
+cw$upop <- as.numeric(cw$upop)
+cw$cinc <- as.numeric(cw$cinc)
+cw$year <- as.numeric(cw$year)
+cw$irst <- as.numeric(cw$irst)
+
+
+cw <- cw[cw$year >= cw_year_st-10, ]
+
+```
+
+```{r}
+ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=cw_year_st, xmax=cw_year_end, ymin=0, ymax=.4),alpha=0.1, fill = "salmon") +
+  geom_line(data = cw, aes(x = year, y = cinc, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+```
+
+
+```{r fig.width=16, fig.height=12}
+
+irst<-  ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=cw_year_st, xmax=cw_year_end, ymin=0, ymax=max(cw$irst)),alpha=0.1, fill = "salmon") +
+  geom_line(data = cw, aes(x = year, y = irst, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+ex<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=cw_year_st, xmax=cw_year_end, ymin=0, ymax=max(cw$milex)),alpha=0.1, fill = "salmon") +
+  geom_line(data = cw, aes(x = year, y = milex, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+per<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=cw_year_st, xmax=cw_year_end, ymin=0, ymax=max(cw$milper)),alpha=0.1, fill = "salmon") +
+  geom_line(data = cw, aes(x = year, y = milper, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+pec<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=cw_year_st, xmax=cw_year_end, ymin=0, ymax=max(cw$pec)),alpha=0.1, fill = "salmon") +
+  geom_line(data = cw, aes(x = year, y = pec, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+upop<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=cw_year_st, xmax=cw_year_end, ymin=0, ymax=max(cw$upop)),alpha=0.1, fill = "salmon") +
+  geom_line(data = cw, aes(x = year, y = upop, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+tpop<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=cw_year_st, xmax=cw_year_end, ymin=0, ymax=max(cw$tpop)),alpha=0.1, fill = "salmon") +
+  geom_line(data = cw, aes(x = year, y = tpop, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+grid.arrange(irst, ex, per, pec, tpop, upop , nrow = 3)
+```
+
+##Korean War (1950-1953) 
+
+One of the more significant impacts of containment was the outbreak of the Korean War. In June 1950, Kim Il-sung's North Korean People's Army invaded South Korea.[99] Joseph Stalin "planned, prepared, and initiated" the invasion,[100] creating "detailed [war] plans" that were communicated to the North Koreans.To Stalin's surprise,[14] the UN Security Council backed the defense of South Korea, though the Soviets were then boycotting meetings in protest that Taiwan and not Communist China held a permanent seat on the Council.[105] A UN force of personnel from South Korea, the United States, the United Kingdom, Turkey, Canada, Colombia, Australia, France, South Africa, the Philippines, the Netherlands, Belgium, New Zealand and other countries joined to stop the invasion.[106]
+
+
+General Douglas MacArthur, UN Command CiC (seated), observes the naval shelling of Incheon from the USS Mt. McKinley, September 15, 1950.
+Among other effects, the Korean War galvanised NATO to develop a military structure.[107] Public opinion in countries involved, such as Great Britain, was divided for and against the war. Many feared an escalation into a general war with Communist China, and even nuclear war. The strong opposition to the war often strained Anglo-American relations. For these reasons British officials sought a speedy end to the conflict, hoping to unite Korea under United Nations auspices and withdrawal of all foreign forces.[108]
+
+Even though the Chinese and North Koreans were exhausted by the war and were prepared to end it by late 1952, Stalin insisted that they continue fighting, and the Armistice was approved only in July 1953, after Stalin's death.[30] North Korean leader Kim Il Sung created a highly centralized, totalitarian dictatorship – which continues to date – according himself unlimited power and generating a formidable cult of personality.[109][110] In the South, the American-backed strongman Syngman Rhee ran a significantly less brutal but deeply corrupt and authoritarian regime.[111] After Rhee was overthrown in 1960, South Korea fell within a year under a period of military rule that lasted until the re-establishment of a multi-party system in the late 1980s.
+
+```{r}
+sk <- c("United States of America", "United Kingdom", "South Korea")
+sk_ccode  <- member_alliances$ccode[match(sk, member_alliances$state_name)]
+
+
+nk <- c("Russia", "North Korea", "China")
+nk_ccode  <- member_alliances$ccode[match(nk, member_alliances$state_name)]
+
+kw_year_st = 1950
+kw_year_end = 1953
+
+kw <- NMC
+
+sk_nmc <- c("")
+for(code in sk_ccode ){
+  sk_nmc <- rbind(sk_nmc, kw[kw$ccode == as.numeric(code),])
+}
+sk_nmc  <- sk_nmc [c(2:nrow(sk_nmc )),]
+sk_nmc$side = "US and Allies "
+
+nk_nmc <- c("")
+for(code in nk_ccode ){
+  nk_nmc <- rbind(nk_nmc, kw[kw$ccode == as.numeric(code),])
+}
+nk_nmc <- nk_nmc[c(2:nrow(nk_nmc)),]
+nk_nmc$side = "USSR and Allies"
+
+kw <-rbind(sk_nmc,nk_nmc)
+
+kw$milex <- as.numeric(kw$milex)
+kw$milper <- as.numeric(kw$milper)
+kw$pec <- as.numeric(kw$pec)
+kw$tpop <- as.numeric(kw$tpop)
+kw$upop <- as.numeric(kw$upop)
+kw$cinc <- as.numeric(kw$cinc)
+kw$year <- as.numeric(kw$year)
+kw$irst <- as.numeric(kw$irst)
+
+kw <- kw[kw$year >= kw_year_st-5, ]
+kw <- kw[kw$year < kw_year_end+5, ]
+```
+```{r}
+ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=kw_year_st, xmax=kw_year_end, ymin=0, ymax=.4),alpha=0.1, fill = "salmon") +
+  geom_line(data = kw, aes(x = year, y = cinc, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+```
+
+
+```{r fig.width=16, fig.height=12}
+
+irst<-  ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=kw_year_st, xmax=kw_year_end, ymin=0, ymax=max(kw$irst)),alpha=0.1, fill = "salmon") +
+  geom_line(data = kw, aes(x = year, y = irst, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+ex<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=kw_year_st, xmax=kw_year_end, ymin=0, ymax=max(kw$milex)),alpha=0.1, fill = "salmon") +
+  geom_line(data = kw, aes(x = year, y = milex, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+per<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=kw_year_st, xmax=kw_year_end, ymin=0, ymax=max(kw$milper)),alpha=0.1, fill = "salmon") +
+  geom_line(data = kw, aes(x = year, y = milper, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+pec<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=kw_year_st, xmax=kw_year_end, ymin=0, ymax=max(kw$pec)),alpha=0.1, fill = "salmon") +
+  geom_line(data = kw, aes(x = year, y = pec, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+upop<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=kw_year_st, xmax=kw_year_end, ymin=0, ymax=max(kw$upop)),alpha=0.1, fill = "salmon") +
+  geom_line(data = kw, aes(x = year, y = upop, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+tpop<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=kw_year_st, xmax=kw_year_end, ymin=0, ymax=max(kw$tpop)),alpha=0.1, fill = "salmon") +
+  geom_line(data = kw, aes(x = year, y = tpop, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+grid.arrange(irst, ex, per, pec, tpop, upop , nrow = 3)
+```
+
+##Vietnam War (1955-1975)  
+
+```{r}
+us <- c("United States of America", "South Korea", "China", "New Zealand", "Australia")
+us_ccode  <- member_alliances$ccode[match(us, member_alliances$state_name)]
+
+
+viet <- c("Russia", "North Korea", "Vietnam", "Cuba")
+viet_ccode  <- member_alliances$ccode[match(viet, member_alliances$state_name)]
+
+vw_year_st = 1955
+vw_year_end = 1975
+
+vw <- NMC
+
+us_nmc <- c("")
+for(code in us_ccode ){
+  us_nmc <- rbind(us_nmc, vw[vw$ccode == as.numeric(code),])
+}
+us_nmc  <- us_nmc [c(2:nrow(us_nmc )),]
+us_nmc$side = "US and Allies "
+
+viet_nmc <- c("")
+for(code in viet_ccode ){
+  viet_nmc <- rbind(viet_nmc, vw[vw$ccode == as.numeric(code),])
+}
+viet_nmc <- viet_nmc[c(2:nrow(viet_nmc)),]
+viet_nmc$side = "Vietnam and Allies"
+
+vw <-rbind(us_nmc,viet_nmc)
+
+vw$milex <- as.numeric(vw$milex)
+vw$milper <- as.numeric(vw$milper)
+vw$pec <- as.numeric(vw$pec)
+vw$tpop <- as.numeric(vw$tpop)
+vw$upop <- as.numeric(vw$upop)
+vw$cinc <- as.numeric(vw$cinc)
+vw$year <- as.numeric(vw$year)
+vw$irst <- as.numeric(vw$irst)
+
+vw <- vw[vw$year >= vw_year_st-5, ]
+vw <- vw[vw$year < vw_year_end+5, ]
+
+```
+
+
+```{r}
+ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=vw_year_st, xmax=vw_year_end, ymin=0, ymax=.4),alpha=0.1, fill = "salmon") +
+  geom_line(data = vw, aes(x = year, y = cinc, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+```
+
+
+
+
+```{r fig.width=16, fig.height=12}
+irst<-  ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=vw_year_st, xmax=vw_year_end, ymin=0, ymax=max(vw$irst)),alpha=0.1, fill = "salmon") +
+  geom_line(data = vw, aes(x = year, y = irst, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+ex<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=vw_year_st, xmax=vw_year_end, ymin=0, ymax=max(vw$milex)),alpha=0.1, fill = "salmon") +
+  geom_line(data = vw, aes(x = year, y = milex, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+per<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=vw_year_st, xmax=vw_year_end, ymin=0, ymax=max(vw$milper)),alpha=0.1, fill = "salmon") +
+  geom_line(data = vw, aes(x = year, y = milper, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+pec<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=vw_year_st, xmax=vw_year_end, ymin=0, ymax=max(vw$pec)),alpha=0.1, fill = "salmon") +
+  geom_line(data = vw, aes(x = year, y = pec, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+upop<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=vw_year_st, xmax=vw_year_end, ymin=0, ymax=max(vw$upop)),alpha=0.1, fill = "salmon") +
+  geom_line(data = vw, aes(x = year, y = upop, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+tpop<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=vw_year_st, xmax=vw_year_end, ymin=0, ymax=max(vw$tpop)),alpha=0.1, fill = "salmon") +
+  geom_line(data = vw, aes(x = year, y = tpop, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+grid.arrange(irst, ex, per, pec, tpop, upop , nrow = 3)
+```
+
+##War in Afghanistan (2001-2010)  
+
+
+The war in Afghanistan (or the American war in Afghanistan) followed the 2001 United States invasion of Afghanistan.Supported initially by the United Kingdom, the US was later joined by the rest of NATO, beginning in 2003. Its public aims were to dismantle al-Qaeda and to deny it a safe base of operations in Afghanistan by removing the Taliban from power.[32] Key allies, including the United Kingdom, supported the U.S. from the start to the end of the phase. This phase of the war is the longest war in United States history.
+
+
+Result:  
+	
+* Destruction of al-Qaeda and Taliban militant training camps  
+* Fall of the Taliban government  
+* Establishment of the Islamic Republic of Afghanistan under the Karzai administration  
+* Start of Taliban insurgency  
+* Death of Osama bin Laden  
+* Commencement of war's 2015–present phase  
+ 
+```{r}
+us <- c("United States of America", "United Kingdom", "Canada", "Germany", "Australia")
+us_ccode  <- member_alliances$ccode[match(us, member_alliances$state_name)]
+
+
+afg <- c("Afghanistan")
+afg_ccode  <- member_alliances$ccode[match(afg, member_alliances$state_name)]
+
+aw_year_st = 2001
+aw_year_end = 2010
+
+aw <- NMC
+
+us_nmc <- c("")
+for(code in us_ccode ){
+  us_nmc <- rbind(us_nmc, aw[aw$ccode == as.numeric(code),])
+}
+us_nmc  <- us_nmc [c(2:nrow(us_nmc )),]
+us_nmc$side = "US and UN"
+
+afg_nmc <- c("")
+for(code in afg_ccode ){
+  afg_nmc <- rbind(afg_nmc, aw[aw$ccode == as.numeric(code),])
+}
+afg_nmc <- afg_nmc[c(2:nrow(afg_nmc)),]
+afg_nmc$side = "Afghanistan"
+
+aw <-rbind(us_nmc,afg_nmc)
+
+aw$milex <- as.numeric(aw$milex)
+aw$milper <- as.numeric(aw$milper)
+aw$pec <- as.numeric(aw$pec)
+aw$tpop <- as.numeric(aw$tpop)
+aw$upop <- as.numeric(aw$upop)
+aw$cinc <- as.numeric(aw$cinc)
+aw$year <- as.numeric(aw$year)
+aw$irst <- as.numeric(aw$irst)
+
+aw <- aw[aw$year >= aw_year_st-10, ]
+
+```
+
+```{r}
+ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=aw_year_st, xmax=aw_year_end, ymin=0, ymax=.4),alpha=0.1, fill = "salmon") +
+  geom_line(data = aw, aes(x = year, y = cinc, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+```
+```{r fig.width=16, fig.height=12}
+irst<-  ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=aw_year_st, xmax=aw_year_end, ymin=0, ymax=max(aw$irst)),alpha=0.1, fill = "salmon") +
+  geom_line(data = aw, aes(x = year, y = irst, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+ex<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=aw_year_st, xmax=aw_year_end, ymin=0, ymax=max(aw$milex)),alpha=0.1, fill = "salmon") +
+  geom_line(data = aw, aes(x = year, y = milex, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+per<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=aw_year_st, xmax=aw_year_end, ymin=0, ymax=max(aw$milper)),alpha=0.1, fill = "salmon") +
+  geom_line(data = aw, aes(x = year, y = milper, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+pec<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=aw_year_st, xmax=aw_year_end, ymin=0, ymax=max(aw$pec)),alpha=0.1, fill = "salmon") +
+  geom_line(data = aw, aes(x = year, y = pec, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+upop<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=aw_year_st, xmax=aw_year_end, ymin=0, ymax=max(aw$upop)),alpha=0.1, fill = "salmon") +
+  geom_line(data = aw, aes(x = year, y = upop, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+tpop<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=aw_year_st, xmax=aw_year_end, ymin=0, ymax=max(aw$tpop)),alpha=0.1, fill = "salmon") +
+  geom_line(data = aw, aes(x = year, y = tpop, color = stateabb, group = stateabb)) + facet_wrap(~side)
+
+grid.arrange(irst, ex, per, pec, tpop, upop , nrow = 3)
+```
+
+
+
+```{r fig.width=6, fig.height=3}
+
+## looking at ratios 
+
+nmc_c2 <-nmc_c
+
+#nmc_c2$irst <- nmc_c2$irst/max(nmc_c2$irst)
+#nmc_c2$milex <- nmc_c2$milex/max(nmc_c2$milex)
+#nmc_c2$milper <- nmc_c2$milper/max(nmc_c2$milper)
+#nmc_c2$pec <- nmc_c2$pec/max(nmc_c2$pec)
+#nmc_c2$tpop <- nmc_c2$tpop/max(nmc_c2$tpop)
+#nmc_c2$upop <- nmc_c2$upop/max(nmc_c2$upop)
+
+nmc_c3<- gather(nmc_c2, metric, value, irst:upop)
+
+ggplot() + 
+geom_rect(data=d, mapping=aes(xmin = x1, xmax=x2, ymin=0, ymax=1, fill = Conflict ),alpha=0.25) +
+geom_line(data = nmc_c3, aes(x = year, y = value, color = stateabb), alpha = 1) + facet_wrap(~metric)
+
+```
+
+
+
+## Calculate Ratios
+```{r}
+
+NMC = read.csv(paste(path, "NMC/NMC_v4_0.csv", sep= "/"))
+
+NMC$cinc[NMC$cinc == -9] <- 0
+NMC$irst[NMC$irst == -9] <- 0
+NMC$milex[NMC$milex == -9] <- 0
+NMC$milper[NMC$milper== -9] <- 0
+NMC$pec[NMC$pec == -9] <- 0
+NMC$tpop[NMC$tpop == -9] <- 0
+NMC$upop[NMC$upop == -9] <- 0
+
+
+
+ggplot(NMC[NMC$year > 1900,], aes(stateabb, year, fill = cinc)) + geom_tile()+
+  scale_fill_viridis() + ggtitle("Heatmap of cinc") + theme(axis.text.x = element_text(angle = 60, hjust = 1),plot.title = element_text(hjust = 0.5))
+
+
+#complete cases
+complete.cases(NMC_orig)
+
+```
+
+
+```{r}
+
+all_year <- c(1900:2007)
+
+NMC$cinc[NMC$cinc == -9| is.na(NMC$cinc)] <- 0
+NMC$irst[NMC$irst == -9| is.na(NMC$irst)] <- 0
+NMC$milex[NMC$milex == -9| is.na(NMC$milex)] <- 0
+NMC$milper[NMC$milper== -9| is.na(NMC$milper)] <- 0
+NMC$pec[NMC$pec == -9| is.na(NMC$pec)] <- 0
+NMC$tpop[NMC$tpop == -9| is.na(NMC$tpop)] <- 0
+NMC$upop[NMC$upop == -9| is.na(NMC$upop)] <- 0
+
+NMC$irst <- as.numeric(NMC$irst)
+NMC$milex <- as.numeric(NMC$milex)
+NMC$milper <- as.numeric(NMC$milper)
+NMC$pec <- as.numeric(NMC$pec)
+NMC$tpop <- as.numeric(NMC$tpop)
+NMC$upop <- as.numeric(NMC$upop)
+NMC$cinc <- as.numeric(NMC$cinc)
+NMC$year <- as.numeric(NMC$year)
+
+
+yr2000 <- NMC[NMC$year == 1971, ] 
+apply(yr2000, 2, max)
+
+NMC2 <- c("")
+
+for (year_t in all_year){
+  yr <- NMC[NMC$year == year_t, ] 
+  
+  max <- apply(yr, 2, max)
+  max <- as.numeric(max[4:9])
+  
+  for (i in 4:9){
+    yr[,i] = yr[,i]/max[i-3]
+
+  }
+  NMC2 <- rbind(NMC2, yr)
+}
+
+NMC2 <- NMC2[c(2:nrow(NMC2)),]
+
+
+```
+
+```{r fig.width=20, fig.height=15}
+d=data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), y1=c(0,0,0,0,0,0), y2=c(.4,.4,.4,.4,.4,.4), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+NMC2_yr<- NMC2[NMC2$year > 1900,]
+
+countries <- c("United States of America", "United Kingdom", "France", "Russia","Germany", "Italy", "Japan", "China")
+country_code <- member_alliances$ccode[match(countries, member_alliances$state_name)]
+
+
+NMC2_yr <- filter(NMC2_yr, NMC2_yr$ccode %in% country_code )
+NMC_orig_yr <- filter(NMC, NMC$ccode %in% country_code )
+
+NMC2_yr$irst <- as.numeric(NMC2_yr$irst)
+NMC2_yr$milex <- as.numeric(NMC2_yr$milex)
+NMC2_yr$milper <- as.numeric(NMC2_yr$milper)
+NMC2_yr$pec <- as.numeric(NMC2_yr$pec)
+NMC2_yr$tpop <- as.numeric(NMC2_yr$tpop)
+NMC2_yr$upop <- as.numeric(NMC2_yr$upop)
+NMC2_yr$cinc <- as.numeric(NMC2_yr$cinc)
+NMC2_yr$year <- as.numeric(NMC2_yr$year)
+
+
+
+a<- ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=1, fill=Conflict),alpha=0.15) +
+  geom_line(data = NMC2_yr, aes(x = year, y = irst, color = stateabb, group = stateabb))+ theme(legend.position="none")
+
+a2<- ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=1, fill=Conflict),alpha=0.15) +
+  geom_line(data = NMC_orig_yr, aes(x = year, y = irst, color = stateabb, group = stateabb))+ theme(legend.position="none")
+
+b<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=1, fill=Conflict),alpha=0.15) +
+  geom_line(data = NMC2_yr, aes(x = year, y = milex, color = stateabb, group = stateabb))+ theme(legend.position="none")
+
+b2<- ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=1, fill=Conflict),alpha=0.15) +
+  geom_line(data = NMC_orig_yr, aes(x = year, y = irst, color = stateabb, group = stateabb))+ theme(legend.position="none")
+
+
+c<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=1, fill=Conflict),alpha=0.15) +
+  geom_line(data = NMC2_yr, aes(x = year, y = milper, color = stateabb, group = stateabb))+ theme(legend.position="none")
+
+c2<- ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=1, fill=Conflict),alpha=0.15) +
+  geom_line(data = NMC_orig_yr, aes(x = year, y = irst, color = stateabb, group = stateabb))+ theme(legend.position="none")
+
+d2<- ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=1, fill=Conflict),alpha=0.15) +
+  geom_line(data = NMC_orig_yr, aes(x = year, y = irst, color = stateabb, group = stateabb))+ theme(legend.position="none")
+
+
+d<-ggplot() + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=1, fill=Conflict),alpha=0.15) +
+  geom_line(data = NMC2_yr, aes(x = year, y = tpop, color = stateabb, group = stateabb))+ theme(legend.position="none")
+
+
+
+
+grid.arrange(a,a2, b, b2, c, c2, d ,nrow = 4 )
+
+
+```
+

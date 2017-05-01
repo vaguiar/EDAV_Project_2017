@@ -1,0 +1,156 @@
+---
+title: "HW 4 Final Project"
+output: html_notebook
+author: "Cynthia Clement & Vineet Aguiar"
+---
+
+
+```{r}
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(tidyr)
+library(dplyr)
+library(viridis)
+library(oce)
+library(vcd)
+library(vcdExtra)
+library(extracat)
+```
+
+
+##Introduction
+
+
+Wars are complex events that involve many countires and take place over many years. During that time pacts are made, ties are broken and countries go through so many changes. We were interested in the changes that happen to a country before and after they enter into a conflict or war. We are interested in seeing what alliances were formed at the begining of the war and what alliances ended and how trade and national materials capabiliites(NMC) changed for those countries before, during and after the war. Also, we want to compare and contrast the characteristics of countries who won the war to the countries that lost the war. In the end, we want to determine if there are certain factors that indicate which countries will enter into a war and how the factors we are analyzing will change for the country. 
+
+We are using datasets from the [Correlates of War Project](http://www.correlatesofwar.org). We are specifically looking at trade, NMC and militarized interstate disputes. Also we are limiting our scope to only look at events that the United States of America particapated in post 1900. 
+
+Events we are looking at:
+
+WWI    ---------------------- 1914-1918  
+WWII  ----------------------- 1939-1945  
+Cold War -------------------- 1947-1991  
+Korean War ------------------ 1950-1953  
+Vietnam War ----------------- 1955-1975  
+War in Afghanistan ---------- 2001-2010  
+
+
+##Team Members and Roles 
+
+##### Phase 1:  
+* Cynthia to analyze National Materials Capabilites and Alliances  
+* Vineet to analyize Militarized Interstate Disputes and Trade  
+
+##### Phase 2:  
+* We are going to switch the data sets we are looking at to see if the other person can discern any new insights or creative ways of presenting the data.  
+  + Cynthia to analyze Militarized Interstate Disputes and Trade  
+  + Vineet to analyze National Materials Capabilites and Alliances   
+
+#### Phase 3:
+* Cynthia and Vineet to come together and look at the interaction of differnt variables. For examply how did a change in trade impact the NMC. 
+
+
+##Important Factors 
+
+#####NMC  
+  
+National Material Capabilities(NMC) is the measure ofthe power of a country based on 6 values: military expenditure, military personnel, energy consumption, iron and steel production, urban population, and total population. To view the these 6 metrics and a single indicator, we use the Composite Indicator of National Capability(CINC). We believe that this indicator can reveal certain characters that can help determine the outcome of a war.
+
+We started by looking at the general trend of the 6 varaibles for some of the major powers today. 
+
+```{r fig.width=12, fig.height=12}
+
+## Set file path
+path = "/Users/cynthiaclement/Desktop"
+
+member_alliances = read.csv(paste(path, "version4.1_csv/alliance_v4.1_by_member.csv", sep= "/"))
+NMC = read.csv(paste(path, "NMC/NMC_v4_0.csv", sep= "/"))
+
+## cleaning the unknown values to 0
+NMC$cinc[NMC$cinc == -9] <- 0
+NMC$irst[NMC$irst == -9] <- 0
+NMC$milex[NMC$milex == -9] <- 0
+NMC$milper[NMC$milper== -9] <- 0
+NMC$pec[NMC$pec == -9] <- 0
+NMC$tpop[NMC$tpop == -9] <- 0
+NMC$upop[NMC$upop == -9] <- 0
+
+## import dataset of yeard 
+timeline <- usevents
+
+countries <- c("United States of America", "United Kingdom", "France", "Russia","Germany", "Italy", "Japan", "China")
+country_code <- member_alliances$ccode[match(countries, member_alliances$state_name)]
+
+nmc_c  <- c("")
+for(code in country_code){
+  nmc_c <- rbind(nmc_c, NMC[NMC$ccode == as.numeric(code),])
+}
+
+nmc_c <- nmc_c[c(2:nrow(nmc_c)),]
+nmc_c$year <- as.numeric(nmc_c$year)
+nmc_c$irst <- as.numeric(nmc_c$irst)
+nmc_c$milex <- as.numeric(nmc_c$milex)
+nmc_c$milper <- as.numeric(nmc_c$milper)
+nmc_c$pec <- as.numeric(nmc_c$pec)
+nmc_c$tpop <- as.numeric(nmc_c$tpop)
+nmc_c$upop <- as.numeric(nmc_c$upop)
+nmc_c$cinc <- as.numeric(nmc_c$cinc)
+
+yr_min = 1910
+
+#cnic <- ggplot(nmc_c[nmc_c$year > 1930,], aes(year , cinc, color = stateabb, group = stateabb)) + geom_point(alpha = 1/100) + geom_line()  + theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5)) + ggtitle("Composite National Materials Capabilities")
+irst <- ggplot(nmc_c[nmc_c$year > yr_min,], aes(year , irst, color = stateabb, group = stateabb)) + geom_point(alpha = 1/100) + geom_line()  + theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5)) + ggtitle("Iron and Steel Production")
+ex <- ggplot(nmc_c[nmc_c$year > yr_min,], aes(year , milex, color = stateabb, group = stateabb)) + geom_point(alpha = 1/100) + geom_line()  + theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5)) + ggtitle("Military Expenditures")
+per <- ggplot(nmc_c[nmc_c$year > yr_min,], aes(year , milper, color = stateabb, group = stateabb)) + geom_point(alpha = 1/100) + geom_line()  + theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5)) + ggtitle("Military Personell")
+pec <- ggplot(nmc_c[nmc_c$year > yr_min,], aes(year , pec, color = stateabb, group = stateabb)) + geom_point(alpha = 1/100) + geom_line()  + theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5)) + ggtitle("Primary Energy Consumption Ratio")
+tpop <- ggplot(nmc_c[nmc_c$year > yr_min,], aes(year , tpop, color = stateabb, group = stateabb)) + geom_point(alpha = 1/100) + geom_line()  + theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5)) + ggtitle("Total Population")
+upop <- ggplot(nmc_c[nmc_c$year > yr_min,], aes(year , upop, color = stateabb, group = stateabb)) + geom_point(alpha = 1/100) + geom_line()  + theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5)) + ggtitle("Urban Population")
+
+grid.arrange(irst, ex, per, pec, tpop, upop , nrow = 3)
+
+```
+
+
+```{r}
+ggplot(nmc_c[nmc_c$year > yr_min,], aes(year , cinc, color = stateabb, group = stateabb)) + geom_point(alpha = 1/100) + geom_line()  + theme(axis.text.x = element_text(angle = 90, hjust = 1), plot.title = element_text(hjust = 0.5)) + ggtitle("Composite National Materials Capabilities")
+
+```
+
+```{r}
+## Heatmap of CNIC 
+
+ggplot(nmc_c[nmc_c$year > 1900,], aes(stateabb, year, fill = cinc)) + geom_tile()+
+  scale_fill_viridis() + ggtitle("Heatmap of cinc") + theme(axis.text.x = element_text(angle = 60, hjust = 1),plot.title = element_text(hjust = 0.5))
+
+
+```
+
+```{r fig.width=8, fig.height=8}
+
+##PCP PLot 
+library(GGally)
+ct <- ggparcoord(nmc_c[nmc_c$year>1930,], columns = 4:10, scale = "uniminmax", alphaLines = .2, groupColumn = "stateabb")
+yr <- ggparcoord(nmc_c[nmc_c$year>1930,], columns = 4:10, scale = "uniminmax", alphaLines = .2, groupColumn = "year")
+grid.arrange(ct, yr, nrow = 2)
+
+```
+
+
+#####Trade  
+
+
+```{r}
+
+```
+
+#####Militarized Interstate Disputes 
+
+
+#####Alliances 
+
+######Sources 
+
+NMC v5. Singer, J. David, Stuart Bremer, and John Stuckey. (1972). "Capability Distribution, Uncertainty, and Major Power War, 1820-1965." in Bruce Russett (ed) Peace, War, and Numbers, Beverly Hills: Sage, 19-48.
+
+
