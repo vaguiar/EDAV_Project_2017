@@ -1,0 +1,318 @@
+ ---
+title: "Alliances Analysis"
+output: html_notebook
+---
+
+
+## Analysis Process
+
+```{r Echo = False}
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(tidyr)
+library(dplyr)
+library(viridis)
+library(oce)
+library(vcd)
+library(vcdExtra)
+library(extracat)
+
+## Set file path
+path = "/Users/cynthiaclement/Desktop"
+
+################################# Looking at US Alliances #################################
+dyad_al= read.csv("./data/version4.1_csv/alliance_v4.1_by_dyad.csv", sep= ",")
+dyad_al_year = read.csv("./data/version4.1_csv/alliance_v4.1_by_dyad_yearly.csv", sep= ",")
+
+member_alliances = read.csv("./data/version4.1_csv/alliance_v4.1_by_member.csv", sep= ",")
+member_al_year = read.csv("./data/version4.1_csv/alliance_v4.1_by_member_yearly.csv", sep= ",")
+
+dir_al_year= read.csv("./data/version4.1_csv/alliance_v4.1_by_directed_yearly.csv", sep= ",")
+dir_al= read.csv("./data/version4.1_csv/alliance_v4.1_by_directed.csv", sep= ",")
+
+d=data.frame(x1=c(1914,1939, 1947, 1950, 1955, 2001), x2=c(1918, 1945, 1991, 1953, 1975, 2010), Conflict=c("WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War"), r=c(1,2,3,4,5,6))
+
+
+mylables <- c("No War" , "WWI", "WWII", "Cold War", "Korean War", "Vietnam War", "Afghanistan War")
+```
+
+
+
+```{r fig.width=14, fig.height=8}
+
+dayd_al_year <- filter(dyad_al_year, dyad_al_year$year %in% c(1900:2012))
+dyad_al_year$length = dyad_al_year$dyad_end_year - dyad_al_year$dyad_st_year
+
+dayd_al_year$conflict <- "0"
+dyad_al_year$count <- 1 
+
+dir_alliances <- gather(dir_al_year, treaty_type, idicator, defense:entente)
+dir_alliances <- dir_alliances[!dir_alliances$idicator %in%  0,]
+dir_alliances$dyad_end_year[dir_alliances$dyad_end_year %in% NA] = 2016
+dir_alliances <- dir_alliances[dir_alliances$year>1900,]
+alliance_count <- dir_alliances[, c(2,3,14,16)]
+alliance_count$count <- 1 
+
+gp_ct <- aggregate(cbind(count) ~ ccode1+state_name1+year+treaty_type, data =alliance_count, FUN = sum )
+gp_ct$Conflict <- "0"
+
+for(i in c(1:length(d$x1))){
+  gp_ct[gp_ct$year >= d$x1[i] & gp_ct$year <= d$x2[i], length(gp_ct)] <- as.character(i)
+}
+
+```
+
+
+  WWI was triggered by the assassination of the Archduke Franz Ferdinand of Austria. His death set off diplomatic crisis as countries that were not involved in the original conflict has to get involved. Once Austria declared war on Serbia for the death of the Arch Duke, Russia had to step into defend Serbia. Once Russia entered the conflict, Germany was forced to enter the conflict due to its alliance with Austria. When German invaded Belgium, Great Britain had to mobilize due to their alliance. This pattern continued to eventually involve all the major powers of the world for a devastating battle. Such alliances were the cause of World War I. Since then the number of Alliances has only grown and continues to grow. For this reason, we wanted to look at alliances and see how they change during wars. 
+
+
+  Below is boxplot of the total number of alliances that are in effect each year between any two countries. It is easy to see that the median number of alliances jumped up significantly during WWII and continued to grow during the Cold War and remained relatively level since then. An interesting pattern is that the median number of alliances increased more in the 1-3 before the end of war. You can see this patter with WWI, Korean War, Vietnam War and the end of the Cold War. Although the Cold War was only a state of severe political war there were many regional battles and the threat of a large-scale military war was constant. Even during this time period, the median number of alliances increased before the end Cold War. 
+
+
+
+```{r fig.width=20, fig.height=5}
+ggplot() +
+  xlab("Year") +
+  ylab("Count")+
+  geom_boxplot(data = gp_ct, aes(x = as.factor(year), y = count, fill = Conflict)) +
+  ggtitle("Total Alliances by Year") + 
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5), axis.text.x = element_text(angle = 90), legend.position="bottom")+
+  scale_fill_manual(values=c("white", "lightsteelblue3", "pink3", "paleturquoise3", "lightsteelblue2", "lightsteelblue4","salmon" ), labels = mylables)
+
+```
+Next we looked at the types of alliances formed during this time. The COW data reports on 4 types of alliances: defense, neutrality, entente and non-aggression. In a defense alliance the member states agree to defend one or more states in the event of conflict. With a neutrality alliance there is an agreement to maintain neutrality towards the members of the alliance. In non-aggression the members agree to take no military action against one another. With an entente alliance there is an understanding that the state would consult with one or more states in the alliance if a crisis occurred 
+
+The plots below show the number of alliances by alliance type. The top row shows the number of alliances that were formed each year and the second row shows number of alliances that were terminated that year. 
+
+
+
+
+```{r fig.width=20, fig.height=8}
+dir_al_0 <- filter(dir_al, dir_al$dyad_st_year %in% c(1900:2012))
+all_st <- gather(dir_al_0, treaty_type, idicator, defense:entente)
+all_st <- all_st[!all_st$idicator %in%  0,]
+all_st$dyad_end_year[all_st$dyad_end_year %in% NA] = 2016
+al_st_count <- all_st[, c(3,5,8,11,15)]
+al_st_count$count <- 1 
+
+gp_st <- aggregate(cbind(count) ~ dyad_st_year+treaty_type, data =al_st_count, FUN = sum )
+
+a <- ggplot() +
+  xlab("Year") +
+  ylab("Count")+
+  geom_bar(data = al_st_count, aes(x = dyad_st_year)) +
+  ggtitle("Total Alliances by Year they started")+
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=max(450), fill=Conflict),alpha=0.2)+
+  ggtitle("Number of Alliances Formed") +
+  theme_classic()+
+  theme(legend.position="bottom", plot.title = element_text(hjust = .5)) + 
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1 )
+
+b<- ggplot() +
+  xlab("Year") +
+  ylab("Count")+
+  geom_bar(data = al_st_count[al_st_count$dyad_end_year < 2016, ], aes(x = dyad_end_year)) +
+  ggtitle("Number of Alliances Terminated")+
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin=0, ymax=max(450), fill=Conflict),alpha=0.2)+
+  theme_classic()+
+  theme(legend.position="bottom", plot.title = element_text(hjust = .5)) + 
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)
+
+grid.arrange(a,b, nrow =2)
+
+
+```
+
+It is clear that most of the alliances formed were at the end of WWII and during the Cold War. Also the most frequently formed alliances were defense and entente. Surprisingly, most alliances also ended around the same time. To dig in further to get a better understand of what types of treaties were formed and why they ended, we looked at individual countries. 
+
+The following charts are all organized the same way, they show a timeline of when the alliances started till either the end of the alliance (shown in red) or till today if the alliance is still in effect (shown in blue). The charts separated to show the different types of alliances because many of the alliance types overlap. For example, one alliance could be both a defense and entente alliance.  
+ 
+
+
+**United States of America ** 
+
+```{r fig.width=15, fig.height=10}
+
+al_us_yr <- filter(dir_al_year, dir_al_year$state_name1 %in% "United States of America")
+al_us_yr <- gather(al_us_yr, Treaty, idicator, defense:entente)   
+al_us_yr <- al_us_yr[!al_us_yr$idicator %in%  0,]
+al_us_yr$dyad_end_year[al_us_yr$dyad_end_year %in% NA] = 2016
+al_us_yr <- al_us_yr[, c(5,8,11,14,16)]
+al_us_yr$count = 1 
+al_us_yr$Status <- ""
+al_us_yr$Status[al_us_yr$dyad_end_year < 2012] <- "Ended"
+al_us_yr$Status[al_us_yr$dyad_end_year== 2012] <- "Ongoing"
+
+ggplot() + 
+  xlab("Year") +
+  ylab("Country")+
+  geom_point(data =al_us_yr, aes(x=year, y = state_name2, color =Status), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  ggtitle("US Alliances ")+
+  theme_classic()+
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)+
+  facet_wrap(~Treaty, nrow = 1 ) +
+  theme(legend.position="right", plot.title = element_text(hjust = .5)) 
+
+```
+
+Looking at the alliances that ended for the US, we see that most defense alliances are ongoing, as in they are still in effect today. There were handful of alliances with South American countries that ended towards the end of WWII but the US entered into a different alliance with those same countries immediately. The treaties in effect with the South American countries is the Inter-American Treaty of Reciprocal Assistance (Rio Pact) where if there is an attack against one country, it is considered an attack among all the Americas countries in the alliance. This alliance was created n 1949 and continues till today. 
+
+You can also see a similar pattern of ongoing alliances for defense entente and nonaggression treaty types. NATO, a defensive, entente and nonaggression alliance, was formed in 1947 and is still in effect till today. NATO involves 28 countries and so you see a high number of alliances formed in 1949 for the 3 types. 
+
+The entente alliances follow a similar pattern where the alliance ended and was immediately reformed. There were a few countries where there was an entente alliance formed towards the end of the Korean War and ended a few years after the end of the Vietnam war. The majority of the countries that follow the described patters are in Asia or Australia. This is reasonable considering they were participants is the Vietnam War. Also the defense and entente alliance between the US and Cuba ended during the Vietnam War, indicated in the graph above, where Cuba was providing military support to the Vietnamese. Also, during the Vietnam war, there was a neutrality alliance for a few years between the US and countries that participated in the Vietnam war. This alliance was called the International Agreement on the Neutrality of Laos starting in 1961. This agreement was violated 2 year later by the Democratic Republic of Vietnam and so is no longer in effect 
+
+**United Kingdom ** 
+
+
+```{r fig.width=12, fig.height=10}
+dir_al_year2 <- filter(dir_al_year, dir_al_year$dyad_st_year %in% c(1900:2016))
+al_gb_yr <- filter(dir_al_year2, dir_al_year2$state_name1 %in% c("United Kingdom"))
+al_gb_yr <- gather(al_gb_yr, Treaty, idicator, defense:entente)   
+al_gb_yr <- al_gb_yr[!al_gb_yr$idicator %in%  0,]
+
+al_gb_yr <- al_gb_yr[, c(3,5,8,11,14,16)]
+al_gb_yr$count = 1 
+al_gb_yr$Status[al_gb_yr$dyad_end_year < 2012] <- "Ended"
+al_gb_yr$Status[al_gb_yr$dyad_end_year== 2012] <- "Ongoing"
+
+ggplot() + 
+  xlab("Year") +
+  ylab("Country")+
+  geom_point(data =al_us_yr, aes(x=year, y = state_name2, color =Status), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  ggtitle("United Kingdom Alliances")+
+  theme_classic()+
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)+
+  facet_wrap(~Treaty, nrow = 1 ) +
+  theme(legend.position="right", plot.title = element_text(hjust = .5)) 
+
+```
+
+
+The United Kingdom follows the same pattern as the United States. Most of the defense alliances started towards the end of WWII and are still in effect today. The United Kingdom is part of NATO so we see a high number of defense, entente and non-aggression treaty types formed in 1949 and continue till today. The UK was also part of the Neutrality of Laos alliance and we can see that in the neutrality plot. 
+
+
+**Germany ** 
+
+
+```{r fig.width=12, fig.height=6}
+al_gmy_yr <- filter(dir_al_year2, dir_al_year2$state_name1 %in% c("Germany"))
+al_gmy_yr <- gather(al_gmy_yr, Treaty, idicator, defense:entente)   
+al_gmy_yr <- al_gmy_yr[!al_gmy_yr$idicator %in%  0,]
+
+al_gmy_yr <- al_gmy_yr[, c(5,8,11,14,16)]
+al_gmy_yr$count = 1 
+al_gmy_yr$Status[al_gmy_yr$dyad_end_year < 2012] <- "Ended"
+al_gmy_yr$Status[al_gmy_yr$dyad_end_year== 2012] <- "Ongoing"
+
+ggplot() + 
+  xlab("Year") +
+  ylab("Country")+
+  geom_point(data =al_gmy_yr, aes(x=year, y = state_name2, color =Status), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  ggtitle("Germany Alliances")+
+  theme_classic()+
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)+
+  facet_wrap(~Treaty, nrow = 1 ) +
+  theme(legend.position="right", plot.title = element_text(hjust = .5)) 
+
+
+```
+As Germany was heavily impacted by WWII, we see all its alliances end by the end of the war. During its recovery period, Germany was not a part of any military alliance. This is to be as expected since Germany was so devastated by the war it could not afford to maintain the military. Germany was also going through a period of civil unrest. In 1990, Germany joined NATO after East and West Germany combined to from a unified Germany. 
+
+
+
+**Russia ** 
+
+
+```{r fig.width=15, fig.height=7}
+al_rus_yr <- filter(dir_al_year2, dir_al_year2$state_name1 %in% c("Russia"))
+al_rus_yr <- gather(al_rus_yr, Treaty, idicator, defense:entente)   
+al_rus_yr <- al_rus_yr[!al_rus_yr$idicator %in%  0,]
+
+al_rus_yr <- al_rus_yr[, c(5,8,11,14,16)]
+al_rus_yr$count = 1 
+al_rus_yr$Status[al_rus_yr$dyad_end_year < 2012] <- "Ended"
+al_rus_yr$Status[al_rus_yr$dyad_end_year== 2012] <- "Ongoing"
+
+ggplot() + 
+  xlab("Year") +
+  ylab("Country")+
+  geom_point(data =al_rus_yr, aes(x=year, y = state_name2, color =Status), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  ggtitle("Russia Alliances")+
+  theme_classic()+
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)+
+  facet_wrap(~Treaty, nrow = 1 ) +
+  theme(legend.position="right", plot.title = element_text(hjust = .5)) 
+
+```
+
+**China ** 
+
+
+
+```{r fig.width=15, fig.height=7}
+al_china_yr <- filter(dir_al_year2, dir_al_year2$state_name1 %in% c("China"))
+al_china_yr <- gather(al_china_yr, Treaty, idicator, defense:entente)   
+al_china_yr <- al_china_yr[!al_china_yr$idicator %in%  0,]
+
+al_china_yr <- al_china_yr[, c(5,8,11,14,16)]
+al_china_yr$count = 1 
+al_china_yr$Status[al_china_yr$dyad_end_year < 2012] <- "Ended"
+al_china_yr$Status[al_china_yr$dyad_end_year== 2012] <- "Ongoing"
+
+ggplot() + 
+  xlab("Year") +
+  ylab("Country")+
+  geom_point(data =al_rus_yr, aes(x=year, y = state_name2, color =Status), alpha = .5) + 
+  geom_rect(data=d, mapping=aes(xmin=x1, xmax=x2, ymin="Afghanistan", ymax="Zimbabwe", fill=Conflict),alpha=0.15) + 
+  ggtitle("China Alliances")+
+  theme_classic()+
+  scale_fill_manual(values=c("salmon", "paleturquoise3", "lightsteelblue2", "lightsteelblue4", "lightsteelblue3", "pink3")) + facet_wrap(~treaty_type, nrow = 1)+
+  facet_wrap(~Treaty, nrow = 1 ) +
+  theme(legend.position="right", plot.title = element_text(hjust = .5)) 
+```
+
+
+**Conclusions**
+
+Since we were mainly focusing on large-scale wars that involved many countries, many treaties were created and broken. For example, Warsaw Pact was created as a counter weight to the NATO Pact created at end of WWII. The US, Great Britain and their allies became part of NATO and the Soviet Union and its Allies became part of the Warsaw pact. Once the USSR dissolved many of the satellite nations and Warsaw Pact members joined NATO. The treaties are used as a balance of power and many of the Alliances created during WWII are still in effect today. In addition to the nonaggression and entente alliances, with formation of the United Nations, it is hard to say which countries participate win the next war. Before the beginning of the War on Afghanistan, the security council had to authorize the United States and NATO allies to organize an offensive again al-Qaeda. This type of regulation makes it hard to determine how future wars will play out. One thing that was interesting is that once a treaty falls apart, the members try to join another treaty which is why we see spikes is the median number of alliances towards the end of the wars. 
+
+One of the things that was hard to work with this data set is that it was impossible to tell which alliances were part of a larger treaty. For example, if there was a data point for an alliance between the US and the UK in 1967, there was no indication of if it was NATO or some other treaty.  This also made it hard to tell when a country joined an existing alliance. For example, when Germany joined NATO there were data points for an alliance between Germany and the NATO members but it is not easy to discern that Germany join NATO without some internet research. 
+
+The other downfall of this data set is that it only considers formal military alliances. It will not take into account other types of alliances such as the United Nations & security council or a trade agreement. For example, Japan is not in any military alliance currently but it does have very close ties to the United States today, and this information is not captured in the data set. 
+
+
+
+
+
+## Data Quality 
+
+The overall data quality of the data set was very good. The information in the alliances data matched exactly with historical facts
+
+**Graph of NATO Alliance and when the members joined Members**
+
+Some of the inconsistencies that I noticed are in cases where the alliance is still in effect as of the 12/31/2012, which was when this data set was last updated. In some of the datasets, if the alliance is ongoing, it would have the dyad_end_year, the field that represents the year in which the alliance was terminated, set to 2012 and in other data sets it would have it set as ‘NA’. In the case that dyad_end_year is set to 2012, it was hard to know if there were any alliances that ended in 2012 or if they were an ongoing alliance. 
+
+
+
+3) US had only one alliance before 1925 and Japan has no more alliances now
+
+```{r fig.width=10, fig.height=8}
+qa <- filter(dir_al_year, dir_al_year$state_name1 %in% c("United States of America"))
+qa <- qa[, c(3,5,8,11,18)]
+qa$dyad_end_year[qa$dyad_end_year %in% NA] = 2016
+#qa <- gather(qa, st_ed, year, dyad_st_year:dyad_end_year )
+
+ggplot() + 
+  geom_point(data =qa, aes(x=year, y = state_name2), alpha = .5) +
+  xlab("Year") +
+  ylab("Country")+
+  ggtitle("")+
+  theme_classic() 
+
+```

@@ -1,0 +1,787 @@
+"ID Number","Name","Version"
+2,"Alaska Boundary Dispute I",2.1
+4,"Corfu Channel",2.1
+7,"Egyptian abrogation of 1936 Suez Canal treaty",2.1
+8,"Anglo-Persian war",2.1
+9,"Anglo-Portuguese Colonial Dispute of 1890",2.1
+11,"Anschluss",2.1
+12,"Munich Crisis",2.1
+13,"Japanese anti-foreign dispute",2.1
+14,"Armenian Massacres",2.1
+15,"Aroostools War",2.1
+16,"Anglo Russian crisis of 1897, Chemulpo naval demonstration",2.1
+20,"Agerbaijan Crisis",2.1
+22,"USSR Occupation of Latvia",2.1
+25,"Netherlands-Belgium",2.1
+26,"Berlin blockade",2.1
+27,"Berlin Wall Crisis",2.1
+28,"Bizerte Crisis",2.1
+30,"Bosnian Annexation Crisis",2.1
+31,"Boxer rebellion",2.1
+38,"Caroline Affair",2.1
+40,"Tsinan Clash",2.1
+41,"Chinese Eastern Railway dispute/Sino-Soviet war",2.1
+43,"Chinese concessions I",2.1
+51,"Korean War",2.1
+55,"Corfu Incident",2.1
+56,"Major power intervention in Crete (1897)",2.1
+57,"Crimean War",2.1
+61,"Cuban Missile Crisis",2.1
+64,"Danubian Principalities",2.1
+65,"Danube question",2.1
+67,"Dolfuss Affair",2.1
+69,"Dominican Intervention",2.1
+71,"Don Pacifico Affair",2.1
+77,"Fashoda crisis",2.1
+78,"Austria-Papal States",2.1
+86,"Oujda and Casablanca Occupations",2.1
+88,"Franco-Prussian War",2.1
+89,"France-Spanish war",2.1
+95,"German Loan Proposal",2.1
+96,"Blockade of Greece by Major powers",2.1
+106,"Aftermath of Sino-Japanese war",2.1
+108,"Italian occupation of Albania",2.1
+111,"Italy/Ethiopia",2.1
+112,"Italian-Roman War",2.1
+113,"Italo-Sicilian war",2.1
+114,"Italian-Turkish War",2.1
+115,"War of Italian Unification",2.1
+119,"Penjdeh Dispute",2.1
+121,"Koszta affair",2.1
+122,"Kuwait-Iraq of 1961",2.1
+123,"Blockade of Buenos Aires",2.1
+125,"US intervention in Lebanon",2.1
+126,"Leiningen Mission",2.1
+127,"Second Occupation of the Ruhr",2.1
+128,"Macedonian Dispute",2.1
+129,"Manchurian War",2.1
+131,"Masampo Naval base concession",2.1
+133,"Memel",2.1
+134,"German Occupation of Memel",2.1
+135,"Franco-Mexican War",2.1
+136,"Seizure USS Dolphin/ occupation of Veracruz",2.1
+137,"UK and the Miguelite wars",2.1
+139,"Jehol",2.1
+141,"Treaty of Berlin/Dulcigno incident",2.1
+142,"Morea Insurrection",2.1
+144,"Greytown Incident",2.1
+146,"Battle of Navarino Bay",2.1
+147,"Neapolitan Revolution",2.1
+149,"Canton of Neuchatel",2.1
+153,"Near Eastern Crisis of 1833",2.1
+154,"Punctuation of Olmutz",2.1
+156,"Taba incident",2.1
+157,"Marco-Polo bridge",2.1
+158,"Cato Dispute",2.1
+159,"Panamanian Independence",2.1
+160,"Pastry War",2.1
+164,"Perdicaris",2.1
+165,"Russian occupation of Iran",2.1
+167,"Defeat of the Carbonari in Piedmont",2.1
+169,"Soviet invasion of Poland",2.1
+174,"Remilitarization of the Rhineland",2.1
+175,"War of the Roman Republic",2.1
+177,"Third Occupation of the Ruhr",2.1
+178,"China Eastern Railway",2.1
+179,"Russo-Finnish War",2.1
+180,"Russo-Japanese War",2.1
+182,"Japanese invasion of Mongolia",2.1
+183,"Nomahan War",2.1
+184,"Chankufeng War",2.1
+185,"Polish uprising",2.1
+186,"UK/USSR during Russo-Polish War",2.1
+187,"Russo-Turkish War of 1878",2.1
+189,"Russo-Turkish War of 1828",2.1
+191,"Samoan Dispute",2.1
+194,"2nd Schleswig-Holstein War #46",2.1
+196,"France/Thailand of 1893",2.1
+197,"Allied intervention in Russian Civil War",2.1
+198,"Sicilian insurrection",2.1
+199,"Sino-Indian War",2.1
+200,"Sinai War",2.1
+202,"Sino-French War",2.1
+203,"Tibetan Revolt",2.1
+210,"Intervention into Spanish Civil War",2.1
+211,"First Occupation of the Ruhr",2.1
+212,"Spezzia Crisis",2.1
+217,"Second Syrian War Dispute",2.1
+220,"Tientsin Massacre",2.1
+224,"Japan vs. treaty powers II",2.1
+225,"Trent Affair",2.1
+227,"Occupation of Tsushima",2.1
+228,"Tunisian Affair",2.1
+230,"Italian occupation of Adalia",2.1
+236,"Hungarian Refugee Crisis",2.1
+238,"Guatemalan default of payments",2.1
+239,"Japan vs. treaty powers I",2.1
+241,"British Trawler issue",2.1
+242,"Dogger Bank Incident",2.1
+246,"Bay of Pigs Invasion",2.1
+247,"Dominican Debt Crisis",2.1
+253,"U-2 and RB47 Incidents",2.1
+254,"Venezuelan Debt Crisis",2.1
+256,"Virginius",2.1
+257,"World War I",2.1
+258,"World War II",2.1
+259,"Yemen Aden border conflict",2.1
+260,"Shantung(Twenty one Demands)",2.1
+261,"Seven Weeks War",2.1
+306,"France-Sardinia",2.1
+307,"Britain-Russia during Russian-Turkish War",2.1
+309,"Chinese concessions III",2.1
+311,"Post Office Dispute",2.1
+312,"Seizure of the Sambunk",2.1
+313,"UK/Iran of 1910",2.1
+315,"2nd Moroccan Crisis",2.1
+320,"Italy's entry into World War I",2.1
+321,"Pershing expedition/Pursuit of Pancho Villa",2.1
+322,"US occupation of the Dominican Republic",2.1
+323,"Allied pressure on Greece to enter WWI",2.1
+324,"Greece's entry into World War I",2.1
+327,"First Allied Occupation of Constantinople (Istanbul)",2.1
+328,"Turkish Nationalist occupation II",2.1
+336,"Italy and USSR in Spanish Civil War",2.1
+337,"Blockade of Tienstin",2.1
+343,"First Amur and Ussri River Clash",2.1
+346,"Warsaw Pact nations vs. Czechoslovakia",2.1
+347,"Seizure of USS Pueblo",2.1
+349,"Damaksky island skirmishes",2.1
+354,"Cod War I",2.1
+355,"Paracel Islands dispute",2.1
+356,"Seizure of Mayaguez",2.1
+358,"Tulung Clash",2.1
+362,"Tree  Trimming Incident",2.1
+364,"Helicopter Seizure",2.1
+366,"Spanish Revolution",2.1
+367,"Morea",2.1
+368,"Belgian Independence II",2.1
+370,"Belgian Independence I",2.1
+375,"First Schleswig Holstein War, 1st phase",2.1
+377,"Holy Placer",2.1
+379,"Chinese concessions II",2.1
+380,"Orizaba Incident",2.1
+391,"Allied Ultimatum to Porte to Evacuate Crete",2.1
+397,"Bulgarian entry into World War I",2.1
+398,"German U boat attacks I",2.1
+399,"US entry into WWI",2.1
+409,"Bolhoi and Senufa Islands",2.1
+501,"Great Britain/France and Belgian Independence",2.1
+502,"Prussia vs. Saxony and Hanover",2.1
+507,"French Occupation of Hanoi",2.1
+509,"French mediation of Seven weeks of war",2.1
+510,"Occupation of Vladivostok",2.1
+511,"Chinese concessions IV",2.1
+523,"UK and USSR occupation of Iran",2.1
+602,"Tuna Boats II",2.1
+606,"Hungarian Revolution",2.1
+607,"Turkey/Syria",2.1
+608,"1958-1959 Berlin Deadline Crisis",2.1
+610,"Yemen/UK",2.1
+611,"Vietnam War",2.1
+612,"Batum",2.1
+613,"France-Thai War",2.1
+619,"Cod War II",2.1
+623,"Sikkim Ultimatum",2.1
+625,"Turkish Nationalist occupation I",2.1
+1013,"S.Arabia/Israel",2.1
+1025,"Chaco Oil Rumors",2.1
+1026,"Vanguardia clashes",2.1
+1027,"Chaco War",2.1
+1028,"Chaco clashes",2.1
+1029,"Pre-treaty incidents",2.1
+1035,"Six Day War",2.1
+1042,"Egypt/Jordan clashes during Palestinian War",2.1
+1043,"Israel-Libya",2.1
+1046,"Yom Kippur War",2.1
+1062,"Trieste",2.1
+1068,"Israeli seizure of Algerian officials",2.1
+1069,"Algerian seizure of airplane",2.1
+1073,"Goa",2.1
+1074,"Occupation of Goa",2.1
+1077,"Junagadh",2.1
+1079,"Kashmir III",2.1
+1081,"Jordan/Syria clashes",2.1
+1082,"Chaco patrol",2.1
+1083,"Algerian-Moroccan border dispute",2.1
+1084,"Algeria-Morocco border dispute",2.1
+1086,"Spanish Moroccan War of 1909",2.1
+1087,"Spain-Morocco of 1911",2.1
+1093,"Ultima Esperanza",2.1
+1097,"Alto Palena I",2.1
+1098,"Alto Palena II",2.1
+1099,"Isle of Snipe",2.1
+1100,"Isla Nueva",2.1
+1101,"Alto Palena IV",2.1
+1102,"Alto Palena V",2.1
+1107,"Yemen/South Yemen",2.1
+1108,"Yemen Civil War I",2.1
+1110,"S.Arabia/S.Yemen",2.1
+1117,"Spanish Sahara/Ifni",2.1
+1118,"Morocco-Spain fisheries I",2.1
+1119,"Morocco-Spain fisheries II",2.1
+1123,"Iraq-Turkey border conflict",2.1
+1127,"Saudi/Yemen clash",2.1
+1128,"Najran dispute",2.1
+1129,"Saudi-Yemen War",2.1
+1130,"Gilan",2.1
+1133,"Occupation of Gilan",2.1
+1134,"Kurdish Revolt",2.1
+1135,"Occupation of Abu Musa and the Tunbs Islands",2.1
+1136,"Shatt-al-Arab flag dispute",2.1
+1138,"First Shatt-al-Arab clash",2.1
+1139,"Leticia I",2.1
+1141,"Leticia II",2.1
+1142,"Harbin crisis",2.1
+1145,"Torres Causana clash",2.1
+1147,"Spanish Arbitration Award",2.1
+1148,"Curaray River claim",2.1
+1151,"Pacitas zone",2.1
+1152,"Oriente",2.1
+1153,"Morona",2.1
+1154,"Invasion of El Oro",2.1
+1155,"Rio Cenepa II",2.1
+1156,"Rio Cenepa IV",2.1
+1157,"Rio Cenepa V",2.1
+1158,"Tuna Boats I",2.1
+1160,"Putumayo River Massacre",2.1
+1161,"La Pedrera",2.1
+1162,"Pasto Region II",2.1
+1177,"Nikolaevek incident",2.1
+1178,"Acre",2.1
+1179,"Chaco fortifications I",2.1
+1180,"Manuripi",2.1
+1182,"Chaco fortifications II",2.1
+1183,"Chaco fortifications IV",2.1
+1187,"Chilean Diversion of Lauca River",2.1
+1196,"Mosquito Coast",2.1
+1197,"China/Mongolia clash",2.1
+1200,"Pakistan/Iraq",2.1
+1202,"Third Central American War",2.1
+1204,"Aftermath of 3rd Central American War",2.1
+1205,"Second Central American War",2.1
+1206,"Football War",2.1
+1211,"Demarcation line patrols",2.1
+1219,"Russo-Polish War",2.1
+1225,"Occupation of Preah Vihear Temple",2.1
+1226,"Preah Vihear Temple dispute I",2.1
+1227,"Preah Vihear Temple dispute II",2.1
+1228,"Preah Vihear Temple dispute III",2.1
+1229,"Preah Vihear Temple dispute V",2.1
+1230,"Preah Vihear Temple dispute VI",2.1
+1233,"Burgenland",2.1
+1234,"Latvia and Estonia vs. USSR",2.1
+1235,"Albanian Attack on Mudite Rebels",2.1
+1238,"First Kashmir War",2.1
+1249,"Crete Enosis with Greece",2.1
+1250,"First Balkan War",2.1
+1251,"Second Balkan War #103",2.1
+1265,"Hungary vs. allies war",2.1
+1268,"Teschen Dispute",2.1
+1269,"Germany vs. Latvia and Estonia",2.1
+1270,"Greek Turkish war",2.1
+1272,"Lithuanian War of Independence",2.1
+1273,"Upper Silesia question",2.1
+1274,"Bulgarian Independence II",2.1
+1278,"Territorial sea limit, Aegean see",2.1
+1279,"Cyprus: Christmas day massacre",2.1
+1284,"Greece vs. Albania of 1948",2.1
+1285,"Greece vs. Albania 1949",2.1
+1286,"Yugoslavia vs. Cominform countries",2.1
+1289,"Siznik/Aegean Sea dispute",2.1
+1290,"Cyprus negotiations",2.1
+1292,"Aegean Sea oil exploration",2.1
+1293,"Cyprus War",2.1
+1295,"Bulgaria vs. Greece of 1952",2.1
+1300,"Nekowal",2.1
+1301,"Kutch-Sind Dispute",2.1
+1302,"Assam I",2.1
+1305,"Kabel flag incident",2.1
+1308,"Kashmir II",2.1
+1309,"Kashmir Threat",2.1
+1310,"Tripura",2.1
+1312,"Second Kashmir War",2.1
+1315,"Kasmir ceasefire violations",2.1
+1316,"Assam-Tripura clashes",2.1
+1317,"Dumabari Occupation",2.1
+1321,"Independence of Congo",2.1
+1343,"Uri Sector Clash",2.1
+1345,"Takeshima Islands Dispute",2.1
+1377,"Entebbe raid",2.1
+1378,"Elections in French Somaliland",2.1
+1379,"DMZ Clashes",2.1
+1380,"Kagera Salient I",2.1
+1381,"Kagera Salient II",2.1
+1382,"Kagera Salient III",2.1
+1408,"Ghana Guinea dispute",2.1
+1419,"Segbe incident",2.1
+1421,"Ogaden Border incidents",2.1
+1423,"Aiscia Incident",2.1
+1425,"First Ogaden Clash",2.1
+1426,"First NFD clash",2.1
+1427,"Ogaden Oil dispute",2.1
+1435,"Vietnamese-Cambodian War",2.1
+1447,"Bangladesh War",2.1
+1450,"Monginsidi Incident",2.1
+1452,"Spratly Islands dispute I",2.1
+1462,"Susta border dispute",2.1
+1463,"Sucha Singh case",2.1
+1467,"Kashmir clashes",2.1
+1480,"War of Attrition",2.1
+1482,"Spanish-Chilean war",2.1
+1486,"Korean Coup attempt",2.1
+1488,"Korean Invasion Rumor",2.1
+1489,"Formosan expedition",2.1
+1490,"Sino-Japanese War",2.1
+1494,"Aves Island I",2.1
+1495,"Aves Island II",2.1
+1498,"Flores Expedition in Spain",2.1
+1506,"Aftermath of Flores Expedition",2.1
+1507,"Occupation of the Magellan Straits",2.1
+1508,"Patagonia",2.1
+1509,"Rio Negro",2.1
+1510,"Seizure of the Devonshire",2.1
+1511,"Occupation of Patagonia",2.1
+1512,"USS Baltimore affair",2.1
+1513,"Puna de Atacama",2.1
+1517,"Major Powers and the War of the Pacific",2.1
+1518,"War of the Pacific",2.1
+1519,"Ecuadorian-Colombian War",2.1
+1522,"Panama Tax",2.1
+1523,"Flores Expedition",2.1
+1528,"La Plata War",2.1
+1529,"Mole St. Nicholas",2.1
+1531,"Pelletier Case II",2.1
+1533,"First Central American War I",2.1
+1535,"First Central American War II",2.1
+1540,"Douro River",2.1
+1542,"Seizure of the Rebecca and A.K. Cutting",2.1
+1545,"Las Cuevas Incursion",2.1
+1547,"Remolina Incursion",2.1
+1551,"Amendments to treaty",2.1
+1552,"Mexican-American War",2.1
+1553,"Attack on the steamboat Colombia",2.1
+1554,"Seizure of the US sloop of war",2.1
+1555,"Narogdoches",2.1
+1556,"Seizure of USS Texas and Paragon",2.1
+1557,"Spanish-American War",2.1
+1563,"Chincha Islands",2.1
+1564,"El Dorado",2.1
+1565,"Black Warrior",2.1
+1567,"First Seminole War",2.1
+1569,"Greco-Turkish War of 1897",2.1
+1571,"Karalih",2.1
+1575,"Crete uprising II",2.1
+1576,"Crete uprising I",2.1
+1580,"Spanish Moroccan War of 1859",2.1
+1581,"Melilla fortifications",2.1
+1586,"Blockade of Paraguay",2.1
+1590,"Lopez war/War of the Triple Alliance",2.1
+1593,"Carero incident",2.1
+1594,"Seizure of Maria y Julia",2.1
+1595,"Spanish Scientific Expedition",2.1
+1596,"Seizure of Provicial Governor of the Oriente",2.1
+1598,"Pasto Region I",2.1
+1601,"Puerto Pacheco",2.1
+1605,"Preah Vihear Temple dispute VIII",2.1
+1608,"Laguno del Desierto",2.1
+1609,"Ushuaia",2.1
+1610,"Preah Vihear Temple dispute VII",2.1
+1612,"Iraq Kuwait of 1972/3",2.1
+1613,"Iraq-Kuwait border of 1975",2.1
+1617,"Cambodian Entry into the Vietnam War",2.1
+1622,"Brazilian Slave Trade I",2.1
+1624,"Pirara III",2.1
+1625,"Brazilian Slave Trade II",2.1
+1627,"Brazilian Slave Trade III",2.1
+1630,"Patos Island",2.1
+1631,"British, Spanish, French intervention plans in Mexico",2.1
+1633,"Jeanne-Amalia affair",2.1
+1644,"French Claims on the Dominican Bank",2.1
+1645,"Trinidad Island",2.1
+1647,"Amapa Region",2.1
+1648,"Emil Luder Affair",2.1
+1649,"UK-Portugal",2.1
+1653,"1st US troop deployment in Mexican civil war",2.1
+1668,"Blockade of Amur River",2.1
+1671,"France-Italy of 1926-27",2.1
+1672,"Italian claims for share of Tangier administration",2.1
+1674,"Raid on Soviet Embassy",2.1
+1681,"Pelletier Case I",2.1
+1683,"Bombardment of the Steamer Alp",2.1
+1703,"Yugoslavia vs. Soviet bloc",2.1
+1707,"Khurnak Fort/Sinkiang-Tibet Road",2.1
+1715,"Sikkim border violation I",2.1
+1717,"Gibraltar",2.1
+1718,"Soviet bloc Pressure on Rumania",2.1
+1723,"Russo-Finnish Conflict",2.1
+1740,"Pirara II",2.1
+1742,"Cuban Threat",2.1
+1743,"Portuguese seizure of the Charles et Elergy",2.1
+1746,"France-Morocco of 1960",2.1
+1750,"Bulgarian Massacres",2.1
+1753,"Barrot affair",2.1
+1757,"Mackintosh Loan",2.1
+1771,"Christiania Maneuvers",2.1
+1775,"US threat to Huerta government",2.1
+1777,"Chinese Eastern railroad II",2.1
+1779,"Afganistan-USSR",2.1
+1780,"Fuime",2.1
+1781,"Urta Tagail dispute",2.1
+1793,"Palestine War",2.1
+1804,"Rhodesia independence",2.1
+1810,"Fuzhou Incident",2.1
+1825,"USS Panay",2.1
+1900,"Seizure of the Red Crusader",2.1
+2013,"Pirara I",2.1
+2059,"Macedonian Question",2.1
+2066,"Ogaden Ambush",2.1
+2067,"Second Ogaden Clash",2.1
+2068,"Ogaden border scare",2.1
+2069,"Ethiopian-Somalian Ogaden War",2.1
+2070,"Post War Ethiopian Air Raids",2.1
+2071,"US assistance to Somalia",2.1
+2072,"Ogaden Border Crisis",2.1
+2073,"Ethiopia Air Attacks",2.1
+2074,"Ethiopian Border Attacks I",2.1
+2075,"Ethiopian Border Attacks II",2.1
+2076,"Rio Gallegos",2.1
+2077,"Navarino Island Beacon I",2.1
+2078,"Navarino Island Beacon II",2.1
+2079,"Alto Palena III",2.1
+2080,"Alto Palena VI",2.1
+2081,"Beagle Channel I",2.1
+2082,"Beagle Channel II",2.1
+2083,"Interocean",2.1
+2084,"Los Andes Incident",2.1
+2085,"Beagle Channel III",2.1
+2086,"Islet of Hermanos",2.1
+2087,"Shelling of the Beagle Channel",2.1
+2088,"Tibet",2.1
+2089,"Bara Hoti/Wu Je I",2.1
+2090,"Bara Hoti/Wu Je II",2.1
+2091,"Nilangh/ Tsang Chokla Pass",2.1
+2092,"Bara Hoti/Wu Je III",2.1
+2093,"Bara Hoti/Wu Je IV",2.1
+2094,"Post War Border Incidents",2.1
+2095,"Sikkim and Bhutan border violations",2.1
+2096,"Sino-Pakistani boundary Protocol",2.1
+2097,"Siege of the Indian Embassy",2.1
+2098,"Sikkim Threat",2.1
+2099,"Sikkim border violation II",2.1
+2100,"Occupation of Sikkim",2.1
+2101,"Indian border alert",2.1
+2102,"Formation of Arunachal Pradesh",2.1
+2103,"Treaty of Erzvrum dispute",2.1
+2104,"Khormanshah Incident",2.1
+2105,"Shatt-al-Arab shipping dispute",2.1
+2106,"Kurdish rebellion",2.1
+2108,"Kurdish Rebel Incident",2.1
+2109,"Iranian Embassy Incident",2.1
+2110,"Khanaqin clash",2.1
+2112,"Badrah clash",2.1
+2113,"Kurdish Rebels",2.1
+2114,"Expulsion of Diplomats",2.1
+2115,"Iran-Iraq War",2.1
+2116,"Occupation of Monterey and San Diego",2.1
+2117,"Rio Tecapan",2.1
+2118,"Corrientes River Clash",2.1
+2119,"Cordillera del Condor Clash",2.1
+2120,"Rio Cenepa VI",2.1
+2121,"Rio Cenepa III",2.1
+2122,"Rio Cenepa I",2.1
+2123,"Clash at Cerro Verde",2.1
+2124,"Occupation of Jambeli island",2.1
+2125,"Zarumilla River",2.1
+2126,"Clash at Chaerae",2.1
+2127,"Garcia-Herrera Treaty Ratification",2.1
+2128,"Fuerte Olimpo",2.1
+2129,"Chaco fortifications III",2.1
+2130,"Chaco fortifications V",2.1
+2131,"Mennonite Settlement",2.1
+2132,"Fortin Sorpesa",2.1
+2133,"Bolivian attack plans",2.1
+2134,"Villa Montes-Santa Cruz Road",2.1
+2135,"Occupation of Villa Montes-Santa Cruz Road",2.1
+2139,"Belize Independence",2.1
+2140,"Kagera Salient IV",2.1
+2141,"Ugandan Tanzanian war",2.1
+2147,"Argentine threat",2.1
+2152,"Saudi Arabia Yemen Arab Republic",2.1
+2153,"Saudi Arabia-Egypt",2.1
+2155,"UK Yemen of 1966-67",2.1
+2157,"Yemen-South Arabia Federation",2.1
+2163,"Larnaca Airport dispute",2.1
+2168,"German Ultimatum",2.1
+2169,"French review at Longchamps",2.1
+2173,"Aegean Sea islands fortifications",2.1
+2175,"Aegean Sea",2.1
+2180,"Pakistan-Afghanistan of 1951",2.1
+2181,"Pakistan-Afghanistan of 1956",2.1
+2182,"Chinese Eastern railroad I",2.1
+2183,"Non-recognition of Huerta",2.1
+2185,"Pershing expedition",2.1
+2186,"Ongjin Peninsula",2.1
+2192,"North Korean Economic Zone",2.1
+2199,"Formosan Shipwreck",2.1
+2200,"Occupation of Ryukyu Islands",2.1
+2201,"Annexation of Ryukyu Islands",2.1
+2202,"Korean Mutiny",2.1
+2203,"South Manchurian Railroad",2.1
+2204,"Chiento-South Manchuria Railroad",2.1
+2205,"Zhengjiatun Incident",2.1
+2206,"Chientao",2.1
+2207,"Anti-Mukden Rebellion",2.1
+2208,"Dagu (Taku) Harbor",2.1
+2209,"Hankow Incident",2.1
+2210,"Occupation of Tsinan",2.1
+2211,"Chahar Occupation",2.1
+2212,"Ho-Umetsu Agreement",2.1
+2213,"China Daihara Agreement",2.1
+2215,"Soviet downing of a C-118 transport plane",2.1
+2217,"Operation Mongoose",2.1
+2222,"Seizure of two Fishing boats",2.1
+2223,"US aircraft task force to Iran",2.1
+2224,"Capture of US Torpedo Boat",2.1
+2225,"Soviet Combat Unit in Cuba",2.1
+2226,"Baltic Sea Maneuvers",2.1
+2227,"US threat after Tito's death",2.1
+2228,"US seizure of Soviet cargo",2.1
+2229,"Militarization of Kuril Islands",2.1
+2231,"Deployment of Soviet SS-22 missiles and US Pershing missiles",2.1
+2232,"Shooting of Major Arthur D. Nicholson Jr.",2.1
+2243,"Joseph Russel Affair",2.1
+2244,"Korean war truce violations",2.1
+2300,"UK-France of 1893",2.1
+2302,"German occupation of Czechoslovakia",2.1
+2303,"Italy/France in Spanish Civil War",2.1
+2304,"Italy/UK in Spanish Civil War",2.1
+2306,"Italy-Panama in Spanish Civil War",2.1
+2307,"Italy-Denmark in Spanish Civil War",2.1
+2309,"France Spain of 1908",2.1
+2310,"Seizure of cargo of SS Oregon",2.1
+2311,"Protection of British Oil Interests",2.1
+2312,"Torren Incident I",2.1
+2313,"Torren Incident II",2.1
+2314,"Russian and German suppression of Boxers",2.1
+2316,"Ilha Margarida",2.1
+2319,"Belize",2.1
+2320,"Yungayo DIstrict",2.1
+2321,"Madre de Dios area",2.1
+2327,"Israel seizure of Turkish Ship",2.1
+2328,"Yugoslavia vs. Albania of 1949",2.1
+2331,"Iraqi revolution",2.1
+2332,"Turkey-Iraq of 1958",2.1
+2335,"Israeli attack on US oil rigs",2.1
+2341,"Cerruti Affair",2.1
+2343,"Seizure of the Whitford",2.1
+2357,"North Yemen vs. South Yemen",2.1
+2360,"Yemen Civil War II",2.1
+2362,"Yemen Civil War III",2.1
+2363,"UK Intervention in the Caucasus and Transcaucasus",2.1
+2364,"UK vs. USSR in the Crimea",2.1
+2365,"French Intervention in the Crimean",2.1
+2366,"Soviet civil war-Intervention in Northern USSR",2.1
+2367,"Blockade of Piraeus",2.1
+2368,"Boulanger case",2.1
+2369,"Schnaeble case",2.1
+2371,"Albania vs. Greece 1946-47",2.1
+2372,"Yugoslavia vs. Albania of 1952",2.1
+2373,"Saudi Arabia of 1969",2.1
+2374,"Spain-Morocco of 1975",2.1
+2540,"Libyan pressure on Tunusia",2.1
+2549,"Iraq/Italy ship attack",2.1
+2550,"S.Korea/China torpedo boat incident",2.1
+2563,"Israeli bombing of PLO Tunis headquarters",2.1
+2566,"Turkey Iran threats",2.1
+2568,"Iraq/Greece ship attack",2.1
+2571,"S.Africa/Zambia border raid",2.1
+2572,"Faht al Dibal dispute",2.1
+2573,"Los Chiles clash",2.1
+2583,"Mali/Burkino Faso clashes",2.1
+2587,"Iran threat to close Gulf of Hormuz",2.1
+2589,"MNR rebels in Malawi",2.1
+2590,"USSR/Iran border attack",2.1
+2591,"Israeli detention of Libyan airliner",2.1
+2600,"Rainbow Warrior",2.1
+2603,"Lithuania vs. USSR",2.1
+2604,"Latvia vs. USSR",2.1
+2606,"Soviet Civil war; Intervention in Siberia",2.1
+2623,"Preah Vihear Temple dispute IV",2.1
+2624,"Koh Kong Island",2.1
+2625,"Kashmir I",2.1
+2626,"Indian threat in Kashmir",2.1
+2627,"First Punjab clash",2.1
+2628,"Assam II",2.1
+2629,"Indian show of force in Kashmir",2.1
+2630,"Kashmir threat at Chakrat",2.1
+2631,"Rann of Kutch",2.1
+2632,"Kashmir Fortifications",2.1
+2633,"West Bengal Clashes",2.1
+2634,"Air corridor violations",2.1
+2635,"Malda district clashes",2.1
+2637,"Indian threat (Kashmir)",2.1
+2638,"Ceasefire violations in Kashmir",2.1
+2640,"Death of the Lion of Kashmir",2.1
+2641,"Sikh extremists",2.1
+2642,"Nobra Valley-Siachen Glacier clashes",2.1
+2643,"Siachen Glacier Clashes",2.1
+2644,"Sikh militancy in Kashmir",2.1
+2648,"French Occupation of Corfu",2.1
+2683,"Great Britain-Haiti of 1887",2.1
+2700,"Chinese attempt to navigate the Amur river I",2.1
+2701,"Chinese attempt to navigate the Amur river III",2.1
+2702,"Chinese attempt to navigate the Amur river II",2.1
+2703,"Illi rebellion",2.1
+2704,"Post War Manchuria",2.1
+2706,"Ili Migration",2.1
+2707,"Breakdown of Border negotiations",2.1
+2708,"Soviet-Mongolian 20 year friendship treaty",2.1
+2709,"Red Guard attack on Soviet embassy",2.1
+2710,"Svirsk incident",2.1
+2711,"Post-Czechoslovakia standoff",2.1
+2712,"Mongolian border violation",2.1
+2713,"Mongolian border clashes",2.1
+2715,"Wusuli/Ussuri Incident",2.1
+2716,"Tersadi incident",2.1
+2717,"Argun river",2.1
+2721,"Occupation of Sakhalin Island I",2.1
+2722,"Occupation of Sakhalin Island II",2.1
+2724,"Anui river tensions",2.1
+2725,"Mongolian intervention into WWII against Japan",2.1
+2726,"Russian reaction to Sino-Japanese treaty",2.1
+2727,"Soviet maneuvers on Kurile Islands",2.1
+2729,"Off-shore islands dispute",2.1
+2731,"Off shore islands dispute",2.1
+2733,"US threat to suspend diplomatic relations",2.1
+2743,"Egypt/Libya of 1978",2.1
+2744,"Occupation of Ajuda",2.1
+2746,"Spratly Islands dispute VI",2.1
+2749,"Spratly Islands dispute V",2.1
+2772,"Bahamas Iran",2.1
+2778,"Sri Lanka civil war",2.1
+2780,"Spratly Islands dispute IV",2.1
+2787,"Turkey-Syria of 1987",2.1
+2790,"Iran Maldives",2.1
+2835,"Thessaly uprising",2.1
+2836,"Bulgarian Independence I",2.1
+2837,"Cretean insurrection of 1896",2.1
+3000,"Ethiopia-Sudan",2.1
+3001,"Libya vs. Egypt and Sudan",2.1
+3002,"Rhodesia-Angola air raid",2.1
+3003,"Thailand-Laos Mekong River dispute",2.1
+3004,"Rhodesia-Botswana conflict",2.1
+3005,"South African raid into Zambia",2.1
+3007,"Sino-Vietnam War",2.1
+3008,"KAL airliner downing I",2.1
+3009,"Bolivia-Chile tension",2.1
+3010,"Kenya-Egypt",2.1
+3011,"Zaire-Angola",2.1
+3014,"Libya Tunisia disputed waters",2.1
+3020,"Iran hostage crisis",2.1
+3021,"US maneuvers in the Gulf of Sidra",2.1
+3027,"Burma/Thailand clashes",2.1
+3030,"S.African raid into Botswana",2.1
+3034,"Iran/spanish ship attack",2.1
+3044,"Morocco/Algeria clash",2.1
+3050,"Indonesia/Papua New Guinea II",2.1
+3051,"Libyan pressure on Sudan II",2.1
+3054,"Saudi Arabia/S.Yemen clash",2.1
+3055,"India/Bangladesh border fence",2.1
+3057,"Iraq/Greece ship sinking",2.1
+3058,"Invasion of Grenada",2.1
+3059,"Iran/Afganistan",2.1
+3060,"Zambia/Zaire border tensions",2.1
+3062,"USA/Syria clashes in Lebanon",2.1
+3063,"KAL airliner downing II",2.1
+3065,"Pressure on Libya",2.1
+3066,"Nigeria/Chad",2.1
+3067,"Soviet subs in the Baltic and North Sea",2.1
+3070,"Mozambique/S.Africa",2.1
+3072,"Libyan pressure on Sudan I",2.1
+3073,"S.African raids on Lesotho",2.1
+3074,"Burma/Thailand fishing boats",2.1
+3076,"Ghana/Togo border incidents",2.1
+3081,"Iran threat to Kuwait",2.1
+3082,"Mekong River dispute II",2.1
+3083,"Indonesia/Papua New Guinea I",2.1
+3084,"Spratly Islands dispute III",2.1
+3089,"USSR/Italy submarine intrusion",2.1
+3090,"Zaira/Zambia border conflict",2.1
+3092,"Israeli jets in S.Arabia",2.1
+3093,"USSR subs in Swedish waters",2.1
+3094,"Morocco violation of Mauritian air space",2.1
+3095,"Iran bombing of Kuwait",2.1
+3096,"India/Bangladesh border clash",2.1
+3098,"Libyan air raids into Sudan",2.1
+3099,"Gulf of Sidra air clash",2.1
+3101,"Osirak reactor bombing",2.1
+3103,"Cameroun/Nigeria fisherman conflict",2.1
+3104,"Cameroun/Nigeria clash",2.1
+3105,"US/Ecuador",2.1
+3106,"Syrian border attacks on Jordan",2.1
+3107,"Syrian pressure on Jordan",2.1
+3109,"India/Bangldesh border fire",2.1
+3111,"Burma/Thailand",2.1
+3113,"Morocco/Algeria airspace violation",2.1
+3114,"Mekong River dispute I",2.1
+3116,"Tito's death threat",2.1
+3117,"Sabah dispute",2.1
+3118,"Egypt/Libya of 1980",2.1
+3119,"Morocco/Mauritania air dispute",2.1
+3120,"San Andres dispute",2.1
+3122,"Argentina/USSR fishing boats",2.1
+3123,"Argentina/Bulgaria fishing boats",2.1
+3126,"Egypt/Libya clashes",2.1
+3129,"Somalia/Kenya clash",2.1
+3132,"Turkish invasion of Iran",2.1
+3133,"Russia troops in Iran",2.1
+3134,"French occupation of Cilicia",2.1
+3135,"UK embargo of Rhodesia",2.1
+3136,"UK response to seizure of the Steamer Alps",2.1
+3138,"France and the Miguelite wars",2.1
+3139,"France-Morocco of 1911",2.1
+3181,"Austrian crisis of 1922",2.1
+3182,"Hungarian reparations",2.1
+3183,"Greek Patriarch",2.1
+3185,"Mosul Dispute",2.1
+3189,"Alexandretta I",2.1
+3190,"Alexandretta II",2.1
+3195,"Iranian oil nationalization",2.1
+3217,"Spratly Islands dispute II",2.1
+3232,"Alliancia",2.1
+3238,"Amelia Island",2.1
+3245,"Sino-Russian Protocol of Chuguchak",2.1
+3247,"Occupation of Ili",2.1
+3249,"Pamir dispute",2.1
+3250,"Occupation of Manchuria",2.1
+3254,"Mongolian Autonomy",2.1
+3255,"Cele Village Incident",2.1
+3256,"Kaxgar incident",2.1
+3257,"Mongolian Independence",2.1
+3258,"Occupation of Tangnuwulianghai",2.1
+3259,"Annexation of Tangnuwulianghai",2.1
+3264,"Yining Clash",2.1
+3265,"Second Ili Rebellion",2.1
+3266,"Changshan island",2.1
+3301,"Alaska Boundary Dispute II",2.1
+3321,"Murder of Czerney George of Russia",2.1
+3326,"Insurrection in Milan",2.1
+3349,"German U Boat attacks II",2.1
+3352,"Dedeaghatch Railway Concessions",2.1
+3360,"Kontum",2.1
+3363,"Samoa",2.1
+3445,"Lake Huleh",2.1
+3542,"USSR seizure of Bessarabia",2.1
+3626,"Border Fence",2.1
+3628,"Second Sino-Vietnamese War",2.1
+3630,"Falklands Islands War",2.1
+3645,"Seven Demands on Manchuria",2.1
+3704,"Seizure of the Altmark",2.1
+3709,"Seizure of U.S. Mail",2.1
+3710,"USS Washington",2.1
+3724,"Coal Shipping Dispute",2.1
+3832,"Seizure of the Graf Spree and Tacoma",2.1
+3834,"Graf Spree",2.1
+3956,"Iraqi Scud Attack on Israel",2.1
+3957,"Persian Gulf War",2.1
+3974,"Iraqi No-fly-zone Violations",2.1
